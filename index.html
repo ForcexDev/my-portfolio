@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForcexDev - Space Explorer &amp; Cybersecurity Specialist</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+
+    <audio id="bg-music" loop>
+        <source src="./CornfieldChase.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+</head>
+<body>
+<div class="space-canvas">
+    <div class="stars"></div>
+    <div class="stars"></div>
+    <div class="stars"></div>
+    <div class="nebula"></div>
+    <div class="space-dust"></div>
+</div>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="#home" class="logo">ForcexDev</a>
+        <ul class="nav-links">
+            <li><a href="#home" class="nav-link active">Home</a></li>
+            <li><a href="#about" class="nav-link">About</a></li>
+            <li><a href="#projects" class="nav-link">Projects</a></li>
+            <li><a href="#skills" class="nav-link">Skills</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+        <button class="mobile-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</nav>
+
+<section id="home" class="hero">
+    <div class="particles"></div>
+    <div class="hero-content">
+        <p class="hero-greeting">Greetings from the Digital Cosmos</p>
+        <h1 class="hero-title">ForcexDev</h1>
+        <h2 class="hero-subtitle">Ezequiel Morales</h2>
+        <p class="hero-tagline">Cybersecurity Student &amp; Space Enthusiast</p>
+        <p class="hero-subtitle-2">Universidad Diego Portales</p>
+        <div class="typewriter" id="typewriter"></div>
+        <a href="#projects" class="cta-button">Explore My Universe</a>
+    </div>
+    <div class="scroll-indicator">
+        <p>Scroll to explore</p>
+        <i class="fas fa-chevron-down"></i>
+    </div>
+</section>
+
+<section id="about" class="section">
+    <div class="container">
+        <h2 class="section-title">About Me</h2>
+        <div class="about-content">
+            <div class="about-image">
+                <div class="avatar">
+                    <i class="fas fa-satellite"></i>
+                </div>
+            </div>
+            <div class="about-text">
+                <p>
+                    Welcome to my corner of the digital universe. Here you'll discover my journey through
+                    the vast landscapes of cybersecurity, networking, and programming - much like exploring
+                    the infinite cosmos.
+                </p>
+                <p>
+                    My passion for astronomy parallels my approach to technology: both require curiosity,
+                    precision, and the ability to see patterns in complex systems. Whether I'm analyzing
+                    network architectures or stargazing at distant galaxies, I'm driven by the desire to
+                    understand and protect the digital frontiers we explore.
+                </p>
+                <p>
+                    When I'm not diving deep into code or configuring security systems, you'll find me
+                    contemplating the universe - a reminder that even in the most complex technical
+                    challenges, there's always a bigger picture to consider.
+                </p>
+
+                <div class="music-player-section">
+                    <button id="music-toggle" class="music-play-btn">
+                        <i class="fas fa-play"></i>
+                        <span>Reproducir Música Ambiente</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="projects" class="section">
+    <div class="container">
+        <h2 class="section-title">Featured Projects</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <h3 class="project-title">GrandChessAuto</h3>
+                <p class="project-description">
+                    Strategic gameplay across digital dimensions. A complex system where strategy and technology converge,
+                    featuring robust backend architecture with Node.js and Express, complemented by an interactive frontend
+                    that responds like orbital mechanics.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Node.js</span>
+                    <span class="tag">Express</span>
+                    <span class="tag">HTML</span>
+                    <span class="tag">CSS</span>
+                    <span class="tag">JavaScript</span>
+                    <span class="tag">Web Development</span>
+                </div>
+                <a href="https://github.com/ForcexDev/GrandChessAuto_DesarrolloWeb" target="_blank" class="project-link">
+                    <span>View on GitHub</span>
+                    <i class="fas fa-external-link-alt"></i>
+                </a>
+            </div>
+
+            <div class="project-card">
+                <h3 class="project-title">Java EDA - Data Structures</h3>
+                <p class="project-description">
+                    Mapping data architectures like star formations. These fundamental building blocks organize information
+                    with the same precision that gravity organizes celestial bodies - efficient, elegant, and essential
+                    for navigating the programming cosmos.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Java</span>
+                    <span class="tag">Data Structures</span>
+                    <span class="tag">Algorithms</span>
+                </div>
+                <a href="https://github.com/ForcexDev/Java-EDA" target="_blank" class="project-link">
+                    <span>View on GitHub</span>
+                    <i class="fas fa-external-link-alt"></i>
+                </a>
+            </div>
+
+            <div class="project-card">
+                <h3 class="project-title">Redes De Datos</h3>
+                <p class="project-description">
+                    Network architectures spanning digital space. Like mapping the cosmic web that connects galaxies,
+                    these projects reveal the hidden infrastructure of communication across vast digital territories.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Networking</span>
+                    <span class="tag">TCP/IP</span>
+                    <span class="tag">Routing</span>
+                </div>
+                <a href="https://github.com/ForcexDev/RedesDeDatos" target="_blank" class="project-link">
+                    <span>View on GitHub</span>
+                    <i class="fas fa-external-link-alt"></i>
+                </a>
+            </div>
+
+            <div class="project-card">
+                <h3 class="project-title">Python Projects</h3>
+                <p class="project-description">
+                    Scripting solutions across the programming cosmos. These scripts and Jupyter notebooks demonstrate
+                    the versatility needed to navigate the ever-expanding universe of programming challenges and automation.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">Jupyter</span>
+                    <span class="tag">Programming</span>
+                </div>
+                <a href="https://github.com/ForcexDev/Python" target="_blank" class="project-link">
+                    <span>View on GitHub</span>
+                    <i class="fas fa-external-link-alt"></i>
+                </a>
+            </div>
+
+            <div class="project-card">
+                <h3 class="project-title">Bandit Security Guide</h3>
+                <p class="project-description">
+                    Security exploration in Linux territories. Like charting unknown regions of space, this guide
+                    maps the landscape of system security and exploitation techniques across digital frontiers.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Linux</span>
+                    <span class="tag">Cybersecurity</span>
+                    <span class="tag">Bash</span>
+                    <span class="tag">LaTeX</span>
+                </div>
+                <a href="https://github.com/ForcexDev/Bandit-WriteUp" target="_blank" class="project-link">
+                    <span>View on GitHub</span>
+                    <i class="fas fa-external-link-alt"></i>
+                </a>
+            </div>
+
+            <div class="project-card">
+                <h3 class="project-title">PostgreSQL Database</h3>
+                <p class="project-description">
+                    Structured data like organized stellar catalogs. Just as astronomers catalog stellar objects with
+                    precision, this project demonstrates the art of organizing data for optimal performance and integrity.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">SQL</span>
+                    <span class="tag">PostgreSQL</span>
+                    <span class="tag">Database</span>
+                </div>
+                <a href="https://github.com/ForcexDev/Python/tree/main/Proyect-DataBase" target="_blank" class="project-link">
+                    <span>View on GitHub</span>
+                    <i class="fas fa-external-link-alt"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="skills" class="section">
+    <div class="container">
+        <h2 class="section-title">Technical Skills</h2>
+        <div class="skills-grid">
+            <div class="skill-item">
+                <i class="fab fa-python skill-icon"></i>
+                <div class="skill-info">
+                    <h4>Python</h4>
+                    <p>Scripting across digital galaxies</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <i class="fas fa-database skill-icon"></i>
+                <div class="skill-info">
+                    <h4>SQL</h4>
+                    <p>Database architectures like stellar catalogs</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <i class="fab fa-linux skill-icon"></i>
+                <div class="skill-info">
+                    <h4>Linux</h4>
+                    <p>Navigation through secure systems</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <i class="fas fa-terminal skill-icon"></i>
+                <div class="skill-info">
+                    <h4>Bash Scripting</h4>
+                    <p>Command-line exploration tools</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <i class="fab fa-java skill-icon"></i>
+                <div class="skill-info">
+                    <h4>Java</h4>
+                    <p>Object-oriented stellar architecture</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <i class="fas fa-code skill-icon"></i>
+                <div class="skill-info">
+                    <h4>C++</h4>
+                    <p>System-level cosmic engineering</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <i class="fab fa-js skill-icon"></i>
+                <div class="skill-info">
+                    <h4>JavaScript</h4>
+                    <p>Interactive web constellation</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <i class="fab fa-html5 skill-icon"></i>
+                <div class="skill-info">
+                    <h4>HTML</h4>
+                    <p>Structuring digital universes</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <i class="fab fa-css3-alt skill-icon"></i>
+                <div class="skill-info">
+                    <h4>CSS</h4>
+                    <p>Styling cosmic interfaces</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <i class="fab fa-node-js skill-icon"></i>
+                <div class="skill-info">
+                    <h4>Node.js</h4>
+                    <p>Server-side space stations</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <i class="fab fa-git-alt skill-icon"></i>
+                <div class="skill-info">
+                    <h4>Git &amp; GitHub</h4>
+                    <p>Version control across timelines</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <i class="fab fa-docker skill-icon"></i>
+                <div class="skill-info">
+                    <h4>Docker</h4>
+                    <p>Containerizing applications like space stations</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <i class="fab fa-aws skill-icon"></i>
+                <div class="skill-info">
+                    <h4>AWS</h4>
+                    <p>Cloud infrastructure spanning vast networks</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <i class="fas fa-network-wired skill-icon"></i>
+                <div class="skill-info">
+                    <h4>Networking</h4>
+                    <p>Connecting systems across digital space</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <i class="fas fa-shield-alt skill-icon"></i>
+                <div class="skill-info">
+                    <h4>Cybersecurity</h4>
+                    <p>Protecting digital frontiers</p>
+                </div>
+            </div>
+            <div class="skill-item">
+                <i class="fas fa-file-alt skill-icon"></i>
+                <div class="skill-info">
+                    <h4>LaTeX</h4>
+                    <p>Technical documentation for space missions</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="contact" class="section">
+    <div class="container">
+        <div class="contact-content">
+            <h2 class="section-title">Ground Control Communication Hub</h2>
+            <p class="contact-text">
+                Ready to explore new frontiers together? Let's connect across the digital cosmos and discuss the infinite possibilities of technology and space.
+            </p>
+            <div class="contact-links">
+                <a href="https://github.com/ForcexDev" target="_blank" class="contact-link">
+                    <i class="fab fa-github"></i>
+                    <span>Mission Control Repository</span>
+                </a>
+                <a href="https://www.linkedin.com/in/ezequielleandromorales/" target="_blank" class="contact-link">
+                    <i class="fab fa-linkedin"></i>
+                    <span>Professional Network</span>
+                </a>
+                <a href="https://tryhackme.com/p/ForcexDev" target="_blank" class="contact-link">
+                    <i class="fas fa-user-secret"></i>
+                    <span>Security Training Missions</span>
+                </a>
+                <a href="mailto:ezequiel.morales@gmail.com" class="contact-link">
+                    <i class="fas fa-envelope"></i>
+                    <span>Direct Communication Channel</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="container">
+        <p>© 2025 Ezequiel Morales - All Rights Reserved</p>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
