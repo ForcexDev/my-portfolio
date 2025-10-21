@@ -50,16 +50,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--space-blue-dark); /* Ajustado al tema */
+    background: var(--space-blue-dark);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--nebula-blue); /* Ajustado al tema */
+    background: var(--nebula-blue);
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--cosmic-purple); /* Ajustado al tema */
+    background: var(--cosmic-purple);
 }
 
 /* Realistic Space Background */
@@ -73,7 +73,6 @@ body {
     background: radial-gradient(ellipse at bottom, var(--space-blue-deep) 0%, var(--space-black) 25%, var(--deep-space) 100%);
 }
 
-/* Starfield Layers - Cleaner and Less Busy */
 .stars {
     position: absolute;
     top: 0;
@@ -105,7 +104,6 @@ body {
     animation: starTwinkle 12s linear infinite;
 }
 
-/* Nebula Layer */
 .nebula {
     position: absolute;
     top: 0;
@@ -119,7 +117,6 @@ body {
     animation: nebulaFlow 20s ease-in-out infinite alternate;
 }
 
-/* Space Dust Particles */
 .space-dust {
     position: absolute;
     top: 0;
@@ -161,7 +158,6 @@ body {
     z-index: 1000;
     padding: 1rem 0;
     transition: var(--space-transition);
-    
 }
 
 .navbar.scrolled {
@@ -200,7 +196,7 @@ body {
     display: flex;
     list-style: none;
     gap: 2rem;
-    align-items: center; /* Añadido para alinear el botón de idioma */
+    align-items: center;
 }
 
 .nav-links a {
@@ -240,7 +236,7 @@ body {
     display: none;
     background: none;
     border: none;
-    color: var(--nebula-blue); /* Ajustado */
+    color: var(--nebula-blue);
     font-size: 1.5rem;
     cursor: pointer;
 }
@@ -270,7 +266,7 @@ body {
 
 .hero-greeting {
     font-size: 1.2rem;
-    color: var(--nebula-blue); /* Ajustado */
+    color: var(--nebula-blue);
     margin-bottom: 1rem;
     opacity: 0;
     animation: fadeInUp 0.8s ease-out 0.5s forwards;
@@ -373,7 +369,6 @@ body {
     left: 0;
 }
 
-/* SCROLL INDICATOR CORREGIDO */
 .scroll-indicator {
     position: absolute;
     bottom: 2rem;
@@ -389,7 +384,7 @@ body {
 .scroll-indicator i {
     font-size: 1.5rem;
     margin-top: 0.5rem;
-    animation: bounceArrow 2s infinite ease-in-out; /* Animación añadida */
+    animation: bounceArrow 2s infinite ease-in-out;
 }
 
 /* Cosmic Particles */
@@ -481,11 +476,10 @@ body {
     box-shadow: 0 0 10px rgba(66, 153, 225, 0.5);
 }
 
-/* ABOUT SECTION CORREGIDO */
 .about-content {
     display: grid;
-    grid-template-columns: 1fr; /* Cambiado de 1fr 2fr */
-    gap: 2rem; /* Reducido de 4rem */
+    grid-template-columns: 1fr;
+    gap: 2rem;
     align-items: center;
 }
 
@@ -513,14 +507,14 @@ body {
     line-height: 1.9;
     color: var(--stellar-dim);
     text-shadow: 0 0 5px rgba(203, 213, 225, 0.1);
-    max-width: 800px; /* Añadido para que el texto no sea demasiado ancho */
-    margin: 0 auto; /* Centra el bloque de texto */
-    text-align: center; /* Centra el texto y el botón */
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .about-text p {
     margin-bottom: 1.5rem;
-    text-align: left; /* Mantiene párrafos justificados a la izquierda */
+    text-align: left;
 }
 
 /* Projects Section */
@@ -747,7 +741,7 @@ body {
 
 .contact-text {
     font-size: 1.2rem;
-    color: var(--stellar-dim); /* Ajustado */
+    color: var(--stellar-dim);
     margin-bottom: 3rem;
 }
 
@@ -863,7 +857,6 @@ body {
     }
 }
 
-/* Animación flecha scroll */
 @keyframes bounceArrow {
     0%, 20%, 50%, 80%, 100% {
         transform: translateY(0);
@@ -927,7 +920,6 @@ body {
     left: 0;
 }
 
-/* 'Playing' state */
 .music-play-btn.playing {
     background: linear-gradient(135deg, var(--nebula-blue), var(--cosmic-purple));
     color: var(--deep-space);
@@ -959,7 +951,7 @@ body {
     font-size: 0.85rem;
     transition: var(--space-transition);
     text-shadow: 0 0 5px rgba(66, 153, 225, 0.2);
-    margin-left: 1rem; /* Para separarlo del 'Contact' */
+    margin-left: 1rem;
 }
 
 .lang-btn:hover {
@@ -967,35 +959,31 @@ body {
     color: var(--stellar-white);
     box-shadow: 0 0 10px rgba(66, 153, 225, 0.3);
 }
-
 /* === FIN: Estilos Botón Idioma === */
 
 
-/* === INICIO: BLOQUE RESPONSIVE CORREGIDO === */
+/* === INICIO: BLOQUE RESPONSIVE FINAL === */
 @media (max-width: 768px) {
-    /* REGLA MODIFICADA: Cambiado a Grid para centrar el botón */
+
     .nav-container {
         padding: 0 1rem;
         overflow: visible;
-        display: grid; /* CAMBIO: de flex a grid */
-        grid-template-columns: 1fr auto 1fr; /* CAMBIO: 3 columnas (logo, botón, vacío) */
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
         align-items: center;
-        /* Se elimina 'justify-content: space-between' que venía de la regla desktop */
     }
 
-    /* REGLA MODIFICADA: Reducir tamaño del logo y ubicar en grid */
     .logo {
         font-size: 1.3rem;
         letter-spacing: 1px;
-        grid-column: 1 / 2; /* CAMBIO: Poner en la primera columna */
-        justify-self: start; /* CAMBIO: Alinear a la izquierda */
+        grid-column: 1 / 2;
+        justify-self: start;
     }
 
-    /* REGLA MODIFICADA: Ajustes del panel de menú */
     .nav-links {
         display: flex; 
         position: fixed;
-        top: 70px; /* Altura de la barra de navegación */
+        top: 70px;
         left: 0;
         right: 0;
         background: rgba(0, 0, 17, 0.98);
@@ -1003,29 +991,25 @@ body {
         flex-direction: column;
         padding: 2rem;
         gap: 1.5rem;
-        transform: translateY(-100%); /* Oculto por defecto */
+        transform: translateY(-100%);
         transition: var(--space-transition);
         border-bottom: 1px solid var(--nebula-blue);
-
-        /* AÑADIDO: Centrar enlaces y ajustar altura */
         align-items: center;
-        height: calc(100vh - 70px); /* Ocupa el resto de la pantalla */
-        overflow-y: auto; /* Permite scroll si hay muchos enlaces */
+        height: calc(100vh - 70px);
+        overflow-y: auto;
         z-index: 999; 
     }
 
-    /* REGLA MODIFICADA: Muestra el panel */
     .nav-links.active {
-        transform: translateY(0); /* Muestra el menú */
+        transform: translateY(0);
     }
 
-    /* REGLA MODIFICADA: Ubicar botón en el medio */
     .mobile-toggle {
         display: block;
         flex-shrink: 0; 
         z-index: 1001;
-        grid-column: 2 / 3; /* CAMBIO: Poner en la columna del medio */
-        justify-self: center; /* CAMBIO: Centrar en su celda */
+        grid-column: 2 / 3;
+        justify-self: center;
     }
 
     .hero {
@@ -1035,43 +1019,27 @@ body {
     .hero-title {
         font-size: clamp(2.5rem, 10vw, 4rem);
     }
-
-    .about-content {
-        /*grid-template-columns: 1fr; (Ya está arriba)*/
-        text-align: center;
-        gap: 2rem;
-    }
-
+    
     .about-text p {
-        text-align: center; /* Centramos párrafos en móvil */
+        text-align: center;
     }
 
-    .projects-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .skills-grid {
-        grid-template-columns: 1fr;
-    }
-
+    .projects-grid,
+    .skills-grid,
     .contact-links {
         grid-template-columns: 1fr;
     }
 
     .section {
-        padding: 3rem 0;
+        padding: 3rem 1rem; /* Añadimos padding lateral a la sección misma */
     }
 
-    /* REGLA MODIFICADA: Ajusta el padding general del contenedor en móvil */
-    .container {
-        padding: 0 1rem;
-    }
+    /* La regla de .container de escritorio es suficiente, no la necesitamos aquí */
 
-    /* Estilo botón idioma en móvil */
     .lang-btn {
         margin-left: 0;
-        margin-top: 0.5rem; /* Para separarlo de los enlaces */
-        width: 100px; /* Ancho fijo para centrarlo */
+        margin-top: 0.5rem;
+        width: 100px;
         text-align: center;
     }
 }
@@ -1086,3 +1054,4 @@ body {
         transition-duration: 0.01ms !important;
     }
 }
+
