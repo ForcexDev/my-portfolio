@@ -119,7 +119,7 @@ const translations = {
         'skillLatex': 'Documenting missions with precision',
 
         // --- Contact ---
-        'contactTitle': 'Communication Hub',
+        'contactTitle': 'Contact Hub',
         'contactText': "Ready to explore new frontiers together? Let’s connect across the universal cosmos and create something extraordinary.",
         'contactRepo': 'GITHUB',
         'contactNetwork': 'LINKEDIN',
@@ -195,7 +195,7 @@ const translations = {
         'skillLatex': 'Documentando misiones con precisión',
 
         // --- Contact ---
-        'contactTitle': 'Centro de Comunicación',
+        'contactTitle': 'Centro de Contacto',
         'contactText': '¿Listo para explorar nuevas fronteras juntos? Conectemos a través del cosmos universal y creemos algo extraordinario.',
         'contactRepo': 'GITHUB',
         'contactNetwork': 'LINKEDIN',
@@ -501,3 +501,4 @@ window.addEventListener('scroll', throttle(() => {}, 10));
 document.addEventListener('DOMContentLoaded', () => {
     document.body.offsetHeight;
 });
+
