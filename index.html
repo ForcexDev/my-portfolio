@@ -29,11 +29,12 @@
     <div class="nav-container">
         <a href="#home" class="logo">ForcexDev</a>
         <ul class="nav-links">
-            <li><a href="#home" class="nav-link active">Home</a></li>
-            <li><a href="#about" class="nav-link">About</a></li>
-            <li><a href="#projects" class="nav-link">Projects</a></li>
-            <li><a href="#skills" class="nav-link">Skills</a></li>
-            <li><a href="#contact" class="nav-link">Contact</a></li>
+            <li><a href="#home" class="nav-link active" data-key="navHome">Home</a></li>
+            <li><a href="#about" class="nav-link" data-key="navAbout">About</a></li>
+            <li><a href="#projects" class="nav-link" data-key="navProjects">Projects</a></li>
+            <li><a href="#skills" class="nav-link" data-key="navSkills">Skills</a></li>
+            <li><a href="#contact" class="nav-link" data-key="navContact">Contact</a></li>
+            <li><button id="lang-toggle" class="lang-btn" aria-label="Cambiar idioma">EN | ES</button></li>
         </ul>
         <button class="mobile-toggle">
             <i class="fas fa-bars"></i>
@@ -44,42 +45,37 @@
 <section id="home" class="hero">
     <div class="particles"></div>
     <div class="hero-content">
-        <p class="hero-greeting">Greetings from the Digital Cosmos</p>
+        <p class="hero-greeting" data-key="heroGreeting">Greetings from the Digital Cosmos</p>
         <h1 class="hero-title">ForcexDev</h1>
-        <h2 class="hero-subtitle">Ezequiel Morales</h2>
-        <p class="hero-tagline">Cybersecurity Student &amp; Space Enthusiast</p>
-        <p class="hero-subtitle-2">Universidad Diego Portales</p>
+        <h2 class="hero-subtitle" data-key="heroName">Ezequiel Morales</h2>
+        <p class="hero-tagline" data-key="heroTagline">Cybersecurity Student &amp; Space Enthusiast</p>
+        <p class="hero-subtitle-2" data-key="heroUniv">Universidad Diego Portales</p>
         <div class="typewriter" id="typewriter"></div>
-        <a href="#projects" class="cta-button">Explore My Universe</a>
+        <a href="#about" class="cta-button" data-key="heroCTA">Explore My Universe</a>
     </div>
     <div class="scroll-indicator">
-        <p>Scroll to explore</p>
+        <p data-key="scrollExplore">Scroll to explore</p>
         <i class="fas fa-chevron-down"></i>
     </div>
 </section>
 
 <section id="about" class="section">
     <div class="container">
-        <h2 class="section-title">About Me</h2>
+        <h2 class="section-title" data-key="aboutTitle">About Me</h2>
         <div class="about-content">
-            <div class="about-image">
-                <div class="avatar">
-                    <i class="fas fa-satellite"></i>
-                </div>
-            </div>
             <div class="about-text">
-                <p>
+                <p data-key="aboutP1">
                     Welcome to my corner of the digital universe. Here you'll discover my journey through
                     the vast landscapes of cybersecurity, networking, and programming - much like exploring
                     the infinite cosmos.
                 </p>
-                <p>
+                <p data-key="aboutP2">
                     My passion for astronomy parallels my approach to technology: both require curiosity,
                     precision, and the ability to see patterns in complex systems. Whether I'm analyzing
                     network architectures or stargazing at distant galaxies, I'm driven by the desire to
                     understand and protect the digital frontiers we explore.
                 </p>
-                <p>
+                <p data-key="aboutP3">
                     When I'm not diving deep into code or configuring security systems, you'll find me
                     contemplating the universe - a reminder that even in the most complex technical
                     challenges, there's always a bigger picture to consider.
@@ -88,7 +84,7 @@
                 <div class="music-player-section">
                     <button id="music-toggle" class="music-play-btn">
                         <i class="fas fa-play"></i>
-                        <span>Reproducir Música Ambiente</span>
+                        <span data-key="musicPlay">Reproducir Música Ambiente</span>
                     </button>
                 </div>
             </div>
@@ -98,11 +94,11 @@
 
 <section id="projects" class="section">
     <div class="container">
-        <h2 class="section-title">Featured Projects</h2>
+        <h2 class="section-title" data-key="projectsTitle">Featured Projects</h2>
         <div class="projects-grid">
             <div class="project-card">
-                <h3 class="project-title">GrandChessAuto</h3>
-                <p class="project-description">
+                <h3 class="project-title" data-key="project1Title">GrandChessAuto</h3>
+                <p class="project-description" data-key="project1Desc">
                     Strategic gameplay across digital dimensions. A complex system where strategy and technology converge,
                     featuring robust backend architecture with Node.js and Express, complemented by an interactive frontend
                     that responds like orbital mechanics.
@@ -122,8 +118,8 @@
             </div>
 
             <div class="project-card">
-                <h3 class="project-title">Java EDA - Data Structures</h3>
-                <p class="project-description">
+                <h3 class="project-title" data-key="project2Title">Java EDA - Data Structures</h3>
+                <p class="project-description" data-key="project2Desc">
                     Mapping data architectures like star formations. These fundamental building blocks organize information
                     with the same precision that gravity organizes celestial bodies - efficient, elegant, and essential
                     for navigating the programming cosmos.
@@ -140,8 +136,8 @@
             </div>
 
             <div class="project-card">
-                <h3 class="project-title">Redes De Datos</h3>
-                <p class="project-description">
+                <h3 class="project-title" data-key="project3Title">Redes De Datos</h3>
+                <p class="project-description" data-key="project3Desc">
                     Network architectures spanning digital space. Like mapping the cosmic web that connects galaxies,
                     these projects reveal the hidden infrastructure of communication across vast digital territories.
                 </p>
@@ -157,8 +153,8 @@
             </div>
 
             <div class="project-card">
-                <h3 class="project-title">Python Projects</h3>
-                <p class="project-description">
+                <h3 class="project-title" data-key="project4Title">Python Projects</h3>
+                <p class="project-description" data-key="project4Desc">
                     Scripting solutions across the programming cosmos. These scripts and Jupyter notebooks demonstrate
                     the versatility needed to navigate the ever-expanding universe of programming challenges and automation.
                 </p>
@@ -174,8 +170,8 @@
             </div>
 
             <div class="project-card">
-                <h3 class="project-title">Bandit Security Guide</h3>
-                <p class="project-description">
+                <h3 class="project-title" data-key="project5Title">Bandit Security Guide</h3>
+                <p class="project-description" data-key="project5Desc">
                     Security exploration in Linux territories. Like charting unknown regions of space, this guide
                     maps the landscape of system security and exploitation techniques across digital frontiers.
                 </p>
@@ -192,8 +188,8 @@
             </div>
 
             <div class="project-card">
-                <h3 class="project-title">PostgreSQL Database</h3>
-                <p class="project-description">
+                <h3 class="project-title" data-key="project6Title">PostgreSQL Database</h3>
+                <p class="project-description" data-key="project6Desc">
                     Structured data like organized stellar catalogs. Just as astronomers catalog stellar objects with
                     precision, this project demonstrates the art of organizing data for optimal performance and integrity.
                 </p>
@@ -213,118 +209,118 @@
 
 <section id="skills" class="section">
     <div class="container">
-        <h2 class="section-title">Technical Skills</h2>
+        <h2 class="section-title" data-key="skillsTitle">Technical Skills</h2>
         <div class="skills-grid">
             <div class="skill-item">
                 <i class="fab fa-python skill-icon"></i>
                 <div class="skill-info">
                     <h4>Python</h4>
-                    <p>Scripting across digital galaxies</p>
+                    <p data-key="skillPython">Scripting across digital galaxies</p>
                 </div>
             </div>
             <div class="skill-item">
                 <i class="fas fa-database skill-icon"></i>
                 <div class="skill-info">
                     <h4>SQL</h4>
-                    <p>Database architectures like stellar catalogs</p>
+                    <p data-key="skillSQL">Database architectures like stellar catalogs</p>
                 </div>
             </div>
             <div class="skill-item">
                 <i class="fab fa-linux skill-icon"></i>
                 <div class="skill-info">
                     <h4>Linux</h4>
-                    <p>Navigation through secure systems</p>
+                    <p data-key="skillLinux">Navigation through secure systems</p>
                 </div>
             </div>
             <div class="skill-item">
                 <i class="fas fa-terminal skill-icon"></i>
                 <div class="skill-info">
                     <h4>Bash Scripting</h4>
-                    <p>Command-line exploration tools</p>
+                    <p data-key="skillBash">Command-line exploration tools</p>
                 </div>
             </div>
             <div class="skill-item">
                 <i class="fab fa-java skill-icon"></i>
                 <div class="skill-info">
                     <h4>Java</h4>
-                    <p>Object-oriented stellar architecture</p>
+                    <p data-key="skillJava">Object-oriented stellar architecture</p>
                 </div>
             </div>
             <div class="skill-item">
                 <i class="fas fa-code skill-icon"></i>
                 <div class="skill-info">
                     <h4>C++</h4>
-                    <p>System-level cosmic engineering</p>
+                    <p data-key="skillCpp">System-level cosmic engineering</p>
                 </div>
             </div>
             <div class="skill-item">
                 <i class="fab fa-js skill-icon"></i>
                 <div class="skill-info">
                     <h4>JavaScript</h4>
-                    <p>Interactive web constellation</p>
+                    <p data-key="skillJS">Interactive web constellation</p>
                 </div>
             </div>
             <div class="skill-item">
                 <i class="fab fa-html5 skill-icon"></i>
                 <div class="skill-info">
                     <h4>HTML</h4>
-                    <p>Structuring digital universes</p>
+                    <p data-key="skillHTML">Structuring digital universes</p>
                 </div>
             </div>
             <div class="skill-item">
                 <i class="fab fa-css3-alt skill-icon"></i>
                 <div class="skill-info">
                     <h4>CSS</h4>
-                    <p>Styling cosmic interfaces</p>
+                    <p data-key="skillCSS">Styling cosmic interfaces</p>
                 </div>
             </div>
             <div class="skill-item">
                 <i class="fab fa-node-js skill-icon"></i>
                 <div class="skill-info">
                     <h4>Node.js</h4>
-                    <p>Server-side space stations</p>
+                    <p data-key="skillNode">Server-side space stations</p>
                 </div>
             </div>
             <div class="skill-item">
                 <i class="fab fa-git-alt skill-icon"></i>
                 <div class="skill-info">
                     <h4>Git &amp; GitHub</h4>
-                    <p>Version control across timelines</p>
+                    <p data-key="skillGit">Version control across timelines</p>
                 </div>
             </div>
             <div class="skill-item">
                 <i class="fab fa-docker skill-icon"></i>
                 <div class="skill-info">
                     <h4>Docker</h4>
-                    <p>Containerizing applications like space stations</p>
+                    <p data-key="skillDocker">Containerizing applications like space stations</p>
                 </div>
             </div>
             <div class="skill-item">
                 <i class="fab fa-aws skill-icon"></i>
                 <div class="skill-info">
                     <h4>AWS</h4>
-                    <p>Cloud infrastructure spanning vast networks</p>
+                    <p data-key="skillAWS">Cloud infrastructure spanning vast networks</p>
                 </div>
             </div>
             <div class="skill-item">
                 <i class="fas fa-network-wired skill-icon"></i>
                 <div class="skill-info">
                     <h4>Networking</h4>
-                    <p>Connecting systems across digital space</p>
+                    <p data-key="skillNetwork">Connecting systems across digital space</p>
                 </div>
             </div>
             <div class="skill-item">
                 <i class="fas fa-shield-alt skill-icon"></i>
                 <div class="skill-info">
                     <h4>Cybersecurity</h4>
-                    <p>Protecting digital frontiers</p>
+                    <p data-key="skillCyber">Protecting digital frontiers</p>
                 </div>
             </div>
             <div class="skill-item">
                 <i class="fas fa-file-alt skill-icon"></i>
                 <div class="skill-info">
                     <h4>LaTeX</h4>
-                    <p>Technical documentation for space missions</p>
+                    <p data-key="skillLatex">Technical documentation for space missions</p>
                 </div>
             </div>
         </div>
@@ -334,26 +330,26 @@
 <section id="contact" class="section">
     <div class="container">
         <div class="contact-content">
-            <h2 class="section-title">Ground Control Communication Hub</h2>
-            <p class="contact-text">
+            <h2 class="section-title" data-key="contactTitle">Ground Control Communication Hub</h2>
+            <p class="contact-text" data-key="contactText">
                 Ready to explore new frontiers together? Let's connect across the digital cosmos and discuss the infinite possibilities of technology and space.
             </p>
             <div class="contact-links">
                 <a href="https://github.com/ForcexDev" target="_blank" class="contact-link">
                     <i class="fab fa-github"></i>
-                    <span>Mission Control Repository</span>
+                    <span data-key="contactRepo">Mission Control Repository</span>
                 </a>
                 <a href="https://www.linkedin.com/in/ezequielleandromorales/" target="_blank" class="contact-link">
                     <i class="fab fa-linkedin"></i>
-                    <span>Professional Network</span>
+                    <span data-key="contactNetwork">Professional Network</span>
                 </a>
                 <a href="https://tryhackme.com/p/ForcexDev" target="_blank" class="contact-link">
                     <i class="fas fa-user-secret"></i>
-                    <span>Security Training Missions</span>
+                    <span data-key="contactMissions">Security Training Missions</span>
                 </a>
                 <a href="mailto:ezequiel.morales@gmail.com" class="contact-link">
                     <i class="fas fa-envelope"></i>
-                    <span>Direct Communication Channel</span>
+                    <span data-key="contactChannel">Direct Communication Channel</span>
                 </a>
             </div>
         </div>
