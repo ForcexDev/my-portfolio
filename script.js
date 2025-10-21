@@ -7,7 +7,7 @@ class TypeWriter {
         this.wordIndex = 0;
         this.wait = parseInt(wait, 10);
         this.isDeleting = false;
-        this.timeoutID = null; // <-- CAMBIO CLAVE: Para guardar el ID del timeout
+        this.timeoutID = null;
         this.type();
     }
 
@@ -37,11 +37,9 @@ class TypeWriter {
             typeSpeed = 500;
         }
 
-        // <-- CAMBIO CLAVE: Guardamos el ID para poder cancelarlo
         this.timeoutID = setTimeout(() => this.type(), typeSpeed);
     }
 
-    // <-- CAMBIO CLAVE: Nuevo método para detener el bucle
     stop() {
         if (this.timeoutID) {
             clearTimeout(this.timeoutID);
@@ -52,6 +50,7 @@ class TypeWriter {
 
 // 1. EL DICCIONARIO DE TRADUCCIONES
 const translations = {
+    // ... (El objeto de traducciones gigante va aquí, no ha cambiado) ...
     'en': {
         // --- Nav ---
         'navHome': 'Home',
@@ -174,7 +173,7 @@ const translations = {
         'project5Title': 'Guía de Seguridad Bandit',
         'project5Desc': 'Una exploración guiada por la seguridad en Linux. Como viajar por regiones inexploradas del universo digital, cada nivel revela nuevas capas de protección y vulnerabilidad.',
         'project6Title': 'Base de Datos PostgreSQL',
-        'project6Desc': 'Organizando datos con la precisión de los catálogos estelares. Un proyecto enfocado en el rendimiento y la integridad, porque incluso los datos merecen orden en el cosmos.',
+        'project6Desc': 'Organizando datos con la precisión de los católogos estelares. Un proyecto enfocado en el rendimiento y la integridad, porque incluso los datos merecen orden en el cosmos.',
 
         // --- Skills ---
         'skillsTitle': 'Habilidades Técnicas',
@@ -206,43 +205,45 @@ const translations = {
 };
 
 // 2. LÓGICA DE TRADUCCIÓN
-let currentLang = localStorage.getItem('lang') || 'en'; // 'en' por defecto
-let typewriterInstance; // Guardamos la instancia del TypeWriter
+function getInitialLanguage() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const langFromURL = urlParams.get('lang');
+    if (langFromURL === 'es' || langFromURL === 'en') {
+        localStorage.setItem('lang', langFromURL);
+        return langFromURL;
+    }
+    const langFromStorage = localStorage.getItem('lang');
+    if (langFromStorage === 'es' || langFromStorage === 'en') {
+        return langFromStorage;
+    }
+    return 'en';
+}
+let currentLang = getInitialLanguage();
+let typewriterInstance;
 
 function setLanguage(lang) {
     currentLang = lang;
-    localStorage.setItem('lang', lang); // Guarda la preferencia
-
-    // Actualiza el texto de la página
+    localStorage.setItem('lang', lang);
     document.querySelectorAll('[data-key]').forEach(elem => {
         const key = elem.dataset.key;
         if (translations[lang][key]) {
             elem.textContent = translations[lang][key];
         }
     });
-
-    // Actualiza el botón de idioma (visual)
     const langBtn = document.getElementById('lang-toggle');
     if (lang === 'es') {
         langBtn.innerHTML = 'EN | <span style="color: var(--nebula-blue); font-weight: 700;">ES</span>';
     } else {
         langBtn.innerHTML = '<span style="color: var(--nebula-blue); font-weight: 700;">EN</span> | ES';
     }
-
-    // ¡Importante! Reinicia el TypeWriter con las palabras traducidas
     const txtElement = document.getElementById('typewriter');
     if (txtElement) {
-
-        // <-- CAMBIO CLAVE: Detenemos la instancia anterior antes de crear una nueva
         if (typewriterInstance) {
             typewriterInstance.stop();
         }
-
         const words = translations[lang].typewriterWords;
         typewriterInstance = new TypeWriter(txtElement, words, 2000);
     }
-
-    // ¡Importante! Actualiza el texto del botón de música
     updateMusicButtonText();
 }
 
@@ -250,6 +251,11 @@ function setLanguage(lang) {
 function initMusicPlayer() {
     const musicBtn = document.getElementById('music-toggle');
     const audio = document.getElementById('bg-music');
+    
+    // --- INICIO: CAMBIO ---
+    // Seleccionamos el botón CTA
+    const ctaButton = document.querySelector('.cta-button'); 
+    // --- FIN: CAMBIO ---
 
     if (!musicBtn || !audio) {
         console.warn("Music player elements not found.");
@@ -265,18 +271,51 @@ function initMusicPlayer() {
 
     if (playPromise !== undefined) {
         playPromise.then(_ => {
+            // Autoplay funcionó
             icon.classList.replace('fa-play', 'fa-pause');
-            text.textContent = translations[currentLang].musicPause; // Traducido
+            text.textContent = translations[currentLang].musicPause;
             musicBtn.classList.add('playing');
         }).catch(error => {
+            // Autoplay fue bloqueado
             console.warn("Autoplay fue bloqueado:", error);
             icon.classList.replace('fa-pause', 'fa-play');
-            text.textContent = translations[currentLang].musicPlay; // Traducido
+            text.textContent = translations[currentLang].musicPlay;
             musicBtn.classList.remove('playing');
+
+            // --- INICIO: LÓGICA HÍBRIDA (SCROLL O CLIC) ---
+            
+            // Creamos una sola función para reproducir
+            const playOnInteraction = () => {
+                if (audio.paused) {
+                    audio.play().then(() => {
+                        icon.classList.replace('fa-play', 'fa-pause');
+                        text.textContent = translations[currentLang].musicPause;
+                        musicBtn.classList.add('playing');
+                    }).catch(e => {
+                        console.warn("La reproducción en interacción también falló:", e);
+                    });
+                }
+                
+                // --- IMPORTANTE: Removemos ambos listeners después del primer intento ---
+                //    (Aunque {once: true} ya hace esto, es una doble seguridad)
+                window.removeEventListener('scroll', playOnInteraction);
+                if (ctaButton) {
+                    ctaButton.removeEventListener('click', playOnInteraction);
+                }
+            };
+
+            // Agregamos el listener para SCROLL (se ejecuta 1 vez)
+            window.addEventListener('scroll', playOnInteraction, { once: true });
+            
+            // Agregamos el listener para el CLIC en el BOTÓN (se ejecuta 1 vez)
+            if (ctaButton) {
+                ctaButton.addEventListener('click', playOnInteraction, { once: true });
+            }
+            // --- FIN: LÓGICA HÍBRIDA ---
         });
     }
 
-    // --- Listener del Clic ---
+    // --- Listener del Clic (en el botón de Pausa/Play) ---
     musicBtn.addEventListener('click', () => {
         const icon = musicBtn.querySelector('i');
         const text = musicBtn.querySelector('span');
@@ -284,12 +323,12 @@ function initMusicPlayer() {
         if (audio.paused) {
             audio.play().catch(e => console.error("Audio play failed:", e));
             icon.classList.replace('fa-play', 'fa-pause');
-            text.textContent = translations[currentLang].musicPause; // Traducido
+            text.textContent = translations[currentLang].musicPause;
             musicBtn.classList.add('playing');
         } else {
             audio.pause();
             icon.classList.replace('fa-pause', 'fa-play');
-            text.textContent = translations[currentLang].musicPlay; // Traducido
+            text.textContent = translations[currentLang].musicPlay;
             musicBtn.classList.remove('playing');
         }
     });
@@ -314,11 +353,9 @@ function updateMusicButtonText() {
 // Cosmic Particles System
 function createCosmicParticles() {
     const particlesContainer = document.querySelector('.particles');
-    if (!particlesContainer) return; // Guard clause
-
+    if (!particlesContainer) return;
     const particleCount = 25;
     const particleTypes = ['star', 'dust', 'cosmic'];
-
     for (let i = 0; i < particleCount; i++) {
         const particle = document.createElement('div');
         const type = particleTypes[Math.floor(Math.random() * particleTypes.length)];
@@ -326,14 +363,11 @@ function createCosmicParticles() {
         particle.style.left = Math.random() * 100 + '%';
         particle.style.animationDelay = Math.random() * 12 + 's';
         particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
-
-        // Add some particles with different sizes for depth
         if (type === 'star' && Math.random() > 0.7) {
             particle.style.width = '4px';
             particle.style.height = '4px';
             particle.style.boxShadow = '0 0 8px rgba(255, 255, 255, 1)';
         }
-
         particlesContainer.appendChild(particle);
     }
 }
@@ -344,10 +378,7 @@ function initNavigation() {
     const navLinks = document.querySelectorAll('.nav-link');
     const mobileToggle = document.querySelector('.mobile-toggle');
     const navLinksContainer = document.querySelector('.nav-links');
-
     if (!navbar || !mobileToggle || !navLinksContainer) return;
-
-    // Scroll effect on navbar
     window.addEventListener('scroll', () => {
         if (window.scrollY > 100) {
             navbar.classList.add('scrolled');
@@ -355,22 +386,17 @@ function initNavigation() {
             navbar.classList.remove('scrolled');
         }
     });
-
-    // Mobile menu toggle
     mobileToggle.addEventListener('click', () => {
         navLinksContainer.classList.toggle('active');
         const icon = mobileToggle.querySelector('i');
         icon.classList.toggle('fa-bars');
         icon.classList.toggle('fa-times');
     });
-
-    // Smooth scrolling for nav links
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const targetId = link.getAttribute('href');
             const targetSection = document.querySelector(targetId);
-
             if (targetSection) {
                 const offsetTop = targetSection.offsetTop - 80;
                 window.scrollTo({
@@ -378,12 +404,8 @@ function initNavigation() {
                     behavior: 'smooth'
                 });
             }
-
-            // Update active link
             navLinks.forEach(nl => nl.classList.remove('active'));
             link.classList.add('active');
-
-            // Close mobile menu
             if (navLinksContainer.classList.contains('active')) {
                 navLinksContainer.classList.remove('active');
                 mobileToggle.querySelector('i').classList.add('fa-bars');
@@ -399,7 +421,6 @@ function initScrollAnimations() {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
     };
-
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -407,14 +428,10 @@ function initScrollAnimations() {
             }
         });
     }, observerOptions);
-
-    // Observe project cards
     document.querySelectorAll('.project-card').forEach((card, index) => {
         card.style.animationDelay = `${index * 0.1}s`;
         observer.observe(card);
     });
-
-    // Observe skill items
     document.querySelectorAll('.skill-item').forEach((item, index) => {
         item.style.animationDelay = `${index * 0.05}s`;
         observer.observe(item);
@@ -425,9 +442,8 @@ function initScrollAnimations() {
 function updateActiveNavigation() {
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-link');
-
     window.addEventListener('scroll', () => {
-        let current = 'home'; // Default to home
+        let current = 'home';
         sections.forEach(section => {
             const sectionTop = section.offsetTop - 100;
             const sectionHeight = section.clientHeight;
@@ -435,7 +451,6 @@ function updateActiveNavigation() {
                 current = section.getAttribute('id');
             }
         });
-
         navLinks.forEach(link => {
             link.classList.remove('active');
             if (link.getAttribute('href') === `#${current}`) {
@@ -448,32 +463,20 @@ function updateActiveNavigation() {
 // Simple card hover effects (no tilt)
 function initCardHoverEffects() {
     const cards = document.querySelectorAll('.project-card');
-
     cards.forEach(card => {
-        card.addEventListener('mouseenter', () => {
-            // Hover effect is now handled by CSS :hover
-        });
-
-        card.addEventListener('mouseleave', () => {
-            // Hover effect is now handled by CSS :hover
-        });
+        card.addEventListener('mouseenter', () => {});
+        card.addEventListener('mouseleave', () => {});
     });
 }
 
 // 5. INICIALIZADOR PRINCIPAL
 document.addEventListener('DOMContentLoaded', () => {
-
-    // Configura el botón de idioma
     const langBtn = document.getElementById('lang-toggle');
     langBtn.addEventListener('click', () => {
         const newLang = currentLang === 'en' ? 'es' : 'en';
         setLanguage(newLang);
     });
-
-    // Carga el idioma guardado al iniciar (esto también inicia el TypeWriter)
     setLanguage(currentLang);
-
-    // Inicia el resto de las funciones
     initMusicPlayer();
     createCosmicParticles();
     initNavigation();
@@ -494,14 +497,7 @@ function throttle(func, wait) {
         timeout = setTimeout(later, wait);
     };
 }
-
-// Apply throttling to scroll-heavy functions
-window.addEventListener('scroll', throttle(() => {
-    // Las funciones de scroll (updateActiveNavigation y navbar scroll) ya están en listeners
-}, 10));
-
-// Preload critical animations
+window.addEventListener('scroll', throttle(() => {}, 10));
 document.addEventListener('DOMContentLoaded', () => {
-    // Force repaint to ensure smooth initial animations
     document.body.offsetHeight;
 });
