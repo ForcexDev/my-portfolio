@@ -161,6 +161,7 @@ body {
     z-index: 1000;
     padding: 1rem 0;
     transition: var(--space-transition);
+    
 }
 
 .navbar.scrolled {
@@ -972,21 +973,27 @@ body {
 
 /* === INICIO: BLOQUE RESPONSIVE CORREGIDO === */
 @media (max-width: 768px) {
-    /* REGLA MODIFICADA: Reducir padding y asegurar visibilidad */
+    /* REGLA MODIFICADA: Cambiado a Grid para centrar el botón */
     .nav-container {
         padding: 0 1rem;
-        overflow: visible; /* NUEVO: Evita que el botón se corte */
+        overflow: visible;
+        display: grid; /* CAMBIO: de flex a grid */
+        grid-template-columns: 1fr auto 1fr; /* CAMBIO: 3 columnas (logo, botón, vacío) */
+        align-items: center;
+        /* Se elimina 'justify-content: space-between' que venía de la regla desktop */
     }
 
-    /* REGLA MODIFICADA: Reducir tamaño del logo */
+    /* REGLA MODIFICADA: Reducir tamaño del logo y ubicar en grid */
     .logo {
         font-size: 1.3rem;
         letter-spacing: 1px;
+        grid-column: 1 / 2; /* CAMBIO: Poner en la primera columna */
+        justify-self: start; /* CAMBIO: Alinear a la izquierda */
     }
 
     /* REGLA MODIFICADA: Ajustes del panel de menú */
     .nav-links {
-        display: flex; /* NUEVO: Faltaba esto para que flex-direction funcione */
+        display: flex; 
         position: fixed;
         top: 70px; /* Altura de la barra de navegación */
         left: 0;
@@ -1004,7 +1011,7 @@ body {
         align-items: center;
         height: calc(100vh - 70px); /* Ocupa el resto de la pantalla */
         overflow-y: auto; /* Permite scroll si hay muchos enlaces */
-        z-index: 999; /* NUEVO: Para que se ponga sobre el contenido (pero bajo la navbar) */
+        z-index: 999; 
     }
 
     /* REGLA MODIFICADA: Muestra el panel */
@@ -1012,11 +1019,13 @@ body {
         transform: translateY(0); /* Muestra el menú */
     }
 
-    /* REGLA MODIFICADA: Asegura que el botón de 3 barras se vea */
+    /* REGLA MODIFICADA: Ubicar botón en el medio */
     .mobile-toggle {
         display: block;
-        flex-shrink: 0; /* Impide que el botón se encoja */
-        z-index: 1001; /* NUEVO: Fuerza al botón a estar por encima de la navbar (cuyo z-index es 1000) */
+        flex-shrink: 0; 
+        z-index: 1001;
+        grid-column: 2 / 3; /* CAMBIO: Poner en la columna del medio */
+        justify-self: center; /* CAMBIO: Centrar en su celda */
     }
 
     .hero {
