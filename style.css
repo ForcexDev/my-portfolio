@@ -199,6 +199,7 @@ body {
     display: flex;
     list-style: none;
     gap: 2rem;
+    align-items: center; /* Añadido para alinear el botón de idioma */
 }
 
 .nav-links a {
@@ -371,11 +372,12 @@ body {
     left: 0;
 }
 
+/* SCROLL INDICATOR CORREGIDO */
 .scroll-indicator {
     position: absolute;
     bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0;
+    right: 0;
     color: var(--stellar-dim);
     text-align: center;
     opacity: 0;
@@ -386,6 +388,7 @@ body {
 .scroll-indicator i {
     font-size: 1.5rem;
     margin-top: 0.5rem;
+    animation: bounceArrow 2s infinite ease-in-out; /* Animación añadida */
 }
 
 /* Cosmic Particles */
@@ -477,11 +480,11 @@ body {
     box-shadow: 0 0 10px rgba(66, 153, 225, 0.5);
 }
 
-/* About Section */
+/* ABOUT SECTION CORREGIDO */
 .about-content {
     display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 4rem;
+    grid-template-columns: 1fr; /* Cambiado de 1fr 2fr */
+    gap: 2rem; /* Reducido de 4rem */
     align-items: center;
 }
 
@@ -509,10 +512,14 @@ body {
     line-height: 1.9;
     color: var(--stellar-dim);
     text-shadow: 0 0 5px rgba(203, 213, 225, 0.1);
+    max-width: 800px; /* Añadido para que el texto no sea demasiado ancho */
+    margin: 0 auto; /* Centra el bloque de texto */
+    text-align: center; /* Centra el texto y el botón */
 }
 
 .about-text p {
     margin-bottom: 1.5rem;
+    text-align: left; /* Mantiene párrafos justificados a la izquierda */
 }
 
 /* Projects Section */
@@ -855,6 +862,19 @@ body {
     }
 }
 
+/* Animación flecha scroll */
+@keyframes bounceArrow {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
 /* === INICIO: Estilos del Botón de Música === */
 .music-player-section {
     text-align: center;
@@ -925,30 +945,78 @@ body {
 }
 /* === FIN: Estilos del Botón de Música === */
 
+/* === INICIO: Estilos Botón Idioma === */
+.lang-btn {
+    background: none;
+    border: 1px solid rgba(66, 153, 225, 0.2);
+    color: var(--stellar-dim);
+    padding: 0.5rem 0.8rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-family: 'Orbitron', monospace;
+    font-weight: 500;
+    font-size: 0.85rem;
+    transition: var(--space-transition);
+    text-shadow: 0 0 5px rgba(66, 153, 225, 0.2);
+    margin-left: 1rem; /* Para separarlo del 'Contact' */
+}
 
-/* Responsive Design */
+.lang-btn:hover {
+    border-color: var(--nebula-blue);
+    color: var(--stellar-white);
+    box-shadow: 0 0 10px rgba(66, 153, 225, 0.3);
+}
+
+/* === FIN: Estilos Botón Idioma === */
+
+
+/* === INICIO: BLOQUE RESPONSIVE CORREGIDO === */
 @media (max-width: 768px) {
+    /* REGLA MODIFICADA: Reducir padding y asegurar visibilidad */
+    .nav-container {
+        padding: 0 1rem;
+        overflow: visible; /* NUEVO: Evita que el botón se corte */
+    }
+
+    /* REGLA MODIFICADA: Reducir tamaño del logo */
+    .logo {
+        font-size: 1.3rem;
+        letter-spacing: 1px;
+    }
+
+    /* REGLA MODIFICADA: Ajustes del panel de menú */
     .nav-links {
+        display: flex; /* NUEVO: Faltaba esto para que flex-direction funcione */
         position: fixed;
-        top: 70px; /* Ajustado */
+        top: 70px; /* Altura de la barra de navegación */
         left: 0;
         right: 0;
-        background: rgba(0, 0, 17, 0.98); /* Ajustado */
+        background: rgba(0, 0, 17, 0.98);
         backdrop-filter: blur(10px);
         flex-direction: column;
         padding: 2rem;
-        gap: 1rem;
-        transform: translateY(-100%);
-        transition: var(--space-transition); /* Ajustado */
-        border-bottom: 1px solid var(--nebula-blue); /* Ajustado */
+        gap: 1.5rem;
+        transform: translateY(-100%); /* Oculto por defecto */
+        transition: var(--space-transition);
+        border-bottom: 1px solid var(--nebula-blue);
+
+        /* AÑADIDO: Centrar enlaces y ajustar altura */
+        align-items: center;
+        height: calc(100vh - 70px); /* Ocupa el resto de la pantalla */
+        overflow-y: auto; /* Permite scroll si hay muchos enlaces */
+        z-index: 999; /* NUEVO: Para que se ponga sobre el contenido (pero bajo la navbar) */
     }
 
+    /* REGLA MODIFICADA: Muestra el panel */
     .nav-links.active {
-        transform: translateY(0);
+        transform: translateY(0); /* Muestra el menú */
     }
 
+    /* REGLA MODIFICADA: Asegura que el botón de 3 barras se vea */
     .mobile-toggle {
         display: block;
+        flex-shrink: 0; /* Impide que el botón se encoja */
+        z-index: 1001; /* NUEVO: Fuerza al botón a estar por encima de la navbar (cuyo z-index es 1000) */
     }
 
     .hero {
@@ -960,9 +1028,13 @@ body {
     }
 
     .about-content {
-        grid-template-columns: 1fr;
+        /*grid-template-columns: 1fr; (Ya está arriba)*/
         text-align: center;
         gap: 2rem;
+    }
+
+    .about-text p {
+        text-align: center; /* Centramos párrafos en móvil */
     }
 
     .projects-grid {
@@ -981,10 +1053,21 @@ body {
         padding: 3rem 0;
     }
 
+    /* REGLA MODIFICADA: Ajusta el padding general del contenedor en móvil */
     .container {
         padding: 0 1rem;
     }
+
+    /* Estilo botón idioma en móvil */
+    .lang-btn {
+        margin-left: 0;
+        margin-top: 0.5rem; /* Para separarlo de los enlaces */
+        width: 100px; /* Ancho fijo para centrarlo */
+        text-align: center;
+    }
 }
+/* === FIN: BLOQUE RESPONSIVE === */
+
 
 /* Reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
