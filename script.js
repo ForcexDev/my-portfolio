@@ -51,86 +51,84 @@ class TypeWriter {
 // 1. EL DICCIONARIO DE TRADUCCIONES
 const translations = {
     // ... (El objeto de traducciones gigante va aquí, no ha cambiado) ...
-    'en': {
-        // --- Nav ---
-        'navHome': 'Home',
-        'navAbout': 'About',
-        'navProjects': 'Projects',
-        'navSkills': 'Skills',
-        'navContact': 'Contact',
-
-        // --- Hero ---
-        'heroGreeting': 'Transmitting from the Digital Cosmos',
-        'heroName': 'Ezequiel Morales',
-        'heroTagline': 'Cybersecurity & Networking student',
-        'heroUniv': 'Universidad Diego Portales',
-        'heroCTA': 'Enter to the Universe',
-        'scrollExplore': 'Scroll to explore',
-
-        // --- Typewriter ---
-        'typewriterWords': [
-            'Exploring where code meets the cosmos',
-            'Cybersecurity student navigating digital galaxies',
-            'Mapping networks like constellations in space',
-            'Protecting systems across the vast digital universe',
-            'Turning data into stars that guide technology forward'
-        ],
-
-        // --- About ---
-        'aboutTitle': 'About Me',
-        'aboutP1': "Welcome aboard my digital spacecraft. Here you'll find my journey through cybersecurity, networking, and programming—fields I explore with the same curiosity used to chart the stars.",
-        'aboutP2': "I see technology much like the universe: infinite, mysterious, and full of patterns waiting to be understood. Whether configuring systems or studying distant galaxies, I’m driven by a fascination for discovery and protection across universal frontiers.",
-        'aboutP3': "When I’m not coding or experimenting with network setups, I enjoy reflecting on the cosmos—a reminder that every technical challenge is part of a much larger constellation of ideas and possibilities.",
-        'musicPlay': 'Play',
-        'musicPause': 'Pause',
-
-        // --- Projects ---
-        'projectsTitle': 'Projects from the Digital Frontier',
-        'project1Title': 'Grand Chess Auto',
-        'project1Desc': 'An online chess experience where logic and creativity orbit together. Built with Node.js and Express, this system balances strategy and technology like celestial mechanics.',
-        'project2Title': 'Java EDA',
-        'project2Desc': 'Data structures mapped like constellations. Organized, efficient, and essential—just like the invisible forces that hold the digital universe together.',
-        'project3Title': 'Networking Systems',
-        'project3Desc': 'Projects exploring the backbone of the internet—like charting the cosmic web connecting galaxies across digital space.',
-        'project4Title': 'Python Projects',
-        'project4Desc': 'Scripts and experiments orbiting around automation and data processing—tools for exploring the ever-expanding programming cosmos.',
-        'project5Title': 'Bandit Security Guide',
-        'project5Desc': 'A guided exploration of Linux security. Like venturing through uncharted regions of the digital universe, each level reveals new layers of protection and vulnerability.',
-        'project6Title': 'PostgreSQL Database',
-        'project6Desc': 'Organizing data with the precision of stellar catalogs. A project focused on structured information, performance, and reliability—because even data deserves order in the cosmos.',
-
-        // --- Skills ---
-        'skillsTitle': 'Technical Skills',
-        'skillPython': 'Scripting through digital galaxies',
-        'skillSQL': 'Designing databases like stellar maps',
-        'skillLinux': 'Navigating secure systems',
-        'skillBash': 'Command-line exploration tools',
-        'skillJava': 'Object-oriented architecture among the stars',
-        'skillCpp': 'System-level cosmic engineering',
-        'skillJS': 'Interactive web constellations',
-        'skillHTML': 'Structuring universes of information',
-        'skillCSS': 'Styling digital nebulae',
-        'skillNode': 'Server-side space stations',
-        'skillGit': 'Version control across timelines',
-        'skillDocker': 'Containerizing apps like orbital modules',
-        'skillAWS': 'Building cloud systems across digital space',
-        'skillNetwork': 'Connecting systems through the data cosmos',
-        'skillCyber': 'Defending the frontiers of cyberspace',
-        'skillLatex': 'Documenting missions with precision',
-
-        // --- Contact ---
-        'contactTitle': 'Contact Hub',
-        'contactText': "Ready to explore new frontiers together? Let’s connect across the universal cosmos and create something extraordinary.",
-        'contactRepo': 'GITHUB',
-        'contactNetwork': 'LINKEDIN',
-        'contactMissions': 'TRYHACKME',
-        'contactChannel': 'EMAIL'
-    },
+        'en': {
+     // --- Nav ---
+    'navHome': 'Home',
+    'navAbout': 'About Me',
+    'navProjects': 'Projects',
+    'navSkills': 'Skills',
+    'navContact': 'Contact',
+    
+     // --- Hero ---
+    'heroGreeting': 'Transmitting from the Digital Cosmos',
+    'heroName': 'Ezequiel Morales',
+    'heroTagline': 'Student focused on Cybersecurity and Networks',
+    'heroUniv': 'Universidad Diego Portales',
+    'heroCTA': 'Enter the Universe',
+    'scrollExplore': 'Scroll to explore',
+    
+     // --- Typewriter ---
+    'typewriterWords': [
+    'Exploring where code meets the cosmos',
+    'Cybersecurity student navigating digital galaxies',
+    'Mapping networks like constellations in space',
+    'Protecting systems across the vast digital universe',
+    'Transforming data into stars that guide technology'
+     ],
+    // --- About ---
+    'aboutTitle': 'About Me',
+    'aboutP1': 'In this space, you will find all my programming, cybersecurity, and networking projects, which I will update and improve over time.',
+    'aboutP2': 'The idea is to share part of my learning, tools, and solutions, and also to offer resources for those who want to explore and learn a little more about these topics.',
+    'aboutP3': 'I combine my focus on cybersecurity and networks with a touch of futuristic and retro creativity, exploring systems and networks to find ways to make them more secure. When I\'m not working, studying, or experimenting with new setups, I get inspired by music and games from my childhood: a reminder that even when programming becomes repetitive, motivation is everything. If you want, press play and join me in this experience.',
+    'musicPlay': 'Play',
+    'musicPause': 'Pause',
+    
+     // --- Projects ---
+    'projectsTitle': 'Projects',
+    'project1Desc': 'Web development project for an online chess game. It includes a robust backend with Node.js and Express, along with an interactive frontend built with HTML, CSS, and JavaScript.',
+    'project2Title': 'Java EDA',
+    'project2Desc': 'Implementation of various data structures using Java. This repository demonstrates my ability to design and apply efficient algorithms and fundamental data structures.',
+    'project3Title': 'Data Networks',
+    'project3Desc': 'Collection of implementations and experiments related to data networks. It explores concepts such as routing, communication protocols, and network configuration, reinforcing my understanding of network infrastructure.',
+    'project4Title': 'Python',
+    'project4Desc': 'Implementation of Python for solving various practical problems and programming exercises. Includes scripts and Jupyter notebooks that demonstrate my versatility with the language.',
+    'project5Title': 'Hacking Guide: Bandit (OverTheWire)',
+    'project5Desc': 'Exhaustive LaTeX documentation of the methodology and solution for the Bandit wargame challenges, focusing on Linux commands and basic exploitation techniques.',
+    'project6Title': 'PostgreSQL Database',
+    'project6Desc': 'Design and implementation of a relational database in PostgreSQL, applying normalization and denormalization principles to optimize performance and ensure integrity.',
+    
+    // --- Skills ---
+    'skillsTitle': 'Skills',
+    'skillPython': 'Python (Scripting, Data Analysis)',
+    'skillSQL': '(PostgreSQL, MySQL)',
+    'skillLinux': '(Kali, Ubuntu)',
+    'skillBash': 'Bash Scripting, Scalability',
+    'skillJava': 'Used for data structures and algorithms',
+    'skillCpp': 'Object-Oriented Programming (OOP)',
+    'skillJS': 'BackEnd, scripting, and interactive web',
+    'skillHTML': 'Web structures',
+    'skillCSS': 'Web styling',
+    'skillNode': 'Servers and deployment',
+    'skillGit': 'Version control',
+    'skillDocker': 'Containerized applications',
+    'skillAWS': 'Cloud systems',
+    'skillNetwork': 'System networking',
+    'skillCyber': 'Ethical Hacking & Defense',
+    'skillLatex': 'Professional Documentation',
+    
+    // --- Contact ---
+    'contactTitle': 'Contact Hub',
+    'contactText': 'Ready to explore new frontiers together? Lets connect across the universal cosmos and create something extraordinary.',
+    'contactRepo': 'GITHUB',
+    'contactNetwork': 'LINKEDIN',
+    'contactMissions': 'TRYHACKME',
+    'contactChannel': 'EMAIL'
+},
 
     'es': {
         // --- Nav ---
         'navHome': 'Inicio',
-        'navAbout': 'Sobre Mí',
+        'navAbout': 'Sobre Mi',
         'navProjects': 'Proyectos',
         'navSkills': 'Habilidades',
         'navContact': 'Contacto',
@@ -153,46 +151,46 @@ const translations = {
         ],
 
         // --- About ---
-        'aboutTitle': 'Sobre Mí',
-        'aboutP1': 'Bienvenido a bordo de mi nave digital. Aquí encontrarás mi recorrido por la ciberseguridad, las redes y la programación: territorios que exploro con la misma curiosidad con la que se observan las estrellas.',
-        'aboutP2': 'Veo la tecnología como el universo: infinita, misteriosa y llena de patrones por descubrir. Ya sea configurando sistemas o estudiando galaxias lejanas, me impulsa la fascinación por explorar y proteger las fronteras universales.',
-        'aboutP3': 'Cuando no estoy programando o experimentando con redes, me gusta contemplar el cosmos. Es un recordatorio de que cada desafío técnico forma parte de una constelación más grande de ideas y posibilidades.',
+        'aboutTitle': 'Sobre Mi',
+        'aboutP1': 'En este espacio encontrarás todos mis proyectos de programación, ciberseguridad y redes, que iré actualizando y mejorando con el tiempo.',
+        'aboutP2': 'La idea es compartir parte de mi aprendizaje, herramientas y soluciones, y también ofrecer recursos para quienes quieran explorar y aprender un poco más sobre estos temas.',
+        'aboutP3': 'Mi enfoque en la ciberseguridad y redes lo combino con un toque de creatividad futurista y retro, explorando sistemas y redes para encontrar formas de hacerlos más seguros. Cuando no estoy trabajando, estudiando o experimentando nuevas configuraciones, me dejo inspirar por la música y juegos de mi infancia: un recordatorio de que incluso programar cuando se vuelve repetitivo, la motivación lo es todo. Si quieres, dale al play y acompáñame en esta experiencia.',
         'musicPlay': 'Reproducir',
         'musicPause': 'Pausar',
 
         // --- Projects ---
-        'projectsTitle': 'Proyectos del Frente Digital',
+        'projectsTitle': 'Proyectos',
         'project1Title': 'Grand Chess Auto',
-        'project1Desc': 'Una experiencia de ajedrez online donde la lógica y la creatividad orbitan juntas. Desarrollado con Node.js y Express, este sistema equilibra estrategia y tecnología como mecánica celeste.',
+        'project1Desc': 'Proyecto de desarrollo web para un juego de ajedrez online. Incluye un robusto backend con Node.js y Express, junto con un frontend interactivo construido con HTML, CSS y JavaScript.',
         'project2Title': 'Java EDA',
-        'project2Desc': 'Estructuras de datos trazadas como constelaciones. Organizadas, eficientes y esenciales, como las fuerzas invisibles que sostienen el universo digital.',
+        'project2Desc': 'Implementación de diversas estructuras de datos utilizando Java. Este repositorio demuestra mi habilidad para diseñar y aplicar algoritmos eficientes y estructuras de datos fundamentales.',
         'project3Title': 'Redes de Datos',
-        'project3Desc': 'Proyectos que exploran la columna vertebral de Internet, como si se cartografiara la red cósmica que conecta galaxias a través del espacio digital.',
-        'project4Title': 'Proyectos en Python',
-        'project4Desc': 'Scripts y experimentos que orbitan alrededor de la automatización y el análisis de datos, herramientas para explorar el cosmos siempre en expansión de la programación.',
-        'project5Title': 'Guía de Seguridad Bandit',
-        'project5Desc': 'Una exploración guiada por la seguridad en Linux. Como viajar por regiones inexploradas del universo digital, cada nivel revela nuevas capas de protección y vulnerabilidad.',
+        'project3Desc': 'Colección de implementaciones y experimentos relacionados con redes de datos. Explora conceptos como el enrutamiento, protocolos de comunicación y configuración de red, reforzando mi comprensión de la infraestructura de redes.',
+        'project4Title': 'Python',
+        'project4Desc': 'Implementación de Python para la resolución de diversos problemas prácticos y ejercicios de programación. Incluye scripts y cuadernos Jupyter que demuestran mi versatilidad con el lenguaje.',
+        'project5Title': 'Guía de Hacking: Bandit (OverTheWire)',
+        'project5Desc': 'Documentación exhaustiva en LaTeX de la metodología y solución para los desafíos del wargame Bandit, enfocándose en comandos de Linux y técnicas básicas de explotación.',
         'project6Title': 'Base de Datos PostgreSQL',
-        'project6Desc': 'Organizando datos con la precisión de los católogos estelares. Un proyecto enfocado en el rendimiento y la integridad, porque incluso los datos merecen orden en el cosmos.',
+        'project6Desc': 'Diseño e implementación de una base de datos relacional en PostgreSQL, aplicando principios de normalización y desnormalización para optimizar rendimiento y garantizar la integridad.',
 
         // --- Skills ---
-        'skillsTitle': 'Habilidades Técnicas',
-        'skillPython': 'Scripting a través de galaxias digitales',
-        'skillSQL': 'Diseño de bases de datos como mapas estelares',
-        'skillLinux': 'Navegación por sistemas seguros',
-        'skillBash': 'Herramientas de exploración por terminal',
-        'skillJava': 'Arquitectura orientada a objetos entre estrellas',
-        'skillCpp': 'Ingeniería cósmica a nivel de sistema',
-        'skillJS': 'Constelaciones web interactivas',
-        'skillHTML': 'Estructurando universos de información',
-        'skillCSS': 'Estilizando nebulosas digitales',
-        'skillNode': 'Estaciones espaciales del lado del servidor',
-        'skillGit': 'Control de versiones a través del tiempo',
-        'skillDocker': 'Aplicaciones contenidas como módulos orbitales',
-        'skillAWS': 'Sistemas en la nube que cruzan el espacio digital',
-        'skillNetwork': 'Conectando sistemas en el cosmos de los datos',
-        'skillCyber': 'Defendiendo las fronteras del ciberespacio',
-        'skillLatex': 'Documentando misiones con precisión',
+        'skillsTitle': 'Habilidades',
+        'skillPython': 'Python (Scripting, Análisis de Datos)',
+        'skillSQL': '(PostgreSQL, MySQL)',
+        'skillLinux': '(Kali, Ubuntu)',
+        'skillBash': 'Bash Scripting, Escalabilidad',
+        'skillJava': 'Implementado en estructura de datos y algoritmos',
+        'skillCpp': 'Programación orientada a objetos (OPP)',
+        'skillJS': 'BackEnd, scripting y web interactiva',
+        'skillHTML': 'Estructuras web',
+        'skillCSS': 'Estilización web',
+        'skillNode': 'Servidores y deploy',
+        'skillGit': 'Control de versiones',
+        'skillDocker': 'Aplicaciones contenidas',
+        'skillAWS': 'Sistemas en la nube',
+        'skillNetwork': 'Conexion de sistemas',
+        'skillCyber': 'Defensa y ofensa ética',
+        'skillLatex': 'Documentacion Profesional',
 
         // --- Contact ---
         'contactTitle': 'Centro de contacto',
@@ -500,4 +498,5 @@ function throttle(func, wait) {
 window.addEventListener('scroll', throttle(() => {}, 10));
 document.addEventListener('DOMContentLoaded', () => {
     document.body.offsetHeight;
+
 });
