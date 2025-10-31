@@ -329,7 +329,7 @@ const musicBtn = document.getElementById('music-toggle');
 const ctaButton = document.querySelector('.cta-button[href="#about"]');
 
 if (mainMusic && musicBtn && ctaButton) {
-    mainMusic.volume = 0.20;
+    mainMusic.volume = 0.17;
     const icon = musicBtn.querySelector('i');
     const text = musicBtn.querySelector('span');
     let musicStartedByListener = false; // Flag para saber si el usuario ya interactuó
@@ -957,3 +957,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 /* === FIN: LÓGICA DEL JUEGO SPACE BATTLE === */
+
