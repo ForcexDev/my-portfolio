@@ -262,6 +262,7 @@ body {
     justify-content: center;
     text-align: center;
     width: 100%;
+    transform: translateY(-12vh); /* Mueve todo 10% hacia arriba */
 }
 
 .hero-greeting {
@@ -520,15 +521,15 @@ body {
 /* Projects Section */
 .projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2rem;
+    grid-template-columns: 1fr; /* Cada tarjeta ocupa el 100% del ancho */
+    gap: 2.5rem; /* Un poco más de espacio vertical */
     margin-top: 3rem;
 }
 
 .project-card {
     background: linear-gradient(135deg, rgba(26, 31, 58, 0.6) 0%, rgba(15, 20, 25, 0.8) 100%);
     border-radius: 20px;
-    padding: 2.5rem;
+    padding: 0; /* Lo quitamos de aquí */
     border: 1px solid rgba(66, 153, 225, 0.15);
     backdrop-filter: blur(10px);
     transition: var(--space-transition);
@@ -537,6 +538,10 @@ body {
     opacity: 0;
     transform: translateY(50px);
     box-shadow: 0 8px 32px rgba(0, 0, 17, 0.4);
+
+    /* --- LÍNEAS NUEVAS --- */
+    display: flex;
+    align-items: stretch; /* Ambas columnas tendrán la misma altura */
 }
 
 .project-card.animate {
@@ -584,6 +589,42 @@ body {
     opacity: 1;
     animation: stellarPulse 2s ease-in-out infinite;
 }
+
+/* === INICIO: Estilos de Proyecto (Layout Ancho) === */
+
+.project-image-container {
+    flex-basis: 45%; /* Ancho de la columna de imagen (puedes ajustarlo) */
+    order: 2;        /* 2 = se va a la derecha */
+    flex-shrink: 0;  /* Evita que la imagen se encoja */
+    overflow: hidden;
+    /* Redondea solo las esquinas derechas */
+    border-radius: 0 20px 20px 0;
+    background-color: var(--space-blue-dark); /* Color de fondo */
+}
+
+.project-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* La imagen cubre el espacio sin deformarse */
+    transition: var(--space-transition);
+}
+
+.project-card:hover .project-image {
+    transform: scale(1.05); /* Efecto de zoom de la imagen */
+}
+
+.project-content {
+    flex-basis: 55%; /* Ancho de la columna de texto */
+    order: 1;        /* 1 = se va a la izquierda */
+    padding: 2.5rem; /* Le devolvemos el padding aquí */
+
+    /* Para centrar verticalmente el contenido si no es muy alto */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* === FIN: Estilos de Proyecto (Layout Ancho) === */
 
 .project-title {
     font-family: 'Orbitron', monospace;
@@ -652,12 +693,11 @@ body {
     transform: rotate(45deg) scale(1.2);
 }
 
-/* Skills Section */
 .skills-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2rem;
-    margin-top: 3rem;
+    margin-top: 1.5rem; /* <-- CAMBIA ESTO (antes era 3rem) */
 }
 
 .skill-item {
@@ -709,6 +749,11 @@ body {
     text-align: center;
     text-shadow: 0 0 15px rgba(66, 153, 225, 0.5);
     transition: var(--space-transition);
+
+    /* Añadimos esto para que los íconos de Devicon se centren bien */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .skill-item:hover .skill-icon {
@@ -731,6 +776,27 @@ body {
     font-size: 0.95rem;
     text-shadow: 0 0 3px rgba(203, 213, 225, 0.1);
 }
+
+
+
+.skill-category-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.8rem; /* Un poco más pequeño que el título de la sección */
+    font-weight: 600;
+    color: var(--nebula-blue); /* Mantenemos el color temático */
+    text-shadow: 0 0 15px rgba(66, 153, 225, 0.4);
+    letter-spacing: 1px;
+    margin-top: 3.5rem; /* Espacio *antes* del título de categoría */
+    margin-bottom: 1.5rem; /* Espacio *después* del título */
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(66, 153, 225, 0.2); /* Una línea sutil */
+}
+
+/* El primer título de categoría no necesita espacio superior extra */
+.skills-container .skill-category-title:first-of-type {
+    margin-top: 0;
+}
+/* === FIN: Estilos Categoría de Skills === */
 
 /* Contact Section */
 .contact-content {
@@ -824,6 +890,50 @@ body {
     background: linear-gradient(90deg, transparent, var(--nebula-blue), transparent);
 }
 
+.skill-item.cert-card .skill-info {
+    flex-grow: 1;
+    min-width: 0; /* <-- ASEGÚRATE DE QUE ESTA LÍNEA ESTÉ AHÍ */
+}
+
+.cert-link {
+    display: inline-block;
+    flex-shrink: 1; /* <-- 1. PERMITE QUE EL BOTÓN SE ENCOJA */
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: 1px solid var(--nebula-blue);
+    color: var(--nebula-blue);
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 25px;
+    transition: var(--space-transition);
+    font-size: 0.85rem;
+    text-align: center; /* 2. CENTRA EL TEXTO (para "View" y "En Progreso") */
+    /* 'white-space: nowrap;' FUE ELIMINADO. Esto arregla el desborde. */
+}
+
+.cert-link:hover {
+    background: var(--nebula-blue);
+    color: var(--deep-space);
+    box-shadow: 0 0 15px rgba(66, 153, 225, 0.5);
+    transform: scale(1.05);
+}
+
+.cert-link.in-progress {
+    background: transparent;
+    border: 1px solid var(--stellar-dim);
+    color: var(--stellar-dim);
+    cursor: default;
+}
+
+.cert-link.in-progress:hover {
+    background: transparent;
+    color: var(--stellar-dim);
+    box-shadow: none;
+    transform: none;
+}
+
+/* === FIN: Certifications Card Tweaks === */
+
 /* Space-Themed Animations */
 @keyframes stellarGlow {
     to {
@@ -872,8 +982,25 @@ body {
 /* === INICIO: Estilos del Botón de Música === */
 .music-player-section {
     text-align: center;
-    margin-top: 2.5rem;
+    margin-top: 0;
 }
+
+/* === INICIO: Estilos Contenedor Botones About === */
+.about-buttons-container {
+    display: flex;
+    flex-wrap: wrap; /* Hace que se apilen en móviles */
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem; /* Espacio entre los botones */
+    margin-top: 2.5rem; /* El margen que quitamos antes */
+}
+
+/* Quitamos la animación de entrada del botón CTA */
+.about-buttons-container .cta-button {
+    opacity: 1;
+    animation: none;
+}
+/* === FIN: Estilos Contenedor Botones About === */
 
 .music-play-btn {
     display: inline-flex;
@@ -961,6 +1088,169 @@ body {
 }
 /* === FIN: Estilos Botón Idioma === */
 
+/* === INICIO: Space Battle Game Styles === */
+.game-container {
+    position: relative;
+    max-width: 800px; /* Ancho máximo del juego */
+    margin: 0 auto;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 2px solid var(--nebula-blue);
+    box-shadow: var(--stellar-shadow);
+    /* Deshabilitar selección de texto en el juego */
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: none; /* <-- AÑADE ESTA LÍNEA */
+}
+
+#spaceCanvasGame {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3; /* Proporción 4:3 */
+    background: transparent; /* <-- ESTO LO HACE TRANSPARENTE */
+    display: block;
+}
+
+.game-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 17, 0.85);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 10;
+    transition: opacity 0.5s ease;
+    padding: 1rem;
+}
+
+.game-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#gameMessage {
+    font-size: 1.5rem;
+    color: var(--stellar-white);
+    margin-bottom: 2rem;
+}
+
+#gameScore {
+    font-family: 'Orbitron', monospace;
+    font-size: 2rem;
+    color: var(--nebula-blue);
+    text-shadow: 0 0 10px var(--nebula-blue);
+    margin-bottom: 1.5rem;
+}
+
+/* Controles Móviles */
+.mobile-controls {
+    display: none; /* Oculto por defecto */
+    width: 100%;
+    position: absolute;
+    bottom: 1.5rem;
+    left: 0;
+    z-index: 11;
+    padding: 0 1.5rem;
+    justify-content: space-between;
+}
+
+/* Mostrar controles solo si el juego está activo Y es pantalla táctil */
+.game-active.touch-device .mobile-controls {
+    display: flex;
+}
+
+.touch-control {
+    background: rgba(66, 153, 225, 0.2);
+    border: 2px solid var(--nebula-blue);
+    color: var(--stellar-white);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    /* Para respuesta táctil instantánea */
+    -webkit-tap-highlight-color: transparent;
+}
+
+.touch-control:active {
+    background: rgba(66, 153, 225, 0.5);
+    transform: scale(0.95);
+}
+
+.touch-control.shoot {
+    background: rgba(220, 50, 50, 0.3);
+    border-color: rgba(220, 50, 50, 0.8);
+}
+.touch-control.shoot:active {
+    background: rgba(220, 50, 50, 0.6);
+}
+/* === FIN: Space Battle Game Styles === */
+
+/* === INICIO: Botón Back-to-Top (Estilo Cósmico) === */
+.back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 998;
+
+    /* --- INICIO: CAMBIOS DE ESTILO --- */
+
+    /* Fondo "glassmorphism" como las tarjetas */
+    background: linear-gradient(135deg, rgba(26, 31, 58, 0.6) 0%, rgba(15, 20, 25, 0.8) 100%);
+    backdrop-filter: blur(10px);
+
+    /* Color de ícono (blanco/plata) */
+    color: var(--stellar-silver);
+
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+
+    /* Borde sutil azulado */
+    border: 2px solid rgba(66, 153, 225, 0.2);
+
+    /* --- FIN: CAMBIOS DE ESTILO --- */
+
+    /* Centrado del ícono */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+
+    /* Visibilidad (Oculto por defecto) */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: var(--space-transition);
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.back-to-top:hover {
+    /* --- INICIO: CAMBIO DE HOVER --- */
+
+    /* Borde más brillante y sombra */
+    border-color: var(--nebula-blue);
+    color: var(--stellar-white);
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(66, 153, 225, 0.3);
+
+    /* --- FIN: CAMBIO DE HOVER --- */
+}
+/* === FIN: Botón Back-to-Top === */
+
 
 /* === INICIO: BLOQUE RESPONSIVE FINAL === */
 @media (max-width: 768px) {
@@ -981,7 +1271,7 @@ body {
     }
 
     .nav-links {
-        display: flex; 
+        display: flex;
         position: fixed;
         top: 70px;
         left: 0;
@@ -997,7 +1287,7 @@ body {
         align-items: center;
         height: calc(100vh - 70px);
         overflow-y: auto;
-        z-index: 999; 
+        z-index: 999;
     }
 
     .nav-links.active {
@@ -1006,7 +1296,7 @@ body {
 
     .mobile-toggle {
         display: block;
-        flex-shrink: 0; 
+        flex-shrink: 0;
         z-index: 1001;
         grid-column: 2 / 3;
         justify-self: center;
@@ -1019,7 +1309,7 @@ body {
     .hero-title {
         font-size: clamp(2.5rem, 10vw, 4rem);
     }
-    
+
     .about-text p {
         text-align: center;
     }
@@ -1034,7 +1324,31 @@ body {
         padding: 3rem 1rem; /* Añadimos padding lateral a la sección misma */
     }
 
-    /* La regla de .container de escritorio es suficiente, no la necesitamos aquí */
+    .section-title {
+        /* Reducimos el tamaño de 2.8rem a 2.2rem en móviles */
+        font-size: 1.8rem;
+        /* También reducimos el margen inferior para ahorrar espacio */
+        margin-bottom: 2.5rem;
+    }
+
+    .project-card {
+        flex-direction: column; /* Apila los elementos verticalmente */
+    }
+
+    .project-content {
+        order: 2; /* Texto abajo */
+        flex-basis: auto; /* Resetea el ancho */
+        padding: 2rem; /* Un poco menos de padding en móvil */
+    }
+
+    .project-image-container {
+        order: 1; /* Imagen arriba */
+        flex-basis: auto; /* Resetea el ancho */
+        /* Le devolvemos el aspect-ratio en móvil */
+        aspect-ratio: 16 / 9;
+        /* Resetea el borde para móvil (esquinas superiores) */
+        border-radius: 20px 20px 0 0;
+    }
 
     .lang-btn {
         margin-left: 0;
@@ -1054,4 +1368,3 @@ body {
         transition-duration: 0.01ms !important;
     }
 }
-
