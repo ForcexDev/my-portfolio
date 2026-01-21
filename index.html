@@ -1,556 +1,460 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ForcexDev</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'><path fill='%234299e1' d='M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z'/></svg>">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'><path fill='%234299e1' d='M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z'/></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
 </head>
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 
-    <audio id="bg-music" loop>
-        <source src="./CornfieldChase.mp3" type="audio/mpeg">
-        Tu navegador no soporta el elemento de audio.
-    </audio>
+<audio id="bg-music" loop>
+    <source src="./CornfieldChase.mp3" type="audio/mpeg">
+    Tu navegador no soporta el elemento de audio.
+</audio>
 </head>
+
 <body>
-<div class="space-canvas">
-    <div class="stars"></div>
-    <div class="stars"></div>
-    <div class="stars"></div>
-    <div class="nebula"></div>
-    <div class="space-dust"></div>
-</div>
-
-<nav class="navbar">
-    <div class="nav-container">
-        <a href="#home" class="logo">ForcexDev</a>
-        <ul class="nav-links">
-            <li><a href="#home" class="nav-link active" data-key="navHome">Home</a></li>
-            <li><a href="#about" class="nav-link" data-key="navAbout">About</a></li>
-            <li><a href="#projects" class="nav-link" data-key="navProjects">Projects</a></li>
-            <li><a href="#certifications" class="nav-link" data-key="navCertifications">Certifications</a></li>
-            <li><a href="#skills" class="nav-link" data-key="navSkills">Skills</a></li>
-            <li><a href="#contact" class="nav-link" data-key="navContact">Contact</a></li>
-            <li><button id="lang-toggle" class="lang-btn" aria-label="Cambiar idioma">EN | ES</button></li>
-        </ul>
-        <button class="mobile-toggle">
-            <i class="fas fa-bars"></i>
-        </button>
+    <div class="space-canvas">
+        <div class="stars"></div>
+        <div class="stars"></div>
+        <div class="stars"></div>
+        <div class="nebula"></div>
+        <div class="space-dust"></div>
     </div>
-</nav>
 
-<section id="home" class="hero">
-    <div class="particles"></div>
-    <div class="hero-content">
-        <p class="hero-greeting" data-key="heroGreeting">Greetings from the Digital Cosmos</p>
-        <h1 class="hero-title">ForcexDev</h1>
-        <h2 class="hero-subtitle" data-key="heroName">Ezequiel Morales</h2>
-        <p class="hero-tagline" data-key="heroTagline">Cybersecurity Student &amp; Space Enthusiast</p>
-        <div class="typewriter" id="typewriter"></div>
-        <a href="#about" class="cta-button" data-key="heroCTA">Explore My Universe</a>
-    </div>
-    <div class="scroll-indicator">
-        <p data-key="scrollExplore">Scroll to explore</p>
-        <i class="fas fa-chevron-down"></i>
-    </div>
-</section>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo">ForcexDev</a>
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-link active" data-key="navHome">Home</a></li>
+                <li><a href="#about" class="nav-link" data-key="navAbout">About</a></li>
+                <li><a href="#projects" class="nav-link" data-key="navProjects">Projects</a></li>
+                <li><a href="#certifications" class="nav-link" data-key="navCertifications">Certifications</a></li>
+                <li><a href="#skills" class="nav-link" data-key="navSkills">Skills</a></li>
+                <li><a href="#contact" class="nav-link" data-key="navContact">Contact</a></li>
+                <li><button id="lang-toggle" class="lang-btn" aria-label="Cambiar idioma">EN | ES</button></li>
+            </ul>
+            <button class="mobile-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
 
-<section id="about" class="section">
-    <div class="container">
-        <h2 class="section-title" data-key="aboutTitle">About Me</h2>
-        <div class="about-content">
-            <div class="about-text">
-                <p data-key="aboutP1">
+    <section id="home" class="hero">
+        <div class="particles"></div>
+        <div class="hero-content">
+            <p class="hero-greeting" data-key="heroGreeting">Greetings from the Digital Cosmos</p>
+            <h1 class="hero-title">ForcexDev</h1>
+            <h2 class="hero-subtitle" data-key="heroName">Ezequiel Morales</h2>
+            <p class="hero-tagline" data-key="heroTagline">Cybersecurity Student &amp; Space Enthusiast</p>
+            <div class="typewriter" id="typewriter"></div>
+            <a href="#about" class="cta-button" data-key="heroCTA">Explore My Universe</a>
+        </div>
+        <div class="scroll-indicator">
+            <p data-key="scrollExplore">Scroll to explore</p>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title" data-key="aboutTitle">About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p data-key="aboutP1">
+                    </p>
+                    <p data-key="aboutP2">
+                    </p>
+                    <p data-key="aboutP3">
+                        When I'm not diving deep into code or configuring security systems, you'll find me
+                        contemplating the universe - a reminder that even in the most complex technical
+                        challenges, there's always a bigger picture to consider.
+                    </p>
+
+                    <div class="about-buttons-container">
+
+                        <div class="music-player-section">
+                            <button id="music-toggle" class="music-play-btn">
+                                <i class="fas fa-play"></i>
+                                <span data-key="musicPlay"></span>
+                            </button>
+                        </div>
+
+                        <a href="CVEzequiel_Morales2025-11.pdf" download class="music-play-btn">
+                            <i class="fas fa-download"></i>
+                            <span data-key="aboutCV">Descargar CV</span>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="section">
+        <div class="container">
+            <h2 class="section-title" data-key="projectsTitle">Featured Projects</h2>
+            <!-- Projects Grid Container (Populated by JS) -->
+            <div class="projects-grid">
+                <!-- Dynamic content will be injected here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Modal Template (Hidden) -->
+    <div id="projectModal" class="project-modal-overlay">
+        <div class="project-modal-content">
+            <button class="close-modal" onclick="closeProjectModal()">&times;</button>
+            <div class="modal-body">
+                <div class="modal-image-wrapper">
+                    <img id="modalImage" src="" alt="Project Preview">
+                </div>
+                <div class="modal-details">
+                    <h2 id="modalTitle" class="modal-title"></h2>
+                    <div id="modalTags" class="project-tags"></div>
+                    <p id="modalDesc" class="modal-description"></p>
+
+                    <div class="modal-buttons">
+                        <a id="modalLive" href="#" target="_blank" class="cta-button modal-btn primary-btn">
+                            <span></span>
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                        <a id="modalGithub" href="#" target="_blank" class="cta-button modal-btn secondary-btn">
+                            <span></span>
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
+
+    <section id="certifications" class="section">
+        <div class="container">
+            <h2 class="section-title" data-key="certificationsTitle">Certifications</h2>
+
+            <div class="skills-grid">
+
+                <div class="skill-item cert-card">
+                    <i class="fas fa-award skill-icon"></i>
+                    <div class="skill-info">
+                        <h4 data-key="cert1Title">Introduction to Cybersecurity</h4>
+                        <p data-key="cert1Org">Cisco Networking Academy</p>
+                    </div>
+                    <a href="https://www.credly.com/badges/05aff769-7021-4bf6-9e5e-15b542112284/public_url"
+                        class="cert-link" target="_blank" data-key="certLinkView">View</a>
+                </div>
+
+                <div class="skill-item cert-card">
+                    <i class="fas fa-award skill-icon"></i>
+                    <div class="skill-info">
+                        <h4 data-key="cert2Title">Networking Essentials - Network Technician Career Path</h4>
+                        <p data-key="cert2Org">Cisco Networking Academy</p>
+                    </div>
+                    <a href="https://www.credly.com/badges/21eb7975-97d2-469e-b608-c23b6dab214e/public_url"
+                        class="cert-link" target="_blank" data-key="certLinkView">View</a>
+                </div>
+
+                <div class="skill-item cert-card">
+                    <i class="fas fa-award skill-icon"></i>
+                    <div class="skill-info">
+                        <h4 data-key="cert3Title">Inglés para Desarrolladores</h4>
+                        <p data-key="cert3Org">FreeCodeCamp</p>
+                    </div>
+                    <span class="cert-link in-progress" data-key="certLinkProgress">In Progress</span>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="section">
+        <div class="container skills-container">
+            <h2 class="section-title" data-key="skillsTitle">Technical Skills</h2>
+
+            <h3 class="skill-category-title" data-key="skillsCat1">Cybersecurity & Networks</h3>
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <i class="fas fa-shield-alt skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>Cybersecurity</h4>
+                        <p data-key="skillCyber">Protecting digital frontiers</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-linux-plain skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>Linux</h4>
+                        <p data-key="skillLinux">Navigation through secure systems</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-ubuntu-plain skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>Ubuntu</h4>
+                        <p data-key="skillUbuntu">Server & Desktop Environment</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-bash-plain skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>Bash Scripting</h4>
+                        <p data-key="skillBash">Command-line exploration tools</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="fas fa-network-wired skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>Networking</h4>
+                        <p data-key="skillNetwork"></p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-nginx-original skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>Nginx</h4>
+                        <p data-key="skillNginx">Nginx server http's</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-docker-plain skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>Docker</h4>
+                        <p data-key="skillDocker">Containerizing applications</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="skill-category-title" data-key="skillsCat2">Backend & Data</h3>
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <i class="devicon-python-plain skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>Python</h4>
+                        <p data-key="skillPython">Scripting across digital galaxies</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-java-plain skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>Java</h4>
+                        <p data-key="skillJava">Object-oriented stellar architecture</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-cplusplus-plain skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>C++</h4>
+                        <p data-key="skillCpp">System-level cosmic engineering</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-lua-plain skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>Lua</h4>
+                        <p data-key="skillLua">Scripting & Game Development</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-nodejs-plain skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>Node.js</h4>
+                        <p data-key="skillNode">Server-side space stations</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-express-original skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>Express</h4>
+                        <p data-key="skillExpress">Node.js server framework</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-postgresql-plain skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>PostgreSQL</h4>
+                        <p data-key="skillSQL">Database architectures</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-mongodb-plain skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>MongoDB</h4>
+                        <p data-key="skillMongoDB">NoSQL database management</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="skill-category-title" data-key="skillsCat3">Frontend & Software</h3>
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <i class="devicon-javascript-plain skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>JavaScript</h4>
+                        <p data-key="skillJS">Interactive web constellation</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-html5-plain skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>HTML</h4>
+                        <p data-key="skillHTML">Structuring digital universes</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-css3-plain skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>CSS</h4>
+                        <p data-key="skillCSS">Styling cosmic interfaces</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-git-plain skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>Git &amp; GitHub</h4>
+                        <p data-key="skillGit">Version control across timelines</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="fab fa-aws skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>AWS</h4>
+                        <p data-key="skillAWS">Cloud infrastructure spanning vast networks</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-latex-original skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>LaTeX</h4>
+                        <p data-key="skillLatex">Technical documentation</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-vscode-plain skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>VS Code</h4>
+                        <p data-key="skillVSCode">Code editor of choice</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-webstorm-plain skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>WebStorm</h4>
+                        <p data-key="skillWebStorm">JetBrains IDE for web</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-windows8-original skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>Windows</h4>
+                        <p data-key="skillWindows">Operating System</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-photoshop-plain skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>Photoshop</h4>
+                        <p data-key="skillPhotoshop">Raster graphics editor</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-blender-original skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>Blender</h4>
+                        <p data-key="skillBlender">3D computer graphics</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="game-hub" class="section">
+        <h2 class="section-title" data-key="gameTitle">Cosmic Battle</h2>
+
+        <div id="gameContainer" class="game-container">
+            <canvas id="spaceCanvasGame"></canvas>
+
+            <div id="gameOverlay" class="game-overlay">
+                <p id="gameMessage" data-key="gameIntro">Ready for a cosmic battle?</p>
+                <h3 id="gameScore" style="display: none;">Score: <span>0</span></h3>
+                <button id="startGameBtn" class="cta-button" data-key="gameStart">Start Mission</button>
+            </div>
+
+            <div class="mobile-controls">
+                <div id="touchLeft" class="touch-control"><i class="fas fa-chevron-left"></i></div>
+                <div id="touchShoot" class="touch-control shoot"><i class="fas fa-crosshairs"></i></div>
+                <div id="touchRight" class="touch-control"><i class="fas fa-chevron-right"></i></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section">
+        <div class="container">
+            <div class="contact-content">
+                <h2 class="section-title" data-key="contactTitle">Ground Control Communication Hub</h2>
+                <p class="contact-text" data-key="contactText">
+                    Ready to explore new frontiers together? Let's connect across the digital cosmos and discuss the
+                    infinite possibilities of technology and space.
                 </p>
-                <p data-key="aboutP2">
-                </p>
-                <p data-key="aboutP3">
-                    When I'm not diving deep into code or configuring security systems, you'll find me
-                    contemplating the universe - a reminder that even in the most complex technical
-                    challenges, there's always a bigger picture to consider.
-                </p>
-
-                <div class="about-buttons-container">
-
-                    <div class="music-player-section">
-                        <button id="music-toggle" class="music-play-btn">
-                            <i class="fas fa-play"></i>
-                            <span data-key="musicPlay"></span>
-                        </button>
-                    </div>
-
-                    <a href="CVEzequiel_Morales2025-11.pdf" download class="music-play-btn">
-                        <i class="fas fa-download"></i>
-                        <span data-key="aboutCV">Descargar CV</span>
+                <div class="contact-links">
+                    <a href="https://github.com/ForcexDev" target="_blank" class="contact-link">
+                        <i class="fab fa-github"></i>
+                        <span data-key="contactRepo">Mission Control Repository</span>
                     </a>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section id="projects" class="section">
-    <div class="container">
-        <h2 class="section-title" data-key="projectsTitle">Featured Projects</h2>
-        <div class="projects-grid">
-
-            <div class="project-card">
-                <div class="project-image-container">
-                    <img src="img/ajedrez.png" alt="Proyecto Grand Chess Auto" class="project-image">
-                </div>
-                <div class="project-content">
-                    <h3 class="project-title" data-key="project1Title">GrandChessAuto</h3>
-                    <p class="project-description" data-key="project1Desc">
-                        Strategic gameplay across digital dimensions. A complex system where strategy and technology converge,
-                        featuring robust backend architecture with Node.js and Express, complemented by an interactive frontend
-                        that responds like orbital mechanics.
-                    </p>
-                    <div class="project-tags">
-                        <span class="tag">Node.js</span>
-                        <span class="tag">Express</span>
-                        <span class="tag">HTML</span>
-                        <span class="tag">CSS</span>
-                        <span class="tag">JavaScript</span>
-                        <span class="tag">Web Development</span>
-                    </div>
-                    <a href="https://github.com/ForcexDev/GrandChessAuto_DesarrolloWeb" target="_blank" class="project-link">
-                        <span>View on GitHub</span>
-                        <i class="fas fa-external-link-alt"></i>
+                    <a href="https://www.linkedin.com/in/ezequielleandromorales/" target="_blank" class="contact-link">
+                        <i class="fab fa-linkedin"></i>
+                        <span data-key="contactNetwork">Professional Network</span>
+                    </a>
+                    <a href="https://tryhackme.com/p/ForcexDev" target="_blank" class="contact-link">
+                        <i class="fas fa-flag"></i>
+                        <span data-key="contactMissions">Security Training Missions</span>
+                    </a>
+                    <a href="https://www.hackerrank.com/profile/ezequiel_morales" target="_blank" class="contact-link">
+                        <i class="fas fa-user-secret"></i>
+                        <span data-key="contactHacker">Security Training Missions</span>
+                    </a>
+                    <a href="https://leetcode.com/u/ForcexDev/" target="_blank" class="contact-link">
+                        <i class="fa fa-code"></i>
+                        <span data-key="contactLeet">Security Training Missions</span>
+                    </a>
+                    <a href="mailto:ezequiel.morales@gmail.com" class="contact-link">
+                        <i class="fas fa-envelope"></i>
+                        <span data-key="contactChannel">Direct Communication Channel</span>
                     </a>
                 </div>
             </div>
-
-            <div class="project-card">
-                <div class="project-image-container">
-                    <img src="img/java.png" alt="Proyecto Java EDA" class="project-image">
-                </div>
-                <div class="project-content">
-                    <h3 class="project-title" data-key="project2Title">Java EDA - Data Structures</h3>
-                    <p class="project-description" data-key="project2Desc">
-                        Mapping data architectures like star formations. These fundamental building blocks organize information
-                        with the same precision that gravity organizes celestial bodies - efficient, elegant, and essential
-                        for navigating the programming cosmos.
-                    </p>
-                    <div class="project-tags">
-                        <span class="tag">Java</span>
-                        <span class="tag">Data Structures</span>
-                        <span class="tag">Algorithms</span>
-                    </div>
-                    <a href="https://github.com/ForcexDev/Java-EDA" target="_blank" class="project-link">
-                        <span>View on GitHub</span>
-                        <i class="fas fa-external-link-alt"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="project-card">
-                <div class="project-image-container">
-                    <img src="img/redes.png" alt="Proyecto Redes De Datos" class="project-image">
-                </div>
-                <div class="project-content">
-                    <h3 class="project-title" data-key="project3Title">Redes De Datos</h3>
-                    <p class="project-description" data-key="project3Desc">
-                        Network architectures spanning digital space. Like mapping the cosmic web that connects galaxies,
-                        these projects reveal the hidden infrastructure of communication across vast digital territories.
-                    </p>
-                    <div class="project-tags">
-                        <span class="tag">Networking</span>
-                        <span class="tag">TCP/IP</span>
-                        <span class="tag">Routing</span>
-                    </div>
-                    <a href="https://github.com/ForcexDev/RedesDeDatos" target="_blank" class="project-link">
-                        <span>View on GitHub</span>
-                        <i class="fas fa-external-link-alt"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="project-card">
-                <div class="project-image-container">
-                    <img src="img/python2.png" alt="Proyecto Python" class="project-image">
-                </div>
-                <div class="project-content">
-                    <h3 class="project-title" data-key="project4Title">Python Projects</h3>
-                    <p class="project-description" data-key="project4Desc">
-                        Scripting solutions across the programming cosmos. These scripts and Jupyter notebooks demonstrate
-                        the versatility needed to navigate the ever-expanding universe of programming challenges and automation.
-                    </p>
-                    <div class="project-tags">
-                        <span class="tag">Python</span>
-                        <span class="tag">Jupyter</span>
-                        <span class="tag">Programming</span>
-                    </div>
-                    <a href="https://github.com/ForcexDev/Python" target="_blank" class="project-link">
-                        <span>View on GitHub</span>
-                        <i class="fas fa-external-link-alt"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="project-card">
-                <div class="project-image-container">
-                    <img src="img/bandit.png" alt="Proyecto Bandit Security Guide" class="project-image">
-                </div>
-                <div class="project-content">
-                    <h3 class="project-title" data-key="project5Title">Bandit Security Guide</h3>
-                    <p class="project-description" data-key="project5Desc">
-                        Security exploration in Linux territories. Like charting unknown regions of space, this guide
-                        maps the landscape of system security and exploitation techniques across digital frontiers.
-                    </p>
-                    <div class="project-tags">
-                        <span class="tag">Linux</span>
-                        <span class="tag">Cybersecurity</span>
-                        <span class="tag">Bash</span>
-                        <span class="tag">LaTeX</span>
-                    </div>
-                    <a href="https://github.com/ForcexDev/Bandit-WriteUp" target="_blank" class="project-link">
-                        <span>View on GitHub</span>
-                        <i class="fas fa-external-link-alt"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="project-card">
-                <div class="project-image-container">
-                    <img src="img/sql.png" alt="Proyecto PostgreSQL Database" class="project-image">
-                </div>
-                <div class="project-content">
-                    <h3 class="project-title" data-key="project6Title">PostgreSQL Database</h3>
-                    <p class="project-description" data-key="project6Desc">
-                        Structured data like organized stellar catalogs. Just as astronomers catalog stellar objects with
-                        precision, this project demonstrates the art of organizing data for optimal performance and integrity.
-                    </p>
-                    <div class="project-tags">
-                        <span class="tag">SQL</span>
-                        <span class="tag">PostgreSQL</span>
-                        <span class="tag">Database</span>
-                    </div>
-                    <a href="https://github.com/ForcexDev/Python/tree/main/Proyect-DataBase" target="_blank" class="project-link">
-                        <span>View on GitHub</span>
-                        <i class="fas fa-external-link-alt"></i>
-                    </a>
-                </div>
-            </div>
-
         </div>
-    </div>
-</section>
+    </section>
 
-<section id="certifications" class="section">
-    <div class="container">
-        <h2 class="section-title" data-key="certificationsTitle">Certifications</h2>
 
-        <div class="skills-grid">
 
-            <div class="skill-item cert-card">
-                <i class="fas fa-award skill-icon"></i>
-                <div class="skill-info">
-                    <h4 data-key="cert1Title">Introduction to Cybersecurity</h4>
-                    <p data-key="cert1Org">Cisco Networking Academy</p>
-                </div>
-                <a href="https://www.credly.com/badges/05aff769-7021-4bf6-9e5e-15b542112284/public_url" class="cert-link" target="_blank" data-key="certLinkView">View</a>
-            </div>
-
-            <div class="skill-item cert-card">
-                <i class="fas fa-award skill-icon"></i>
-                <div class="skill-info">
-                    <h4 data-key="cert2Title">Networking Essentials - Network Technician Career Path</h4>
-                    <p data-key="cert2Org">Cisco Networking Academy</p>
-                </div>
-                <a href="https://www.credly.com/badges/21eb7975-97d2-469e-b608-c23b6dab214e/public_url" class="cert-link" target="_blank" data-key="certLinkView">View</a>
-            </div>
-
-            <div class="skill-item cert-card">
-                <i class="fas fa-award skill-icon"></i>
-                <div class="skill-info">
-                    <h4 data-key="cert3Title">Inglés para Desarrolladores</h4>
-                    <p data-key="cert3Org">FreeCodeCamp</p>
-                </div>
-                <span class="cert-link in-progress" data-key="certLinkProgress">In Progress</span>
-            </div>
-
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Ezequiel Morales - All Rights Reserved</p>
         </div>
-    </div>
-</section>
+    </footer>
 
-<section id="skills" class="section">
-    <div class="container skills-container">
-        <h2 class="section-title" data-key="skillsTitle">Technical Skills</h2>
+    <script src="js/translations.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/projects.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/main.js"></script>
 
-        <h3 class="skill-category-title" data-key="skillsCat1">Cybersecurity & Networks</h3>
-        <div class="skills-grid">
-            <div class="skill-item">
-                <i class="fas fa-shield-alt skill-icon"></i>
-                <div class="skill-info">
-                    <h4>Cybersecurity</h4>
-                    <p data-key="skillCyber">Protecting digital frontiers</p>
-                </div>
-            </div>
-            <div class="skill-item">
-                <i class="devicon-linux-plain skill-icon"></i>
-                <div class="skill-info">
-                    <h4>Linux</h4>
-                    <p data-key="skillLinux">Navigation through secure systems</p>
-                </div>
-            </div>
-            <div class="skill-item">
-                <i class="devicon-ubuntu-plain skill-icon"></i>
-                <div class="skill-info">
-                    <h4>Ubuntu</h4>
-                    <p data-key="skillUbuntu">Server & Desktop Environment</p>
-                </div>
-            </div>
-            <div class="skill-item">
-                <i class="devicon-bash-plain skill-icon"></i>
-                <div class="skill-info">
-                    <h4>Bash Scripting</h4>
-                    <p data-key="skillBash">Command-line exploration tools</p>
-                </div>
-            </div>
-            <div class="skill-item">
-                <i class="fas fa-network-wired skill-icon"></i>
-                <div class="skill-info">
-                    <h4>Networking</h4>
-                    <p data-key="skillNetwork"></p>
-                </div>
-            </div>
-            <div class="skill-item">
-                <i class="devicon-nginx-original skill-icon"></i>
-                <div class="skill-info">
-                    <h4>Nginx</h4>
-                    <p data-key="skillNginx">Nginx server http's</p>
-                </div>
-            </div>
-            <div class="skill-item">
-                <i class="devicon-docker-plain skill-icon"></i>
-                <div class="skill-info">
-                    <h4>Docker</h4>
-                    <p data-key="skillDocker">Containerizing applications</p>
-                </div>
-            </div>
-        </div>
-
-        <h3 class="skill-category-title" data-key="skillsCat2">Backend & Data</h3>
-        <div class="skills-grid">
-            <div class="skill-item">
-                <i class="devicon-python-plain skill-icon"></i>
-                <div class="skill-info">
-                    <h4>Python</h4>
-                    <p data-key="skillPython">Scripting across digital galaxies</p>
-                </div>
-            </div>
-            <div class="skill-item">
-                <i class="devicon-java-plain skill-icon"></i>
-                <div class="skill-info">
-                    <h4>Java</h4>
-                    <p data-key="skillJava">Object-oriented stellar architecture</p>
-                </div>
-            </div>
-            <div class="skill-item">
-                <i class="devicon-cplusplus-plain skill-icon"></i>
-                <div class="skill-info">
-                    <h4>C++</h4>
-                    <p data-key="skillCpp">System-level cosmic engineering</p>
-                </div>
-            </div>
-            <div class="skill-item">
-                <i class="devicon-lua-plain skill-icon"></i>
-                <div class="skill-info">
-                    <h4>Lua</h4>
-                    <p data-key="skillLua">Scripting & Game Development</p>
-                </div>
-            </div>
-            <div class="skill-item">
-                <i class="devicon-nodejs-plain skill-icon"></i>
-                <div class="skill-info">
-                    <h4>Node.js</h4>
-                    <p data-key="skillNode">Server-side space stations</p>
-                </div>
-            </div>
-            <div class="skill-item">
-                <i class="devicon-express-original skill-icon"></i>
-                <div class="skill-info">
-                    <h4>Express</h4>
-                    <p data-key="skillExpress">Node.js server framework</p>
-                </div>
-            </div>
-            <div class="skill-item">
-                <i class="devicon-postgresql-plain skill-icon"></i>
-                <div class="skill-info">
-                    <h4>PostgreSQL</h4>
-                    <p data-key="skillSQL">Database architectures</p>
-                </div>
-            </div>
-            <div class="skill-item">
-                <i class="devicon-mongodb-plain skill-icon"></i>
-                <div class="skill-info">
-                    <h4>MongoDB</h4>
-                    <p data-key="skillMongoDB">NoSQL database management</p>
-                </div>
-            </div>
-        </div>
-
-        <h3 class="skill-category-title" data-key="skillsCat3">Frontend & Software</h3>
-        <div class="skills-grid">
-            <div class="skill-item">
-                <i class="devicon-javascript-plain skill-icon"></i>
-                <div class="skill-info">
-                    <h4>JavaScript</h4>
-                    <p data-key="skillJS">Interactive web constellation</p>
-                </div>
-            </div>
-            <div class="skill-item">
-                <i class="devicon-html5-plain skill-icon"></i>
-                <div class="skill-info">
-                    <h4>HTML</h4>
-                    <p data-key="skillHTML">Structuring digital universes</p>
-                </div>
-            </div>
-            <div class="skill-item">
-                <i class="devicon-css3-plain skill-icon"></i>
-                <div class="skill-info">
-                    <h4>CSS</h4>
-                    <p data-key="skillCSS">Styling cosmic interfaces</p>
-                </div>
-            </div>
-            <div class="skill-item">
-                <i class="devicon-git-plain skill-icon"></i>
-                <div class="skill-info">
-                    <h4>Git &amp; GitHub</h4>
-                    <p data-key="skillGit">Version control across timelines</p>
-                </div>
-            </div>
-            <div class="skill-item">
-                <i class="fab fa-aws skill-icon"></i>
-                <div class="skill-info">
-                    <h4>AWS</h4>
-                    <p data-key="skillAWS">Cloud infrastructure spanning vast networks</p>
-                </div>
-            </div>
-            <div class="skill-item">
-                <i class="devicon-latex-original skill-icon"></i>
-                <div class="skill-info">
-                    <h4>LaTeX</h4>
-                    <p data-key="skillLatex">Technical documentation</p>
-                </div>
-            </div>
-            <div class="skill-item">
-                <i class="devicon-vscode-plain skill-icon"></i>
-                <div class="skill-info">
-                    <h4>VS Code</h4>
-                    <p data-key="skillVSCode">Code editor of choice</p>
-                </div>
-            </div>
-            <div class="skill-item">
-                <i class="devicon-webstorm-plain skill-icon"></i>
-                <div class="skill-info">
-                    <h4>WebStorm</h4>
-                    <p data-key="skillWebStorm">JetBrains IDE for web</p>
-                </div>
-            </div>
-            <div class="skill-item">
-                <i class="devicon-windows8-original skill-icon"></i>
-                <div class="skill-info">
-                    <h4>Windows</h4>
-                    <p data-key="skillWindows">Operating System</p>
-                </div>
-            </div>
-            <div class="skill-item">
-                <i class="devicon-photoshop-plain skill-icon"></i>
-                <div class="skill-info">
-                    <h4>Photoshop</h4>
-                    <p data-key="skillPhotoshop">Raster graphics editor</p>
-                </div>
-            </div>
-            <div class="skill-item">
-                <i class="devicon-blender-original skill-icon"></i>
-                <div class="skill-info">
-                    <h4>Blender</h4>
-                    <p data-key="skillBlender">3D computer graphics</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section id="game-hub" class="section">
-    <h2 class="section-title" data-key="gameTitle">Cosmic Battle</h2>
-
-    <div id="gameContainer" class="game-container">
-        <canvas id="spaceCanvasGame"></canvas>
-
-        <div id="gameOverlay" class="game-overlay">
-            <p id="gameMessage" data-key="gameIntro">Ready for a cosmic battle?</p>
-            <h3 id="gameScore" style="display: none;">Score: <span>0</span></h3>
-            <button id="startGameBtn" class="cta-button" data-key="gameStart">Start Mission</button>
-        </div>
-
-        <div class="mobile-controls">
-            <div id="touchLeft" class="touch-control"><i class="fas fa-chevron-left"></i></div>
-            <div id="touchShoot" class="touch-control shoot"><i class="fas fa-crosshairs"></i></div>
-            <div id="touchRight" class="touch-control"><i class="fas fa-chevron-right"></i></div>
-        </div>
-    </div>
-</section>
-
-<section id="contact" class="section">
-    <div class="container">
-        <div class="contact-content">
-            <h2 class="section-title" data-key="contactTitle">Ground Control Communication Hub</h2>
-            <p class="contact-text" data-key="contactText">
-                Ready to explore new frontiers together? Let's connect across the digital cosmos and discuss the infinite possibilities of technology and space.
-            </p>
-            <div class="contact-links">
-                <a href="https://github.com/ForcexDev" target="_blank" class="contact-link">
-                    <i class="fab fa-github"></i>
-                    <span data-key="contactRepo">Mission Control Repository</span>
-                </a>
-                <a href="https://www.linkedin.com/in/ezequielleandromorales/" target="_blank" class="contact-link">
-                    <i class="fab fa-linkedin"></i>
-                    <span data-key="contactNetwork">Professional Network</span>
-                </a>
-                <a href="https://tryhackme.com/p/ForcexDev" target="_blank" class="contact-link">
-                    <i class="fas fa-flag"></i>
-                    <span data-key="contactMissions">Security Training Missions</span>
-                </a>
-                <a href="https://www.hackerrank.com/profile/ezequiel_morales" target="_blank" class="contact-link">
-                    <i class="fas fa-user-secret"></i>
-                    <span data-key="contactHacker">Security Training Missions</span>
-                </a>
-                <a href="https://leetcode.com/u/ForcexDev/" target="_blank" class="contact-link">
-                    <i class="fa fa-code"></i>
-                    <span data-key="contactLeet">Security Training Missions</span>
-                </a>
-                <a href="mailto:ezequiel.morales@gmail.com" class="contact-link">
-                    <i class="fas fa-envelope"></i>
-                    <span data-key="contactChannel">Direct Communication Channel</span>
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-
-<footer class="footer">
-    <div class="container">
-        <p>© 2025 Ezequiel Morales - All Rights Reserved</p>
-    </div>
-</footer>
-
-<script src="script.js"></script>
-
-<a href="#home" id="backToTopBtn" class="back-to-top" title="Volver arriba">
-    <i class="fas fa-chevron-up"></i>
-</a>
+    <a href="#home" id="backToTopBtn" class="back-to-top" title="Volver arriba">
+        <i class="fas fa-chevron-up"></i>
+    </a>
 
 </body>
+
 </html>
