@@ -4,10 +4,10 @@ const projectsData = [
         titleKey: 'project1Title',
         descKey: 'project1Desc',
         image: 'img/ajedrez.png',
-        tags: ['Node.js', 'Express', 'HTML', 'CSS', 'JavaScript', 'Web Development'],
-        github: 'https://github.com/ForcexDev/GrandChessAuto_DesarrolloWeb',
+        tags: ['Node.js', 'Socket.IO', 'MongoDB', 'Express', 'Cloudflare', 'Real-time'],
+        github: 'https://github.com/ForcexDev/GrandChessAuto',
         liveUrl: 'https://grandchessauto.forcex.dev/',
-        detailedDescKey: 'project1Desc' // Using same desc for now, can be expanded
+        detailedDescKey: 'project1DetailedDesc'
     },
     {
         id: 2,

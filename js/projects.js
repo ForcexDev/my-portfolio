@@ -49,6 +49,14 @@ function renderProjects(lang) {
         if (window.globalObserver) {
             window.globalObserver.observe(card);
         }
+
+        // Apply Glow and Shine to dynamic card
+        if (window.initGlowForElement) {
+            window.initGlowForElement(card);
+        }
+        if (window.initShineSingle) {
+            window.initShineSingle(card);
+        }
     });
 }
 

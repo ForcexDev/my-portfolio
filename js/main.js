@@ -1,3 +1,4 @@
+
 // Typewriter Effect
 class TypeWriter {
     constructor(txtElement, words, wait = 3000) {
@@ -102,6 +103,14 @@ function setLanguage(lang) {
     // Update Music Button
     updateMusicButtonText();
 
+    // Update placeholder translations
+    document.querySelectorAll('[data-placeholder-key]').forEach(elem => {
+        const key = elem.dataset.placeholderKey;
+        if (translations[lang][key]) {
+            elem.placeholder = translations[lang][key];
+        }
+    });
+
     // Re-render Projects (to update titles/descriptions)
     if (typeof renderProjects === 'function') {
         renderProjects(lang);
@@ -120,68 +129,107 @@ function updateMusicButtonText() {
     }
 }
 
+// === PUBLIC MUSIC API ===
+// These functions are exposed globally for use by game.js and other modules
+
+let _mainMusic = null;
+let _musicBtn = null;
+let _musicIcon = null;
+let _musicText = null;
+
+function pauseBackgroundMusic() {
+    if (_mainMusic && !_mainMusic.paused) {
+        _mainMusic.pause();
+        if (_musicIcon) _musicIcon.classList.replace('fa-pause', 'fa-play');
+        if (_musicText) _musicText.textContent = translations[currentLang].musicPlay;
+        if (_musicBtn) _musicBtn.classList.remove('playing');
+    }
+}
+
+// Pause for game - ONLY pauses audio, does NOT change button state
+// This matches original behavior where button stayed in 'playing' state
+function pauseBackgroundMusicForGame() {
+    if (_mainMusic && !_mainMusic.paused) {
+        _mainMusic.pause();
+        // Intentionally NOT updating button/icon state
+        // So we can detect it was playing when game ends
+    }
+}
+
+function playBackgroundMusic() {
+    const gameContainer = document.getElementById('gameContainer');
+    if (gameContainer && gameContainer.classList.contains('game-active')) {
+        return; // Don't play if game is active
+    }
+    if (_mainMusic && _mainMusic.paused) {
+        _mainMusic.play().catch(e => console.error("Audio play failed:", e));
+        if (_musicIcon) _musicIcon.classList.replace('fa-play', 'fa-pause');
+        if (_musicText) _musicText.textContent = translations[currentLang].musicPause;
+        if (_musicBtn) _musicBtn.classList.add('playing');
+    }
+}
+
+// Resume after game - checks if button has 'playing' class (matches original behavior)
+function resumeBackgroundMusicAfterGame() {
+    // Button keeps 'playing' class when pauseBackgroundMusicForGame is called
+    // So we can check if music was playing before the game started
+    if (_musicBtn && _musicBtn.classList.contains('playing') && _mainMusic && _mainMusic.paused) {
+        _mainMusic.play().catch(e => console.error("Audio resume failed:", e));
+        // No need to update button/icon - they never changed
+    }
+}
+
+function isBackgroundMusicPlaying() {
+    return _mainMusic && !_mainMusic.paused;
+}
+
+// Expose Music API via namespace
+window.ForcexPortfolio = window.ForcexPortfolio || {};
+window.ForcexPortfolio.pauseBackgroundMusic = pauseBackgroundMusic;
+window.ForcexPortfolio.pauseBackgroundMusicForGame = pauseBackgroundMusicForGame;
+window.ForcexPortfolio.playBackgroundMusic = playBackgroundMusic;
+window.ForcexPortfolio.resumeBackgroundMusicAfterGame = resumeBackgroundMusicAfterGame;
+window.ForcexPortfolio.isBackgroundMusicPlaying = isBackgroundMusicPlaying;
+
+// Legacy support - keep direct window references for game.js compatibility
+window.pauseBackgroundMusicForGame = pauseBackgroundMusicForGame;
+window.resumeBackgroundMusicAfterGame = resumeBackgroundMusicAfterGame;
+
 // Logic for Main Music
 function initMusicPlayer() {
-    const mainMusic = document.getElementById('bg-music');
-    const musicBtn = document.getElementById('music-toggle');
+    _mainMusic = document.getElementById('bg-music');
+    _musicBtn = document.getElementById('music-toggle');
     const ctaButton = document.querySelector('.cta-button[href="#about"]');
 
-    if (mainMusic && musicBtn && ctaButton) {
-        mainMusic.volume = 0.17;
-        const icon = musicBtn.querySelector('i');
-        const text = musicBtn.querySelector('span');
+    if (_mainMusic && _musicBtn && ctaButton) {
+        _mainMusic.volume = 0.17;
+        _musicIcon = _musicBtn.querySelector('i');
+        _musicText = _musicBtn.querySelector('span');
         let musicStartedByListener = false;
 
-        const playMainMusic = () => {
-            // Check if game audio plays (needs game.js loaded or variable accessible)
-            // We can check if the game container has active class maybe?
-            // For now simpler check:
-            const gameContainer = document.getElementById('gameContainer');
-            if (gameContainer && gameContainer.classList.contains('game-active')) {
-                return;
-            }
-
-            mainMusic.play().catch(e => console.error("Audio play failed:", e));
-            icon.classList.replace('fa-play', 'fa-pause');
-            text.textContent = translations[currentLang].musicPause;
-            musicBtn.classList.add('playing');
-        };
-
-        const pauseMainMusic = () => {
-            mainMusic.pause();
-            icon.classList.replace('fa-pause', 'fa-play');
-            text.textContent = translations[currentLang].musicPlay;
-            musicBtn.classList.remove('playing');
-        };
-
         const startMusicOnInteraction = () => {
-            if (!musicStartedByListener && mainMusic.paused) {
-                playMainMusic();
+            if (!musicStartedByListener && _mainMusic.paused) {
+                playBackgroundMusic();
                 musicStartedByListener = true;
             }
-            window.removeEventListener('scroll', startMusicOnInteraction);
-            ctaButton.removeEventListener('click', startMusicOnInteraction);
         };
 
+        // One-time listeners for first interaction
         window.addEventListener('scroll', startMusicOnInteraction, { once: true });
         ctaButton.addEventListener('click', startMusicOnInteraction, { once: true });
 
-        musicBtn.addEventListener('click', () => {
-            if (!musicStartedByListener) {
-                musicStartedByListener = true;
-                window.removeEventListener('scroll', startMusicOnInteraction);
-                ctaButton.removeEventListener('click', startMusicOnInteraction);
-            }
-            if (mainMusic.paused) {
-                playMainMusic();
+        _musicBtn.addEventListener('click', () => {
+            musicStartedByListener = true;
+            if (_mainMusic.paused) {
+                playBackgroundMusic();
             } else {
-                pauseMainMusic();
+                pauseBackgroundMusic();
             }
         });
     }
 }
 
-// Cosmic Particles
+// Cosmic Particles (Original User Version)
 function createCosmicParticles() {
     const particlesContainer = document.querySelector('.particles');
     if (!particlesContainer) return;
@@ -203,30 +251,132 @@ function createCosmicParticles() {
     }
 }
 
+// === REALISTIC STARS WITH INDIVIDUAL TWINKLE ===
+// Each star has its own random animation delay for organic effect
+function createRealisticStars() {
+    const container = document.getElementById('stars-container');
+    if (!container) return;
+
+    // Clear any existing stars
+    container.innerHTML = '';
+
+    // Responsive star count: fewer on mobile for performance
+    const isMobile = window.innerWidth <= 768;
+    const starCount = isMobile ? 50 : 80;
+
+    for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+
+        // 80% white, 10% blue, 10% purple
+        let colorClass = '';
+        const rand = Math.random();
+        if (rand > 0.9) colorClass = 'blue';
+        else if (rand > 0.8) colorClass = 'purple';
+
+        star.className = `individual-star ${colorClass}`.trim();
+
+        // Random position across the viewport
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+
+        // Random size (1-3px for depth illusion)
+        const size = Math.random() * 2 + 1;
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+
+        // KEY: Random animation delay (0-8s) so each star twinkles independently
+        const delay = Math.random() * 8;
+        star.style.setProperty('--twinkle-delay', delay + 's');
+
+        // Random animation duration (2-5s) for variety
+        const duration = Math.random() * 3 + 2;
+        star.style.setProperty('--twinkle-duration', duration + 's');
+
+        // Random opacity range for depth
+        const minOpacity = Math.random() * 0.3 + 0.2; // 0.2-0.5
+        const maxOpacity = Math.random() * 0.3 + 0.7; // 0.7-1.0
+        star.style.setProperty('--star-min-opacity', minOpacity);
+        star.style.setProperty('--star-max-opacity', maxOpacity);
+
+        // Brighter stars get a subtle glow
+        if (size > 2) {
+            star.style.boxShadow = `0 0 ${size}px rgba(255, 255, 255, 0.5)`;
+        }
+
+        container.appendChild(star);
+    }
+}
+
+// === UNIFIED SCROLL HANDLER ===
+// All scroll-dependent logic consolidated here for performance
+
+let _navbar = null;
+let _sections = null;
+let _navLinks = null;
+let _toTopBtn = null;
+
+function handleGlobalScroll() {
+    const scrollY = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollProgress = docHeight > 0 ? (scrollY / docHeight) * 100 : 0;
+
+    // 1. Navbar style change + scroll progress bar
+    if (_navbar) {
+        _navbar.style.setProperty('--scroll-progress', scrollProgress + '%');
+        if (scrollY > 100) {
+            _navbar.classList.add('scrolled');
+        } else {
+            _navbar.classList.remove('scrolled');
+        }
+    }
+
+    // 2. Active navigation section
+    if (_sections && _navLinks) {
+        let current = 'home';
+        _sections.forEach(section => {
+            const sectionTop = section.offsetTop - 100;
+            const sectionHeight = section.clientHeight;
+            if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                current = section.getAttribute('id');
+            }
+        });
+        _navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${current}`) {
+                link.classList.add('active');
+            }
+        });
+    }
+
+    // 3. Back to top button visibility
+    if (_toTopBtn) {
+        if (scrollY > 300) {
+            _toTopBtn.classList.add('visible');
+        } else {
+            _toTopBtn.classList.remove('visible');
+        }
+    }
+}
+
 // Navigation
 function initNavigation() {
-    const navbar = document.querySelector('.navbar');
-    const navLinks = document.querySelectorAll('.nav-link');
+    _navbar = document.querySelector('.navbar');
     const mobileToggle = document.querySelector('.mobile-toggle');
     const navLinksContainer = document.querySelector('.nav-links');
-    if (!navbar || !mobileToggle || !navLinksContainer) return;
+    _navLinks = document.querySelectorAll('.nav-link');
+    _sections = document.querySelectorAll('section[id]');
 
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 100) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-    });
+    if (!_navbar || !mobileToggle || !navLinksContainer) return;
 
     mobileToggle.addEventListener('click', () => {
         navLinksContainer.classList.toggle('active');
+        mobileToggle.classList.toggle('active');
         const icon = mobileToggle.querySelector('i');
         icon.classList.toggle('fa-bars');
         icon.classList.toggle('fa-times');
     });
 
-    navLinks.forEach(link => {
+    _navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const targetId = link.getAttribute('href');
@@ -238,10 +388,11 @@ function initNavigation() {
                     behavior: 'smooth'
                 });
             }
-            navLinks.forEach(nl => nl.classList.remove('active'));
+            _navLinks.forEach(nl => nl.classList.remove('active'));
             link.classList.add('active');
             if (navLinksContainer.classList.contains('active')) {
                 navLinksContainer.classList.remove('active');
+                mobileToggle.classList.remove('active');
                 mobileToggle.querySelector('i').classList.add('fa-bars');
                 mobileToggle.querySelector('i').classList.remove('fa-times');
             }
@@ -249,7 +400,7 @@ function initNavigation() {
     });
 }
 
-// Scroll Animations
+// Scroll Animations (uses IntersectionObserver, not scroll event)
 function initScrollAnimations() {
     const observerOptions = {
         threshold: 0.1,
@@ -258,8 +409,6 @@ function initScrollAnimations() {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // Check if it's a project card to avoid double animation with lazy load
-                // But since we are rendering them dynamically, we might need to observe them AFTER render
                 entry.target.classList.add('animate');
             }
         });
@@ -271,48 +420,165 @@ function initScrollAnimations() {
         observer.observe(item);
     });
 
-    // Expose observer to be used by dynamic content
+    // Expose observer
     window.globalObserver = observer;
 }
 
-// Active Nav State
-function updateActiveNavigation() {
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-link');
-    window.addEventListener('scroll', () => {
-        let current = 'home';
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop - 100;
-            const sectionHeight = section.clientHeight;
-            if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
-                current = section.getAttribute('id');
-            }
-        });
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${current}`) {
-                link.classList.add('active');
-            }
-        });
-    });
-}
-
-// Back To Top
+// Back To Top (click handler only, scroll handled by unified handler)
 function initBackToTop() {
-    const toTopBtn = document.getElementById('backToTopBtn');
-    if (toTopBtn) {
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                toTopBtn.classList.add('visible');
-            } else {
-                toTopBtn.classList.remove('visible');
-            }
-        });
-        toTopBtn.addEventListener('click', (e) => {
+    _toTopBtn = document.getElementById('backToTopBtn');
+    if (_toTopBtn) {
+        _toTopBtn.addEventListener('click', (e) => {
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
+}
+
+// === MISSING FUNCTIONS RESTORED ===
+
+// Helper: Check if Desktop
+function isDesktop() {
+    return window.innerWidth > 768;
+}
+
+// Cosmic Cursor
+function initCosmicCursor() {
+    if (!isDesktop()) return;
+
+    // Remove existing if any
+    const existingCursor = document.querySelector('.cosmic-cursor');
+    if (existingCursor) existingCursor.remove();
+    document.querySelectorAll('.cursor-trail').forEach(el => el.remove());
+
+    const cursor = document.createElement('div');
+    cursor.className = 'cosmic-cursor';
+    document.body.appendChild(cursor);
+
+    // Create trail elements
+    const trailCount = 12;
+    const trails = [];
+    for (let i = 0; i < trailCount; i++) {
+        const trail = document.createElement('div');
+        trail.className = 'cursor-trail';
+        document.body.appendChild(trail);
+        trails.push({ el: trail, x: 0, y: 0 });
+    }
+
+    let mouseX = 0, mouseY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        // The CSS handles centering via transform: translate(-50%, -50%)
+        cursor.style.left = mouseX + 'px';
+        cursor.style.top = mouseY + 'px';
+    });
+
+    // Click indicator
+    document.addEventListener('mousedown', () => cursor.classList.add('clicking'));
+    document.addEventListener('mouseup', () => cursor.classList.remove('clicking'));
+
+    // Animate trail
+    function animateTrail() {
+        let x = mouseX, y = mouseY;
+        trails.forEach((trail, index) => {
+            const nextX = x + (trail.x - x) * 0.3;
+            const nextY = y + (trail.y - y) * 0.3;
+            // Trail also centered via CSS
+            trail.el.style.left = trail.x + 'px';
+            trail.el.style.top = trail.y + 'px';
+            trail.x = nextX;
+            trail.y = nextY;
+            x = nextX;
+            y = nextY;
+        });
+        requestAnimationFrame(animateTrail);
+    }
+    animateTrail();
+
+    // Hover effect on interactive elements
+    const hoverElements = document.querySelectorAll('a, button, .project-card, .skill-item, .cta-button, .nav-link, .lang-btn, .music-play-btn');
+    hoverElements.forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+    });
+}
+
+// Dynamic Glow Effect (Corrected Offset -90)
+function initDynamicGlow() {
+    if (!isDesktop()) return;
+
+    const glowElements = document.querySelectorAll('.skill-item');
+
+    glowElements.forEach(el => {
+        // Prevent duplicate glow
+        if (el.querySelector('.glow-effect')) return;
+
+        const glow = document.createElement('div');
+        glow.className = 'glow-effect';
+        el.style.position = 'relative';
+        el.style.overflow = 'hidden';
+        el.insertBefore(glow, el.firstChild);
+
+        el.addEventListener('mousemove', (e) => {
+            const rect = el.getBoundingClientRect();
+            const x = e.clientX - rect.left - 90; // Centered for 180px glow
+            const y = e.clientY - rect.top - 90;
+            glow.style.left = x + 'px';
+            glow.style.top = y + 'px';
+        });
+    });
+}
+
+// Init Glow for Project Cards (Corrected Offset -90)
+function initGlowForElement(el) {
+    if (!isDesktop()) return;
+    if (el.querySelector('.glow-effect')) return;
+
+    const glow = document.createElement('div');
+    glow.className = 'glow-effect';
+    el.style.position = 'relative';
+    el.style.overflow = 'hidden';
+    el.insertBefore(glow, el.firstChild);
+
+    el.addEventListener('mousemove', (e) => {
+        const rect = el.getBoundingClientRect();
+        const x = e.clientX - rect.left - 90;
+        const y = e.clientY - rect.top - 90;
+        glow.style.left = x + 'px';
+        glow.style.top = y + 'px';
+    });
+}
+
+// Helper to init shine on a single element (exposed for dynamic content)
+function initShineSingle(el) {
+    if (!isDesktop()) return;
+
+    el.addEventListener('mousemove', (e) => {
+        const rect = el.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const moveX = (x - centerX) / 30;
+        const moveY = (y - centerY) / 30;
+
+        el.style.transform = `perspective(1000px) rotateX(${-moveY}deg) rotateY(${moveX}deg) scale(1.02)`;
+    });
+
+    el.addEventListener('mouseleave', () => {
+        el.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+    });
+}
+
+// Restore initShineEffect for static elements
+function initShineEffect() {
+    if (!isDesktop()) return;
+    const shineElements = document.querySelectorAll('.project-card, .skill-item');
+    shineElements.forEach(el => initShineSingle(el));
 }
 
 // Init
@@ -330,14 +596,43 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     createCosmicParticles();
+    createRealisticStars(); // Generate individual stars with random twinkle delays
     initNavigation();
     initScrollAnimations();
-    updateActiveNavigation();
     initMusicPlayer();
     initBackToTop();
 
-    // Render Projects (imported from projects.js)
+    // SINGLE unified scroll listener (replaces 4 separate ones)
+    window.addEventListener('scroll', handleGlobalScroll);
+
+    // RESTORED FUNCTIONS
+    initCosmicCursor();
+    initDynamicGlow();
+
+    // Expose for projects.js via namespace
+    window.ForcexPortfolio = window.ForcexPortfolio || {};
+    window.ForcexPortfolio.initGlowForElement = initGlowForElement;
+    window.ForcexPortfolio.initShineSingle = initShineSingle;
+    window.ForcexPortfolio.globalObserver = window.globalObserver;
+
+    // Legacy support - keep direct window references for projects.js compatibility
+    window.initGlowForElement = initGlowForElement;
+    window.initShineSingle = initShineSingle;
+
+    // Render Projects FIRST (creates dynamic elements)
     if (typeof renderProjects === 'function') {
         renderProjects(currentLang);
+    }
+
+    // THEN apply shine to all elements (static + dynamic)
+    initShineEffect();
+
+    // Hide cosmic loader after everything is ready
+    const cosmicLoader = document.getElementById('cosmic-loader');
+    if (cosmicLoader) {
+        // Small delay for smooth transition
+        setTimeout(() => {
+            cosmicLoader.classList.add('hidden');
+        }, 800);
     }
 });

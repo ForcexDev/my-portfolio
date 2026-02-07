@@ -1,0 +1,240 @@
+/* === ENHANCED COSMIC NAVIGATION === */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 17, 0.8);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(66, 153, 225, 0.1);
+    z-index: 1000;
+    padding: 0.8rem 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navbar::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: var(--scroll-progress, 0%);
+    height: 2px;
+    background: linear-gradient(90deg, var(--nebula-blue), var(--cosmic-purple), var(--cosmic-magenta));
+    transition: width 0.1s linear;
+    box-shadow: 0 0 10px var(--nebula-blue);
+}
+
+.navbar.scrolled {
+    background: rgba(0, 0, 17, 0.95);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(66, 153, 225, 0.1);
+    border-bottom-color: rgba(66, 153, 225, 0.2);
+    padding: 0.6rem 0;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Premium Logo */
+.logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--stellar-white);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 10px rgba(66, 153, 225, 0.4);
+    letter-spacing: 3px;
+    position: relative;
+    padding: 0.5rem 0;
+}
+
+.logo:hover {
+    text-shadow: 0 0 25px rgba(66, 153, 225, 0.8), 0 0 40px rgba(66, 153, 225, 0.4);
+    transform: translateY(-2px);
+    color: var(--nebula-bright);
+}
+
+/* Navigation Links */
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.nav-links li {
+    position: relative;
+}
+
+.nav-links a {
+    color: var(--stellar-dim);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    position: relative;
+    transition: all 0.3s ease;
+    display: block;
+}
+
+.nav-links a:hover {
+    color: var(--stellar-white);
+    background: rgba(66, 153, 225, 0.08);
+}
+
+.nav-links a.active {
+    color: var(--stellar-white);
+    background: rgba(66, 153, 225, 0.12);
+}
+
+/* Animated underline */
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--nebula-blue), var(--cosmic-purple));
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateX(-50%);
+    border-radius: 2px;
+    box-shadow: 0 0 8px rgba(66, 153, 225, 0.5);
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+    width: calc(100% - 2rem);
+}
+
+/* Animated Hamburger Button */
+.mobile-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--nebula-blue);
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.mobile-toggle:hover {
+    background: rgba(66, 153, 225, 0.1);
+}
+
+.mobile-toggle i {
+    transition: transform 0.3s ease;
+}
+
+.mobile-toggle.active i {
+    transform: rotate(90deg);
+}
+
+/* Sections */
+.section {
+    padding: 5rem 0;
+    position: relative;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.section-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 2.8rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 3rem;
+    color: var(--stellar-white);
+    text-shadow: 0 0 20px rgba(66, 153, 225, 0.4);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--nebula-blue), var(--cosmic-purple), var(--nebula-blue));
+    margin: 1.5rem auto;
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(66, 153, 225, 0.5);
+}
+
+.about-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    align-items: center;
+}
+
+.about-image {
+    text-align: center;
+}
+
+.avatar {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--nebula-blue), var(--cosmic-purple));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    color: var(--deep-space);
+    margin: 0 auto;
+    box-shadow: 0 0 40px rgba(66, 153, 225, 0.4), 0 0 80px rgba(159, 122, 234, 0.2);
+    border: 3px solid rgba(255, 255, 255, 0.1);
+}
+
+.about-text {
+    font-size: 1.15rem;
+    line-height: 1.9;
+    color: var(--stellar-dim);
+    text-shadow: 0 0 5px rgba(203, 213, 225, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.about-text p {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+/* Footer */
+.footer {
+    background: linear-gradient(135deg, rgba(0, 0, 17, 0.9) 0%, rgba(26, 31, 58, 0.6) 100%);
+    border-top: 1px solid rgba(66, 153, 225, 0.15);
+    padding: 2.5rem 0;
+    text-align: center;
+    color: var(--stellar-dim);
+    backdrop-filter: blur(10px);
+    position: relative;
+}
+
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--nebula-blue), transparent);
+}

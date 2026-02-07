@@ -36,6 +36,15 @@ document.addEventListener('DOMContentLoaded', () => {
     audio.shoot.volume = 0.4;
     audio.explosion.volume = 0.2;
 
+    // --- 2.5 COLORS FROM CSS VARIABLES ---
+    // Read theme colors from CSS for visual consistency
+    const rootStyles = getComputedStyle(document.documentElement);
+    const gameColors = {
+        player: rootStyles.getPropertyValue('--nebula-blue').trim() || '#4299e1',
+        enemy: rootStyles.getPropertyValue('--cosmic-purple').trim() || '#6b46c1',
+        particle: rootStyles.getPropertyValue('--cosmic-magenta').trim() || '#9f7aea'
+    };
+
     // --- 3. CLASES DEL JUEGO ---
 
     // Clase para la Nave (Jugador)
@@ -49,14 +58,14 @@ document.addEventListener('DOMContentLoaded', () => {
             this.shootCooldown = 0; // Enfriamiento entre disparos
         }
         draw() {
-            ctx.fillStyle = '#4299e1'; // Color --nebula-blue
+            ctx.fillStyle = gameColors.player;
             ctx.beginPath();
             ctx.moveTo(this.x + this.width / 2, this.y);
             ctx.lineTo(this.x, this.y + this.height);
             ctx.lineTo(this.x + this.width, this.y + this.height);
             ctx.closePath();
             ctx.fill();
-            ctx.shadowColor = '#4299e1';
+            ctx.shadowColor = gameColors.player;
             ctx.shadowBlur = 10;
         }
         update() {
@@ -116,9 +125,9 @@ document.addEventListener('DOMContentLoaded', () => {
             this.speed = Math.random() * 2 + 2;
         }
         draw() {
-            ctx.fillStyle = '#6b46c1'; // Color --cosmic-purple
+            ctx.fillStyle = gameColors.enemy;
             ctx.fillRect(this.x, this.y, this.width, this.height);
-            ctx.shadowColor = '#6b46c1';
+            ctx.shadowColor = gameColors.enemy;
             ctx.shadowBlur = 10;
         }
         update() {
@@ -138,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
             this.life = 30; // 30 frames de vida
         }
         draw() {
-            ctx.fillStyle = '#9f7aea'; // Color --cosmic-magenta
+            ctx.fillStyle = gameColors.particle;
             ctx.globalAlpha = this.life / 30;
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -176,9 +185,10 @@ document.addEventListener('DOMContentLoaded', () => {
         gameContainer.classList.add('game-active');
 
         // Empezar música de fondo del juego
-        // (Pausa la música principal del sitio si está sonando)
-        const mainMusic = document.getElementById('bg-music');
-        if (mainMusic && !mainMusic.paused) mainMusic.pause();
+        // Use public API from main.js - remembers if music was playing
+        if (typeof window.pauseBackgroundMusicForGame === 'function') {
+            window.pauseBackgroundMusicForGame();
+        }
 
         audio.background.currentTime = 0;
         audio.background.play().catch(e => console.warn("Audio de fondo bloqueado"));
@@ -285,10 +295,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Detener música del juego
         audio.background.pause();
-        const musicBtn = document.getElementById('music-toggle');
-        const mainMusic = document.getElementById('bg-music');
-        if (musicBtn && mainMusic && musicBtn.classList.contains('playing')) {
-            mainMusic.play().catch(e => console.warn("Reinicio de música principal bloqueado"));
+
+        // Use public API from main.js - resumes music if it was playing before game
+        if (typeof window.resumeBackgroundMusicAfterGame === 'function') {
+            window.resumeBackgroundMusicAfterGame();
         }
 
 

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -8,7 +8,7 @@
 
     <!-- SEO Meta Tags -->
     <meta name="description"
-        content="Portfolio de Ezequiel Morales - Estudiante enfocado en Ciberseguridad y Redes. Proyectos de programación, seguridad informática y desarrollo web.">
+        content="Portfolio de Ezequiel Morales - Estudiante enfocado en Ciberseguridad y Redes. Proyectos de programaciÃ³n, seguridad informÃ¡tica y desarrollo web.">
     <meta name="author" content="Ezequiel Morales">
     <meta name="keywords"
         content="ForcexDev, Ezequiel Morales, ciberseguridad, redes, portfolio, desarrollador, cybersecurity, networking">
@@ -18,7 +18,7 @@
     <meta property="og:url" content="https://forcexdev.github.io/Portfolio/">
     <meta property="og:title" content="ForcexDev - Ezequiel Morales">
     <meta property="og:description"
-        content="Estudiante enfocado en Ciberseguridad y Redes. Explora mis proyectos de programación, seguridad informática y desarrollo web.">
+        content="Estudiante enfocado en Ciberseguridad y Redes. Explora mis proyectos de programaciÃ³n, seguridad informÃ¡tica y desarrollo web.">
     <meta property="og:image" content="https://forcexdev.github.io/Portfolio/img/preview.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -43,12 +43,21 @@
         href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
 
-    <!-- Icons -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="style.css">
+    <!-- Modular CSS -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/loader.css">
 </head>
 
 <audio id="bg-music" loop>
@@ -57,10 +66,29 @@
 </audio>
 
 <body>
+    <!-- Loading Screen -->
+    <div id="cosmic-loader" class="cosmic-loader">
+        <div class="loader-content">
+            <div class="planet-container">
+                <div class="planet-body">
+                    <div class="planet-atmosphere"></div>
+                    <div class="planet-surface"></div>
+                </div>
+                <!-- 3D Rings & Orbits -->
+                <div class="orbital-ring"></div>
+                <div class="satellite-orbit">
+                    <div class="satellite"></div>
+                </div>
+            </div>
+            <p class="loader-text">Loading<span class="dots"></span></p>
+        </div>
+    </div>
+
     <div class="space-canvas">
         <div class="stars"></div>
         <div class="stars"></div>
         <div class="stars"></div>
+        <div class="stars-container" id="stars-container"></div>
         <div class="nebula"></div>
         <div class="space-dust"></div>
     </div>
@@ -101,7 +129,7 @@
 
     <section id="about" class="section">
         <div class="container">
-            <h2 class="section-title" data-key="aboutTitle">About Me</h2>
+            <h2 class="section-title" data-key="aboutTitle"></h2>
             <div class="about-content">
                 <div class="about-text">
                     <p data-key="aboutP1">
@@ -121,7 +149,7 @@
 
                         <a href="CVEzequiel_Morales2025-11.pdf" download class="music-play-btn">
                             <i class="fas fa-download"></i>
-                            <span data-key="aboutCV">Descargar CV</span>
+                            <span data-key="aboutCV"></span>
                         </a>
 
                     </div>
@@ -132,7 +160,7 @@
 
     <section id="projects" class="section">
         <div class="container">
-            <h2 class="section-title" data-key="projectsTitle">Featured Projects</h2>
+            <h2 class="section-title" data-key="projectsTitle"></h2>
             <!-- Projects Grid Container (Populated by JS) -->
             <div class="projects-grid">
                 <!-- Dynamic content will be injected here -->
@@ -170,37 +198,37 @@
 
     <section id="certifications" class="section">
         <div class="container">
-            <h2 class="section-title" data-key="certificationsTitle">Certifications</h2>
+            <h2 class="section-title" data-key="certificationsTitle"></h2>
 
             <div class="skills-grid">
 
                 <div class="skill-item cert-card">
                     <i class="fas fa-award skill-icon"></i>
                     <div class="skill-info">
-                        <h4 data-key="cert1Title">Introduction to Cybersecurity</h4>
-                        <p data-key="cert1Org">Cisco Networking Academy</p>
+                        <h4 data-key="cert1Title"></h4>
+                        <p data-key="cert1Org"></p>
                     </div>
                     <a href="https://www.credly.com/badges/05aff769-7021-4bf6-9e5e-15b542112284/public_url"
-                        class="cert-link" target="_blank" data-key="certLinkView">View</a>
+                        class="cert-link" target="_blank" data-key="certLinkView"></a>
                 </div>
 
                 <div class="skill-item cert-card">
                     <i class="fas fa-award skill-icon"></i>
                     <div class="skill-info">
-                        <h4 data-key="cert2Title">Networking Essentials - Network Technician Career Path</h4>
-                        <p data-key="cert2Org">Cisco Networking Academy</p>
+                        <h4 data-key="cert2Title"></h4>
+                        <p data-key="cert2Org"></p>
                     </div>
                     <a href="https://www.credly.com/badges/21eb7975-97d2-469e-b608-c23b6dab214e/public_url"
-                        class="cert-link" target="_blank" data-key="certLinkView">View</a>
+                        class="cert-link" target="_blank" data-key="certLinkView"></a>
                 </div>
 
                 <div class="skill-item cert-card">
                     <i class="fas fa-award skill-icon"></i>
                     <div class="skill-info">
-                        <h4 data-key="cert3Title">Inglés para Desarrolladores</h4>
-                        <p data-key="cert3Org">FreeCodeCamp</p>
+                        <h4 data-key="cert3Title"></h4>
+                        <p data-key="cert3Org"></p>
                     </div>
-                    <span class="cert-link in-progress" data-key="certLinkProgress">In Progress</span>
+                    <span class="cert-link in-progress" data-key="certLinkProgress"></span>
                 </div>
 
             </div>
@@ -209,9 +237,9 @@
 
     <section id="skills" class="section">
         <div class="container skills-container">
-            <h2 class="section-title" data-key="skillsTitle">Technical Skills</h2>
+            <h2 class="section-title" data-key="skillsTitle"></h2>
 
-            <h3 class="skill-category-title" data-key="skillsCat1">Cybersecurity & Networks</h3>
+            <h3 class="skill-category-title" data-key="skillsCat1"></h3>
             <div class="skills-grid">
                 <div class="skill-item">
                     <i class="fas fa-shield-alt skill-icon"></i>
@@ -262,9 +290,37 @@
                         <p data-key="skillDocker">Containerizing applications</p>
                     </div>
                 </div>
+                <div class="skill-item">
+                    <i class="fas fa-cloud-meatball skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>Cloudflare</h4>
+                        <p data-key="skillCloudflare">CDN & Security</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="fas fa-broadcast-tower skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>Wireshark</h4>
+                        <p data-key="skillWireshark">Network Protocol Analyzer</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="fas fa-user-secret skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>Metasploit</h4>
+                        <p data-key="skillMetasploit">Penetration Testing Framework</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="fas fa-bug skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>Burp Suite</h4>
+                        <p data-key="skillBurp">Web Security Testing</p>
+                    </div>
+                </div>
             </div>
 
-            <h3 class="skill-category-title" data-key="skillsCat2">Backend & Data</h3>
+            <h3 class="skill-category-title" data-key="skillsCat2"></h3>
             <div class="skills-grid">
                 <div class="skill-item">
                     <i class="devicon-python-plain skill-icon"></i>
@@ -322,9 +378,30 @@
                         <p data-key="skillMongoDB">NoSQL database management</p>
                     </div>
                 </div>
+                <div class="skill-item">
+                    <i class="devicon-kubernetes-plain skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>Kubernetes</h4>
+                        <p data-key="skillKubernetes">Container Orchestration</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="fas fa-database skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>Oracle Cloud</h4>
+                        <p data-key="skillOracle">Cloud Infrastructure</p>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-arduino-plain skill-icon"></i>
+                    <div class="skill-info">
+                        <h4>Arduino</h4>
+                        <p data-key="skillArduino">Hardware & IoT</p>
+                    </div>
+                </div>
             </div>
 
-            <h3 class="skill-category-title" data-key="skillsCat3">Frontend & Software</h3>
+            <h3 class="skill-category-title" data-key="skillsCat3"></h3>
             <div class="skills-grid">
                 <div class="skill-item">
                     <i class="devicon-javascript-plain skill-icon"></i>
@@ -376,31 +453,10 @@
                     </div>
                 </div>
                 <div class="skill-item">
-                    <i class="devicon-webstorm-plain skill-icon"></i>
+                    <i class="fas fa-sticky-note skill-icon"></i>
                     <div class="skill-info">
-                        <h4>WebStorm</h4>
-                        <p data-key="skillWebStorm">JetBrains IDE for web</p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="devicon-windows8-original skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>Windows</h4>
-                        <p data-key="skillWindows">Operating System</p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="devicon-photoshop-plain skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>Photoshop</h4>
-                        <p data-key="skillPhotoshop">Raster graphics editor</p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="devicon-blender-original skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>Blender</h4>
-                        <p data-key="skillBlender">3D computer graphics</p>
+                        <h4>Notion</h4>
+                        <p data-key="skillNotion">Project Management</p>
                     </div>
                 </div>
             </div>
@@ -430,36 +486,64 @@
     <section id="contact" class="section">
         <div class="container">
             <div class="contact-content">
-                <h2 class="section-title" data-key="contactTitle">Ground Control Communication Hub</h2>
-                <p class="contact-text" data-key="contactText">
-                    Ready to explore new frontiers together? Let's connect across the digital cosmos and discuss the
-                    infinite possibilities of technology and space.
-                </p>
+                <h2 class="section-title" data-key="contactTitle"></h2>
+                <p class="contact-text" data-key="contactText"></p>
                 <div class="contact-links">
                     <a href="https://github.com/ForcexDev" target="_blank" class="contact-link">
                         <i class="fab fa-github"></i>
-                        <span data-key="contactRepo">Mission Control Repository</span>
+                        <span data-key="contactRepo"></span>
                     </a>
                     <a href="https://www.linkedin.com/in/ezequielleandromorales/" target="_blank" class="contact-link">
                         <i class="fab fa-linkedin"></i>
-                        <span data-key="contactNetwork">Professional Network</span>
+                        <span data-key="contactNetwork"></span>
                     </a>
                     <a href="https://tryhackme.com/p/ForcexDev" target="_blank" class="contact-link">
                         <i class="fas fa-flag"></i>
-                        <span data-key="contactMissions">Security Training Missions</span>
+                        <span data-key="contactMissions"></span>
                     </a>
-                    <a href="https://www.hackerrank.com/profile/ezequiel_morales" target="_blank" class="contact-link">
-                        <i class="fas fa-user-secret"></i>
-                        <span data-key="contactHacker">Security Training Missions</span>
+                    <a href="https://profile.hackthebox.com/profile/019c38be-e58b-70e7-8414-6252a08e0953"
+                        target="_blank" class="contact-link">
+                        <i class="fas fa-cube"></i>
+                        <span data-key="contactHTB"></span>
                     </a>
                     <a href="https://leetcode.com/u/ForcexDev/" target="_blank" class="contact-link">
                         <i class="fa fa-code"></i>
-                        <span data-key="contactLeet">Security Training Missions</span>
+                        <span data-key="contactLeet"></span>
                     </a>
-                    <a href="mailto:ezequiel.morales@gmail.com" class="contact-link">
-                        <i class="fas fa-envelope"></i>
-                        <span data-key="contactChannel">Direct Communication Channel</span>
+                    <a href="https://www.hackerrank.com/profile/ezequiel_morales" target="_blank" class="contact-link">
+                        <i class="fas fa-user-secret"></i>
+                        <span data-key="contactHacker"></span>
                     </a>
+                </div>
+                <!-- Contact Form with EmailJS -->
+                <div class="contact-form-container">
+                    <h3 class="contact-form-title" data-key="contactFormTitle"></h3>
+                    <form id="contact-form" class="contact-form">
+                        <div class="form-group">
+                            <label for="from_name" data-key="formName"></label>
+                            <input type="text" id="from_name" name="from_name" required placeholder="John Doe"
+                                data-placeholder-key="formPlaceholderName">
+                        </div>
+                        <div class="form-group">
+                            <label for="from_email" data-key="formEmail"></label>
+                            <input type="email" id="from_email" name="from_email" required
+                                placeholder="john@example.com" data-placeholder-key="formPlaceholderEmail">
+                        </div>
+                        <div class="form-group">
+                            <label for="message" data-key="formMessage"></label>
+                            <textarea id="message" name="message" required placeholder="Hello, I'd like to discuss..."
+                                data-placeholder-key="formPlaceholderMessage"></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            <span class="btn-text" data-key="formSend"></span>
+                            <span class="btn-loading">
+                                <i class="fas fa-spinner"></i>
+                                <span data-key="formSending"></span>
+                            </span>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                        <div id="form-status" class="form-status"></div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -473,10 +557,14 @@
         </div>
     </footer>
 
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
     <script src="js/translations.js"></script>
     <script src="js/data.js"></script>
     <script src="js/projects.js"></script>
     <script src="js/game.js"></script>
+    <script src="js/contact.js"></script>
     <script src="js/main.js"></script>
 
     <a href="#home" id="backToTopBtn" class="back-to-top" title="Volver arriba">
