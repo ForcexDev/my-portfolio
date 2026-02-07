@@ -595,44 +595,59 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    createCosmicParticles();
-    createRealisticStars(); // Generate individual stars with random twinkle delays
-    initNavigation();
-    initScrollAnimations();
-    initMusicPlayer();
-    initBackToTop();
-
-    // SINGLE unified scroll listener (replaces 4 separate ones)
-    window.addEventListener('scroll', handleGlobalScroll);
-
-    // RESTORED FUNCTIONS
-    initCosmicCursor();
-    initDynamicGlow();
-
-    // Expose for projects.js via namespace
-    window.ForcexPortfolio = window.ForcexPortfolio || {};
-    window.ForcexPortfolio.initGlowForElement = initGlowForElement;
-    window.ForcexPortfolio.initShineSingle = initShineSingle;
-    window.ForcexPortfolio.globalObserver = window.globalObserver;
-
-    // Legacy support - keep direct window references for projects.js compatibility
-    window.initGlowForElement = initGlowForElement;
-    window.initShineSingle = initShineSingle;
-
-    // Render Projects FIRST (creates dynamic elements)
-    if (typeof renderProjects === 'function') {
-        renderProjects(currentLang);
-    }
-
-    // THEN apply shine to all elements (static + dynamic)
-    initShineEffect();
-
-    // Hide cosmic loader after everything is ready
+    // Hide cosmic loader with fail-safe
     const cosmicLoader = document.getElementById('cosmic-loader');
-    if (cosmicLoader) {
-        // Small delay for smooth transition
-        setTimeout(() => {
+
+    const hideLoader = () => {
+        if (cosmicLoader && !cosmicLoader.classList.contains('hidden')) {
             cosmicLoader.classList.add('hidden');
-        }, 800);
+        }
+    };
+
+    // Attempt to hide after load
+    window.addEventListener('load', () => {
+        setTimeout(hideLoader, 800);
+    });
+
+    // Fallback: Force hide after 3 seconds max (in case window.load hangs)
+    setTimeout(hideLoader, 3000);
+
+    // Initializations protected by try-catch to prevent blocking
+    try {
+        createCosmicParticles();
+        createRealisticStars();
+        initNavigation();
+        initScrollAnimations();
+        initMusicPlayer();
+        initBackToTop();
+
+        // SINGLE unified scroll listener
+        window.addEventListener('scroll', handleGlobalScroll);
+
+        // RESTORED FUNCTIONS
+        initCosmicCursor();
+        initDynamicGlow();
+
+        // Expose for projects.js via namespace
+        window.ForcexPortfolio = window.ForcexPortfolio || {};
+        window.ForcexPortfolio.initGlowForElement = initGlowForElement;
+        window.ForcexPortfolio.initShineSingle = initShineSingle;
+        window.ForcexPortfolio.globalObserver = window.globalObserver;
+
+        // Legacy compatibility
+        window.initGlowForElement = initGlowForElement;
+        window.initShineSingle = initShineSingle;
+
+        // Render Projects
+        if (typeof renderProjects === 'function') {
+            renderProjects(currentLang);
+        }
+
+        // Apply shine
+        initShineEffect();
+    } catch (error) {
+        console.error("Initialization error:", error);
+        // Ensure loader is hidden even on error
+        hideLoader();
     }
 });
