@@ -119,7 +119,7 @@ const translations = {
         'contactChannel': 'Email',
 
         // Contact Form
-        'contactFormTitle': 'Send a Direct Transmission',
+        'contactFormTitle': 'Send a direct message',
         'formName': 'Your Name',
         'formEmail': 'Your Email',
         'formMessage': 'Your Message',
@@ -261,7 +261,7 @@ const translations = {
         'contactChannel': 'Email',
 
         // Contact Form
-        'contactFormTitle': 'Enviar una Transmisión Directa',
+        'contactFormTitle': 'Enviar un mensaje directo',
         'formName': 'Tu Nombre',
         'formEmail': 'Tu Email',
         'formMessage': 'Tu Mensaje',
