@@ -4,17 +4,29 @@ function renderProjects(lang) {
 
     projectsGrid.innerHTML = ''; // Clear existing content
 
+    // Remove existing "View More" button if any
+    const existingBtn = document.querySelector('.load-more-container');
+    if (existingBtn) existingBtn.remove();
+
+    const INITIAL_LIMIT = 6;
+    let hasMore = projectsData.length > INITIAL_LIMIT;
+
     projectsData.forEach((project, index) => {
         const title = translations[lang][project.titleKey];
         const desc = translations[lang][project.descKey];
-        const readMoreText = translations[lang]['projectDetails']; // "Read More" / "Leer Más"
+        const readMoreText = translations[lang]['projectDetails']; // "Read More"
 
         const card = document.createElement('div');
         card.className = 'project-card';
+
+        // Hide if over limit
+        if (index >= INITIAL_LIMIT) {
+            card.style.display = 'none';
+            card.classList.add('hidden-project');
+        }
+
         // Add click listener to the whole card
         card.onclick = (e) => {
-            // Prevent opening if clicking specifically on a link inside (if we ever add one)
-            // But for now, the whole card opens the modal
             openProjectModal(project.id);
         };
 
@@ -34,8 +46,6 @@ function renderProjects(lang) {
                 <div class="project-tags">
                     ${tagsHtml}
                 </div>
-                <!-- Visual "Button" (not strictly needed for interaction if whole card clicks, 
-                     but good for affordance). We use a span so it doesn't nest buttons. -->
                 <span class="project-link">
                     <span>${readMoreText}</span>
                     <i class="fas fa-expand-alt"></i>
@@ -58,6 +68,41 @@ function renderProjects(lang) {
             window.initShineSingle(card);
         }
     });
+
+    // Add "View More" Button Logic
+    if (hasMore) {
+        const btnContainer = document.createElement('div');
+        btnContainer.className = 'load-more-container';
+
+        const btn = document.createElement('button');
+        btn.className = 'cta-button';
+        // Ensure translations exist
+        const viewMoreText = translations[lang]['viewMore'] || 'View More Projects';
+
+        btn.innerHTML = `
+            <span>${viewMoreText}</span>
+            <i class="fas fa-chevron-down" style="font-size: 0.8em; margin-left: 8px;"></i>
+        `;
+
+        btn.onclick = () => {
+            const hiddenProjects = document.querySelectorAll('.hidden-project');
+            hiddenProjects.forEach((p, i) => {
+                p.style.display = 'flex';
+                // Trigger reflow/animation
+                p.style.animation = 'none';
+                p.offsetHeight; /* trigger reflow */
+                p.style.animation = `cosmicEmergence 0.6s ease-out ${i * 0.1}s forwards`;
+                p.style.opacity = '0'; // reset for animation
+                p.classList.remove('hidden-project');
+            });
+            btnContainer.remove(); // Remove button after showing all
+        };
+
+        btnContainer.appendChild(btn);
+
+        // Insert after grid container
+        projectsGrid.parentNode.insertBefore(btnContainer, projectsGrid.nextSibling);
+    }
 }
 
 function openProjectModal(projectId) {

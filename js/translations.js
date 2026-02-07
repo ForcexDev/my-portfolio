@@ -39,6 +39,9 @@ const translations = {
         'project1Title': 'Grand Chess Auto: Reimagined',
         'project1Desc': 'Real-time multiplayer chess game with Retrowave/GTA aesthetics. Features WebSocket synchronization, glassmorphism UI, and self-hosted infrastructure with Cloudflare Zero Trust.',
         'project1DetailedDesc': 'GCA: Reimagined is a complete rewrite of my original chess project, built from scratch with professional-grade architecture. It features real-time multiplayer via Socket.IO, spectator mode, precision game clocks with latency compensation, in-game chat, and a premium Glassmorphism interface. The backend runs on Node.js + Express with MongoDB Atlas, secured by Cloudflare WAF and Turnstile captcha. Self-hosted on my homelab with Cloudflare Zero Trust Tunnels.',
+        'projectIaTitle': 'IAimageBetter - AI Image Enhancer',
+        'projectIaDesc': 'A professional-grade, self-hosted web application for AI-powered image upscaling and enhancement using Real-ESRGAN. Built with React and Python.',
+        'projectIaDetailedDesc': 'Professional self-hosted web application for AI-powered image upscaling using Real-ESRGAN. Features unlimited localized processing, smart hardware detection (CUDA/CPU), privacy-focused offline design, and a modern UI with before/after comparisons. Built with React 18, FastAPI, PyTorch, Docker, and Nginx. Supports multiple AI models (x2, x4) for photography and anime.',
         'project2Title': 'Java EDA',
         'project2Desc': 'Implementation of various data structures using Java. This repository demonstrates my ability to design and apply efficient algorithms and fundamental data structures.',
         'project3Title': 'Data Networks',
@@ -55,44 +58,44 @@ const translations = {
         // --- Skills ---
         'skillsTitle': 'Technical Skills',
         // Categorías
-        'skillsCat1': 'Cybersecurity & Networks',
+        'skillsCat1': 'Cybersecurity & Cloud Infrastructure',
         'skillsCat2': 'Backend & Data',
-        'skillsCat3': 'Frontend & Software',
-        // Fila 1
+        'skillsCat3': 'Frontend & Modern Web',
+        // Fila 1 - Cyber & Infra
         'skillCyber': 'Ethical Hacking & Defense',
-        'skillLinux': 'Navigation through secure systems',
+        'skillLinux': 'Kali Linux & Hyprland Rice',
         'skillUbuntu': 'Server & Desktop Environment',
         'skillBash': 'Command-line exploration tools',
         'skillNetwork': 'System networking',
-        'skillNginx': 'Nginx server https',
-        'skillDocker': 'Containerizing applications',
-        // Fila 2
-        'skillPython': 'Scripting, Data Analysis',
-        'skillJava': 'Used for data structures and algorithms',
-        'skillCpp': 'Object-Oriented Programming (OOP)',
-        'skillLua': 'Scripting & Game Development',
-        'skillNode': 'Servers and deployment',
-        'skillExpress': 'Node.js server framework',
-        'skillPostgres': 'Database architectures',
-        'skillMongoDB': 'NoSQL database management',
-        // Fila 3
-        'skillJS': 'Interactive web constellation',
-        'skillHTML': 'Structuring digital universes',
-        'skillCSS': 'Styling cosmic interfaces',
-        'skillGit': 'Version control',
-        'skillAWS': 'Cloud infrastructure',
-        'skillLaTeX': 'Technical documentation',
-        'skillVSCode': 'Code editor of choice',
-
-        // --- NEW SKILLS (Reinstated) ---
-        'skillCloudflare': 'CDN & Security',
-        'skillWireshark': 'Network Protocol Analyzer',
-        'skillMetasploit': 'Penetration Testing Framework',
-        'skillBurp': 'Web Security Testing',
+        'skillNginx': 'Reverse Proxy & Load Balancing',
+        'skillDocker': 'Containerization & Orchestration',
+        // Fila 2 - Backend & Cloud
+        'skillPython': 'FastAPI & Scripting',
+        'skillJava': 'Data Structures & Algorithms',
+        'skillCpp': 'System-level Programming',
+        'skillLua': 'Scripting & Configs',
+        'skillNode': 'Backend Javascript Runtime',
+        'skillExpress': 'API Development',
+        'skillPostgres': 'Relational Databases',
+        'skillMongoDB': 'NoSQL Document Store',
+        'skillRedis': 'In-Memory Data Structures',
         'skillKubernetes': 'Container Orchestration',
         'skillOracle': 'Cloud Infrastructure',
-        'skillArduino': 'Hardware & IoT',
-        'skillNotion': 'Project Management',
+        // Fila 3 - Frontend
+        'skillJS': 'ES6+ Modern Javascript',
+        'skillHTML': 'Semantic Structure',
+        'skillCSS': 'Responsive Design',
+        'skillReact': 'Modern UI Library',
+        'skillTailwind': 'Utility-First CSS',
+        'skillGit': 'Version Control & CI/CD',
+        'skillAWS': 'Cloud Services',
+        'skillFastAPI': 'High-performance APIs',
+
+        // --- NEW SKILLS (Reinstated) ---
+        'skillCloudflare': 'CDN, WAF & Tunnels',
+        'skillWireshark': 'Network Protocol Analysis',
+        'skillMetasploit': 'Exploitation Framework',
+        'skillBurp': 'Web Vulnerability Scanning',
 
         // --- Game ---
         'gameTitle': 'Cosmic Battle',
@@ -138,7 +141,8 @@ const translations = {
         'cert3Title': 'English for Developers',
         'cert3Org': 'FreeCodeCamp',
         'certLinkView': 'View',
-        'certLinkProgress': 'In Progress'
+        'certLinkProgress': 'In Progress',
+        'viewMore': 'View More Projects'
 
     },
 
@@ -181,6 +185,9 @@ const translations = {
         'project1Title': 'Grand Chess Auto: Reimagined',
         'project1Desc': 'Juego de ajedrez multijugador en tiempo real con estética Retrowave/GTA. Sincronización WebSocket, interfaz Glassmorphism e infraestructura self-hosted con Cloudflare Zero Trust.',
         'project1DetailedDesc': 'GCA: Reimagined es una reescritura completa de mi proyecto de ajedrez original, construido desde cero con arquitectura profesional. Incluye multijugador en tiempo real vía Socket.IO, modo espectador, relojes de precisión con compensación de latencia, chat integrado e interfaz premium Glassmorphism. El backend corre en Node.js + Express con MongoDB Atlas, protegido por Cloudflare WAF y Turnstile captcha. Self-hosted en mi homelab con Cloudflare Zero Trust Tunnels.',
+        'projectIaTitle': 'IAimageBetter - Mejora de Imágenes con IA',
+        'projectIaDesc': 'Aplicación web profesional self-hosted para el escalado y mejora de imágenes mediante IA usando Real-ESRGAN. Sin límites, privada y acelerada por GPU.',
+        'projectIaDetailedDesc': 'Aplicación web profesional self-hosted para el escalado de imágenes con IA utilizando Real-ESRGAN. Ofrece procesamiento local ilimitado, detección inteligente de hardware (CUDA/CPU), diseño centrado en la privacidad offline y una interfaz moderna con comparativas antes/después. Construida con React 18, FastAPI, PyTorch, Docker y Nginx. Soporta múltiples modelos de IA (x2, x4) para fotografía y anime.',
         'project2Title': 'Java EDA',
         'project2Desc': 'Implementación de diversas estructuras de datos utilizando Java. Este repositorio demuestra mi habilidad para diseñar y aplicar algoritmos eficientes y estructuras de datos fundamentales.',
         'project3Title': 'Redes de Datos',
@@ -197,44 +204,47 @@ const translations = {
         // --- Skills ---
         'skillsTitle': 'Habilidades Técnicas',
         // Categorías
-        'skillsCat1': 'Ciberseguridad y Redes',
+        'skillsCat1': 'Ciberseguridad e Infraestructura Cloud',
         'skillsCat2': 'Backend y Datos',
-        'skillsCat3': 'Frontend y Software',
-        // Fila 1
-        'skillCyber': 'Defensa y ofensa ética',
-        'skillLinux': 'Navegación por sistemas seguros',
-        'skillUbuntu': 'Entorno de servidor y escritorio',
-        'skillBash': 'Herramientas de exploración por terminal',
-        'skillNetwork': 'Conexion de sistemas',
-        'skillNginx': 'Servicios Nginx en https',
-        'skillDocker': 'Aplicaciones contenidas',
-        // Fila 2
-        'skillPython': 'Scripting, Análisis de Datos',
-        'skillJava': 'Implementado en estructura de datos y algoritmos',
-        'skillCpp': 'Programación Orientada a Objetos',
-        'skillLua': 'Scripting y desarrollo de juegos',
-        'skillNode': 'Servidores y deploy',
-        'skillExpress': 'Framework de servidor para Node.js',
-        'skillPostgres': 'Arquitecturas de bases de datos',
-        'skillMongoDB': 'Gestión de bases de datos NoSQL',
-        // Fila 3
-        'skillJS': 'Constelación web interactiva',
-        'skillHTML': 'Estructuras web',
-        'skillCSS': 'Estilización web',
-        'skillGit': 'Control de versiones a través del tiempo',
-        'skillAWS': 'Infraestructura en la nube',
-        'skillLaTeX': 'Documentación Técnica',
-        'skillVSCode': 'Editor de código principal',
+        'skillsCat3': 'Frontend y Modern Web',
+        // Fila 1 - Cyber & Infra
+        'skillCyber': 'Hacking Ético & Defensa',
+        'skillLinux': 'Kali Linux & Hyprland Rice',
+        'skillUbuntu': 'Entorno de Servidor y Escritorio',
+        'skillBash': 'Herramientas de línea de comandos',
+        'skillNetwork': 'Redes de Sistemas',
+        'skillNginx': 'Proxy Inverso y Balanceo de Carga',
+        'skillDocker': 'Contenerización y Orquestación',
+        // Fila 2 - Backend & Cloud
+        'skillPython': 'FastAPI y Scripting',
+        'skillJava': 'Estructuras de Datos y Algoritmos',
+        'skillCpp': 'Programación de bajo nivel',
+        'skillLua': 'Scripting y Desarrollo de Juegos',
+        'skillNode': 'Runtime de Javascript Backend',
+        'skillExpress': 'Desarrollo de APIs',
+        'skillPostgres': 'Bases de Datos Relacionales',
+        'skillMongoDB': 'Base de Datos NoSQL',
+        'skillRedis': 'Estructuras de Datos en Memoria',
+        'skillKubernetes': 'Orquestación de Contenedores',
+        'skillOracle': 'Infraestructura Cloud',
+        // Fila 3 - Frontend
+        'skillJS': 'Javascript Moderno ES6+',
+        'skillHTML': 'Estructura Semántica',
+        'skillCSS': 'Diseño Responsivo',
+        'skillReact': 'Librería de UI Moderna',
+        'skillTailwind': 'CSS Utility-First',
+        'skillGit': 'Control de Versiones y CI/CD',
+        'skillAWS': 'Servicios en la Nube',
+        'skillFastAPI': 'APIs de alto rendimiento',
 
         // --- NEW SKILLS (Reinstated) ---
-        'skillCloudflare': 'CDN y Seguridad',
-        'skillWireshark': 'Analizador de Protocolos de Red',
-        'skillMetasploit': 'Framework de Pruebas de Penetración',
-        'skillBurp': 'Pruebas de Seguridad Web',
-        'skillKubernetes': 'Orquestación de Contenedores',
-        'skillOracle': 'Infraestructura en la Nube',
-        'skillArduino': 'Hardware e IoT',
-        'skillNotion': 'Gestión de Proyectos',
+        'skillCloudflare': 'CDN, WAF y Túneles',
+        'skillWireshark': 'Análisis de Protocolos de Red',
+        'skillMetasploit': 'Framework de Explotación',
+        'skillBurp': 'Escaneo de Vulnerabilidades Web',
+        'skillArduino': 'Hardware & IoT',
+        'skillLatex': 'Technical Documentation',
+        // Removed: VSCode, Notion
 
         // --- Game ---
         'gameTitle': 'Batalla Cósmica',
@@ -280,6 +290,7 @@ const translations = {
         'cert3Title': 'Inglés para Desarrolladores',
         'cert3Org': 'FreeCodeCamp',
         'certLinkView': 'Ver',
-        'certLinkProgress': 'En Progreso'
+        'certLinkProgress': 'En Progreso',
+        'viewMore': 'Ver Más Proyectos'
     }
 };

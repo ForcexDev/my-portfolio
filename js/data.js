@@ -10,6 +10,16 @@ const projectsData = [
         detailedDescKey: 'project1DetailedDesc'
     },
     {
+        id: 7, // New ID
+        titleKey: 'projectIaTitle',
+        descKey: 'projectIaDesc',
+        image: 'img/IAimagebetter.png',
+        tags: ['React', 'FastAPI', 'PyTorch', 'Docker', 'Redis'],
+        github: 'https://github.com/ForcexDev/IAimageBetter',
+        liveUrl: 'https://iaimagebetter.forcex.dev/',
+        detailedDescKey: 'projectIaDetailedDesc'
+    },
+    {
         id: 2,
         titleKey: 'project2Title',
         descKey: 'project2Desc',

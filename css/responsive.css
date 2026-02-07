@@ -253,3 +253,73 @@
         /* Content flows naturally */
     }
 }
+
+/* === 2K & 4K OPTIMIZATION === */
+@media (min-width: 1920px) {
+    .container {
+        max-width: 1600px;
+        /* Wider container for 2K */
+        padding: 0 4rem;
+    }
+
+    .projects-grid {
+        gap: 4rem;
+        /* More space between cards */
+    }
+
+    /* Scaling up base size */
+    html {
+        font-size: 18px;
+    }
+
+    .hero-title {
+        font-size: 5rem;
+    }
+
+    /* MODAL OPTIMIZATION FOR 2K */
+    .project-modal-content {
+        max-width: 1400px;
+        /* Wider modal */
+    }
+
+    .modal-body {
+        height: 600px;
+        /* Taller content area */
+    }
+
+    .modal-image-wrapper {
+        flex: 1.8;
+        /* Image takes more relative space */
+    }
+
+    .modal-details {
+        padding: 4rem 3rem;
+        gap: 2rem;
+    }
+
+    .modal-title {
+        font-size: 2.2rem;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+    }
+
+    /* Stack buttons for 2K as requested */
+    .modal-buttons {
+        flex-direction: column;
+        align-items: center;
+        /* Center the buttons */
+        width: 100%;
+        gap: 1rem;
+    }
+
+    .modal-btn {
+        width: 100%;
+        max-width: 350px;
+        /* Limit width for cleaner look */
+        padding: 1.2rem 2rem;
+        font-size: 1rem;
+        flex: none;
+        margin-top: 0;
+    }
+}
