@@ -6,7 +6,7 @@ const projectsData = [
         image: 'img/ajedrez.png',
         tags: ['Node.js', 'Express', 'HTML', 'CSS', 'JavaScript', 'Web Development'],
         github: 'https://github.com/ForcexDev/GrandChessAuto_DesarrolloWeb',
-        liveUrl: 'https://grandchessauto.forcex.dev/', // Add real URL if available
+        liveUrl: 'https://grandchessauto.forcex.dev/',
         detailedDescKey: 'project1Desc' // Using same desc for now, can be expanded
     },
     {
