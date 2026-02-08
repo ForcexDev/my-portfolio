@@ -628,6 +628,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Add CV Modal Logic
         window.openCVModal = function () {
+            // Mobile Optimization: Open directly in new tab instead of modal
+            // (iFrames for PDFs are often buggy on mobile browsers)
+            if (window.innerWidth <= 768) {
+                window.open("CVEzequiel_Morales2025-11.pdf", "_blank");
+                return;
+            }
+
             const modal = document.getElementById('cvModal');
             const iframe = document.getElementById('cvFrame');
             if (modal && iframe) {
