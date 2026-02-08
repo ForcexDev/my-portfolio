@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OverTheWire: Bandit Walkthrough | ForcexDev</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Grotesk:wght@300;400;700&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="../css/page-template.css">
+    <link rel="stylesheet" href="../css/responsive-enhancements.css">
+    <link rel="stylesheet" href="../css/animations.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html#home" class="logo">ForcexDev</a>
+            <ul class="nav-links">
+                <li><a href="../index.html#home" class="nav-link">Home</a></li>
+                <li><a href="../index.html#projects" class="nav-link">Projects</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Background Effects -->
+    <div class="space-canvas">
+        <div class="stars-container"></div>
+    </div>
+
+    <!-- Page Content -->
+    <div class="page-content">
+        <header class="page-header">
+            <h1 class="page-title">Bandit Walkthrough</h1>
+            <p class="page-subtitle">Guía paso a paso para los niveles iniciales de OverTheWire Bandit.</p>
+
+            <div class="page-meta">
+                <span><i class="fas fa-calendar-alt"></i> Feb 7, 2026</span>
+                <span><i class="fas fa-user-cloak"></i> ForcexDev</span>
+                <span><i class="fas fa-clock"></i> 10 min read</span>
+            </div>
+
+            <div class="page-tags">
+                <span class="tag">Linux</span>
+                <span class="tag">Wargames</span>
+                <span class="tag">SSH</span>
+                <span class="tag">Security</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <article class="text-block">
+            <p>Bandit es un wargame de seguridad básico diseñado para enseñarte los fundamentos de la línea de comandos
+                de Linux. En esta guía, cubriremos desde el acceso inicial hasta los primeros desafíos.</p>
+
+            <div class="callout info">
+                <i class="fas fa-info-circle"></i>
+                <div class="callout-content">
+                    <p><strong>Meta:</strong> El objetivo principal es encontrar la contraseña para el siguiente nivel,
+                        generalmente guardada en un archivo dentro del sistema.</p>
+                </div>
+            </div>
+
+            <section class="step-section" id="step0">
+                <h3><i class="fas fa-key"></i> Level 0 -> Level 1</h3>
+                <p>El objetivo es iniciar sesión en el juego mediante SSH. Los datos de acceso son:</p>
+                <ul>
+                    <li><strong>Host:</strong> bandit.labs.overthewire.org</li>
+                    <li><strong>Port:</strong> 2220</li>
+                    <li><strong>User:</strong> bandit0</li>
+                    <li><strong>Pass:</strong> bandit0</li>
+                </ul>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-language">bash</span>
+                        <button class="copy-btn"><i class="far fa-copy"></i> <span>Copy</span></button>
+                    </div>
+                    <div class="code-content">
+                        <pre><code>ssh bandit0@bandit.labs.overthewire.org -p 2220</code></pre>
+                    </div>
+                </div>
+
+                <p>Una vez dentro, necesitamos encontrar la contraseña para el nivel 1, la cual se encuentra en un
+                    archivo llamado <code>readme</code> en el directorio home.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-language">bash</span>
+                        <button class="copy-btn"><i class="far fa-copy"></i> <span>Copy</span></button>
+                    </div>
+                    <div class="code-content">
+                        <pre><code>ls
+cat readme</code></pre>
+                    </div>
+                </div>
+
+                <div class="image-block">
+                    <img src="../img/bandit.png" alt="Bandit Level 0 Solution" class="zoomable">
+                    <p class="image-caption">Ejecución del comando cat para revelar la primera contraseña.</p>
+                </div>
+            </section>
+
+            <section class="step-section" id="step1">
+                <h3><i class="fas fa-lock-open"></i> Level 1 -> Level 2</h3>
+                <p>La contraseña para el siguiente nivel está guardada en un archivo llamado <code>-</code> localizado
+                    en el directorio home.</p>
+
+                <div class="callout warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div class="callout-content">
+                        <p><strong>Advertencia:</strong> Los comandos normales como <code>cat -</code> no funcionarán
+                            porque el sistema interpretará
+                            el guión como una opción del comando.</p>
+                    </div>
+                </div>
+
+                <p>Para leer este archivo, debemos especificar su ruta relativa de forma explícita:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-language">bash</span>
+                        <button class="copy-btn"><i class="far fa-copy"></i> <span>Copy</span></button>
+                    </div>
+                    <div class="code-content">
+                        <pre><code>cat ./-</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="step-section" id="step2">
+                <h2><i class="fas fa-graduation-cap"></i> Conceptos Clave</h2>
+                <p>A través de estos niveles, has aprendido:</p>
+                <ul>
+                    <li>Conexión remota mediante SSH</li>
+                    <li>Navegación básica del sistema de archivos Linux</li>
+                    <li>Manejo de archivos con nombres especiales</li>
+                    <li>Uso de rutas relativas y absolutas</li>
+                </ul>
+            </section>
+        </article>
+
+        <footer class="text-block" style="text-align: center; margin-top: 4rem;">
+            <p>¿Te gustó este walkthrough? Próximamente subiré los niveles del 2 al 10.</p>
+            <div style="margin-top: 2rem;">
+                <a href="../index.html#projects" class="cta-button">
+                    <span>Volver a Proyectos</span>
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <div class="container">
+            <div class="contact-content">
+                <h2 class="section-title">Contact Hub</h2>
+                <p class="contact-text">Ready to explore new frontiers together? Let's connect and create something
+                    extraordinary.</p>
+                <div class="contact-links">
+                    <a href="https://github.com/ForcexDev" target="_blank" class="contact-link">
+                        <i class="fab fa-github"></i>
+                        <span>GitHub</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/ezequielleandromorales/" target="_blank" class="contact-link">
+                        <i class="fab fa-linkedin"></i>
+                        <span>LinkedIn</span>
+                    </a>
+                    <a href="https://tryhackme.com/p/ForcexDev" target="_blank" class="contact-link">
+                        <i class="fas fa-flag"></i>
+                        <span>TryHackMe</span>
+                    </a>
+                    <a href="https://profile.hackthebox.com/profile/019c38be-e58b-70e7-8414-6252a08e0953"
+                        target="_blank" class="contact-link">
+                        <i class="fas fa-cube"></i>
+                        <span>HackTheBox</span>
+                    </a>
+                </div>
+
+                <div class="contact-form-container">
+                    <h3 class="contact-form-title">Send a Direct Message</h3>
+                    <form id="contact-form" class="contact-form">
+                        <div class="form-group">
+                            <label for="from_name">Your Name</label>
+                            <input type="text" id="from_name" name="from_name" required placeholder="John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label for="from_email">Your Email</label>
+                            <input type="email" id="from_email" name="from_email" required
+                                placeholder="john@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Your Message</label>
+                            <textarea id="message" name="message" required
+                                placeholder="Hello, I would like to discuss..."></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn" style="width: 100%;">
+                            <span class="btn-text">Send Transmission</span>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                        <div id="form-status" class="form-status"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 Ezequiel Morales - All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <!-- Back to Top -->
+    <a href="#" id="backToTopBtn" class="back-to-top" title="Volver arriba">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- Scripts -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="../js/contact.js"></script>
+    <script src="../js/page-template.js"></script>
+</body>
+
+</html>

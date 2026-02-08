@@ -1,0 +1,398 @@
+/* ============================================
+   RESPONSIVE ENHANCEMENTS
+   Additional fixes for 2K, 1080p, and Mobile
+   ============================================ */
+
+/* === GLOBAL RESPONSIVE TYPOGRAPHY === */
+html {
+    font-size: 16px;
+}
+
+@media (min-width: 1920px) {
+    html {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 1366px) {
+    html {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    html {
+        font-size: 14px;
+    }
+}
+
+/* === NAVBAR RESPONSIVE FIXES === */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0.6rem 0;
+    }
+
+    .nav-container {
+        padding: 0 1rem;
+    }
+
+    .logo {
+        font-size: 1.1rem;
+        letter-spacing: 1.5px;
+    }
+
+    /* Ensure links stay visible on mobile for subpages */
+    .nav-links {
+        position: static !important;
+        width: auto !important;
+        height: auto !important;
+        background: transparent !important;
+        backdrop-filter: none !important;
+        flex-direction: row !important;
+        padding: 0 !important;
+        gap: 0.3rem !important;
+        border: none !important;
+        box-shadow: none !important;
+        transform: none !important;
+        right: auto !important;
+        opacity: 1 !important;
+        overflow: visible !important;
+    }
+
+    .nav-links li {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .nav-links a {
+        padding: 0.5rem 0.7rem !important;
+        font-size: 0.85rem !important;
+        border-radius: 6px !important;
+    }
+}
+
+/* === CONTAINER & SPACING === */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 1rem;
+    }
+
+    .section {
+        padding: 3rem 0;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+    }
+}
+
+@media (min-width: 1920px) {
+    .container {
+        max-width: 1600px;
+        padding: 0 4rem;
+    }
+
+    .section {
+        padding: 6rem 0;
+    }
+}
+
+/* === CONTACT FORM RESPONSIVE === */
+/* === CONTACT FORM RESPONSIVE (DISABLED TO MATCH HOMEPAGE) === */
+/*
+.contact-form-container {
+    margin-top: 3rem;
+}
+
+@media (max-width: 768px) {
+    .contact-form-container {
+        margin-top: 2rem;
+    }
+
+    .contact-form .form-group {
+        margin-bottom: 1.2rem;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+        font-size: 1rem;
+    }
+
+    .contact-form textarea {
+        min-height: 120px;
+    }
+}
+
+@media (min-width: 1920px) {
+    .contact-form-container {
+        max-width: 900px;
+        margin: 3rem auto 0;
+    }
+}
+*/
+
+/* === BUTTONS RESPONSIVE === */
+.cta-button,
+.submit-btn {
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .cta-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.95rem;
+    }
+
+    .submit-btn {
+        padding: 0.9rem 1.5rem;
+        font-size: 0.95rem;
+    }
+}
+
+@media (min-width: 1920px) {
+    .cta-button {
+        padding: 1.1rem 2.5rem;
+        font-size: 1.1rem;
+    }
+
+    .submit-btn {
+        padding: 1.2rem 2.5rem;
+        font-size: 1.1rem;
+    }
+}
+
+/* === CONTACT LINKS GRID === */
+/* === CONTACT LINKS GRID (DISABLED TO MATCH HOMEPAGE) === */
+/*
+.contact-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+@media (max-width: 768px) {
+    .contact-links {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+@media (min-width: 1920px) {
+    .contact-links {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 3rem auto;
+    }
+}
+*/
+
+/* === TAGS RESPONSIVE === */
+.tag {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+    .tag {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.75rem;
+    }
+}
+
+@media (min-width: 1920px) {
+    .tag {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.95rem;
+    }
+}
+
+/* === IMAGE OPTIMIZATION === */
+.text-block img,
+.hero-banner img,
+.carousel-item img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+@media (max-width: 768px) {
+    .text-block img {
+        border-radius: 8px;
+        margin: 1.5rem 0;
+    }
+
+    .hero-banner {
+        border-radius: 12px;
+        max-height: 350px;
+    }
+}
+
+/* === CODE BLOCKS RESPONSIVE === */
+@media (max-width: 768px) {
+    .code-block {
+        border-radius: 8px;
+        margin: 1.5rem 0;
+    }
+
+    .code-content {
+        padding: 1rem;
+    }
+
+    .code-content code {
+        font-size: 0.8rem;
+        line-height: 1.5;
+    }
+}
+
+@media (min-width: 1920px) {
+    .code-block {
+        border-radius: 16px;
+    }
+
+    .code-content {
+        padding: 2rem;
+    }
+
+    .code-content code {
+        font-size: 1rem;
+        line-height: 1.8;
+    }
+}
+
+/* === CAROUSEL RESPONSIVE IMPROVEMENTS === */
+@media (max-width: 768px) {
+    .carousel-item {
+        height: 250px;
+    }
+
+    .carousel-container {
+        margin: 1.5rem 0;
+    }
+}
+
+@media (min-width: 1920px) {
+    .carousel-item {
+        height: 650px;
+    }
+
+    .carousel-container {
+        border-radius: 16px;
+    }
+}
+
+/* === FOOTER RESPONSIVE === */
+.footer {
+    padding: 2rem 0;
+}
+
+@media (max-width: 768px) {
+    .footer {
+        padding: 1.5rem 0;
+        font-size: 0.9rem;
+    }
+}
+
+@media (min-width: 1920px) {
+    .footer {
+        padding: 3rem 0;
+        font-size: 1.1rem;
+    }
+}
+
+/* === SMOOTH SCROLL BEHAVIOR === */
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
+    }
+}
+
+/* === FOCUS STYLES FOR ACCESSIBILITY === */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--nebula-blue);
+    outline-offset: 2px;
+}
+
+/* === PRINT STYLES === */
+@media print {
+
+    .navbar,
+    .back-to-top,
+    #contact,
+    .footer,
+    .carousel-btn,
+    .lightbox,
+    .cosmic-cursor,
+    .cursor-trail,
+    .glow-effect {
+        display: none !important;
+    }
+
+    .page-content {
+        padding: 0;
+        max-width: 100%;
+    }
+
+    .code-block {
+        page-break-inside: avoid;
+    }
+}
+
+/* === HIGH RESOLUTION DISPLAYS === */
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+
+    .text-block img,
+    .hero-banner img {
+        image-rendering: -webkit-optimize-contrast;
+    }
+}
+
+/* === LANDSCAPE MOBILE === */
+@media (max-width: 768px) and (orientation: landscape) {
+    .page-content {
+        padding: 80px 1rem 2rem;
+    }
+
+    .hero-banner {
+        max-height: 300px;
+    }
+
+    .carousel-item {
+        height: 300px;
+    }
+}
+
+/* === TABLET SPECIFIC === */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .page-content {
+        padding: 110px 2rem 4rem;
+    }
+
+    .text-block h2 {
+        font-size: 1.6rem;
+    }
+
+    .carousel-item {
+        height: 400px;
+    }
+}
+
+/* === ULTRA-WIDE DISPLAYS === */
+@media (min-width: 2560px) {
+    .page-content {
+        max-width: 1800px;
+    }
+
+    .container {
+        max-width: 1800px;
+    }
+
+    .hero-banner {
+        max-height: 1000px;
+    }
+}

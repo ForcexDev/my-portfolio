@@ -8,18 +8,18 @@
 
     <!-- SEO Meta Tags -->
     <meta name="description"
-        content="Portfolio de Ezequiel Morales - Estudiante enfocado en Ciberseguridad y Redes. Proyectos de programaciÃ³n, seguridad informÃ¡tica y desarrollo web.">
+        content="Ezequiel Morales | Especialista en Ciberseguridad e Ingeniería de Redes. Portfolio profesional enfocado en seguridad informática, desarrollo seguro y soluciones de infraestructura.">
     <meta name="author" content="Ezequiel Morales">
     <meta name="keywords"
-        content="ForcexDev, Ezequiel Morales, ciberseguridad, redes, portfolio, desarrollador, cybersecurity, networking">
+        content="ForcexDev, Ezequiel Morales, ciberseguridad, redes, portfolio, desarrollador, cybersecurity, networking, ethical hacking, full stack">
 
     <!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://forcexdev.github.io/Portfolio/">
     <meta property="og:title" content="ForcexDev - Ezequiel Morales">
     <meta property="og:description"
-        content="Estudiante enfocado en Ciberseguridad y Redes. Explora mis proyectos de programaciÃ³n, seguridad informÃ¡tica y desarrollo web.">
-    <meta property="og:image" content="https://forcexdev.github.io/Portfolio/img/preview.png">
+        content="Especialista en Ciberseguridad e Ingeniería de Redes. Proyectos destacados en seguridad informática, desarrollo de software y arquitectura de sistemas.">
+    <meta property="og:image" content="https://forcexdev.github.io/Portfolio/img/preview.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:locale" content="es_ES">
@@ -29,8 +29,9 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://forcexdev.github.io/Portfolio/">
     <meta name="twitter:title" content="ForcexDev - Ezequiel Morales">
-    <meta name="twitter:description" content="Estudiante enfocado en Ciberseguridad y Redes. Portfolio de proyectos.">
-    <meta name="twitter:image" content="https://forcexdev.github.io/Portfolio/img/preview.png">
+    <meta name="twitter:description"
+        content="Especialista en Ciberseguridad y Redes. Soluciones de seguridad, desarrollo profesional y gestión de infraestructura.">
+    <meta name="twitter:image" content="https://forcexdev.github.io/Portfolio/img/preview.jpg">
 
     <!-- Favicon -->
     <link rel="icon"
@@ -147,10 +148,15 @@
                             </button>
                         </div>
 
-                        <a href="CVEzequiel_Morales2025-11.pdf" download class="music-play-btn">
-                            <i class="fas fa-download"></i>
-                            <span data-key="aboutCV"></span>
-                        </a>
+                        <div class="cv-buttons-group">
+                            <button onclick="openCVModal()" class="music-play-btn cv-view-btn">
+                                <i class="fas fa-eye"></i>
+                                <span data-key="aboutViewCV">View CV</span>
+                            </button>
+                            <a href="CVEzequiel_Morales2025-11.pdf" download class="music-play-btn cv-download-btn">
+                                <i class="fas fa-download"></i>
+                            </a>
+                        </div>
 
                     </div>
                 </div>
@@ -569,4 +575,22 @@
 
 </body>
 
-</html>
+</html><!-- CV Viewer Modal -->
+<div id="cvModal" class="project-modal-overlay">
+    <div class="project-modal-content cv-modal-content">
+        <button class="close-modal" onclick="closeCVModal()">&times;</button>
+        <div class="modal-body cv-modal-body">
+            <div class="cv-container">
+                <iframe id="cvFrame" src="" width="100%" height="100%" style="border: none;"></iframe>
+            </div>
+            <div class="modal-buttons cv-modal-buttons">
+                <a href="CVEzequiel_Morales2025-11.pdf" download class="cta-button modal-btn primary-btn">
+                    <i class="fas fa-download"></i> <span data-key="cvDownload">Download PDF</span>
+                </a>
+                <a href="CVEzequiel_Morales2025-11.pdf" target="_blank" class="cta-button modal-btn secondary-btn">
+                    <i class="fas fa-external-link-alt"></i> <span data-key="cvOpenExternal">Open in New Tab</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

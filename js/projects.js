@@ -116,6 +116,7 @@ function openProjectModal(projectId) {
     // Labels
     const githubLabel = translations[lang]['projectLinkGithub'];
     const liveLabel = translations[lang]['projectLinkLive'];
+    const detailsLabel = translations[lang]['projectLinkDetails'];
 
     // Create or get modal elements
     let modalOverlay = document.getElementById('projectModal');
@@ -129,29 +130,46 @@ function openProjectModal(projectId) {
     const modalImage = document.getElementById('modalImage');
     const modalDesc = document.getElementById('modalDesc');
     const modalTags = document.getElementById('modalTags');
-    const modalGithub = document.getElementById('modalGithub');
-    const modalLive = document.getElementById('modalLive'); // New Button
+    const modalButtons = document.querySelector('.modal-buttons');
 
     modalTitle.textContent = title;
     modalImage.src = project.image;
     modalDesc.textContent = fullDesc;
     modalTags.innerHTML = project.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
 
-    // GitHub Button
-    modalGithub.href = project.github;
-    modalGithub.querySelector('span').textContent = githubLabel;
+    // Clear existing buttons and rebuild dynamically
+    modalButtons.innerHTML = '';
 
-    // Live Project Button (Always show for now per user request)
-    modalLive.href = project.liveUrl || '#';
-    modalLive.style.display = 'inline-flex';
-    modalLive.querySelector('span').textContent = liveLabel;
+    // Helper to check if URL is valid
+    const isValidUrl = (url) => url && url !== '#' && url.trim() !== '';
 
-    // Optional: Add visual indication if link is empty
-    if (!project.liveUrl || project.liveUrl === '#') {
-        modalLive.style.opacity = '0.7';
-        // modalLive.style.cursor = 'not-allowed'; // Optional
-    } else {
-        modalLive.style.opacity = '1';
+    // Button 1: View Live Project (external link)
+    if (isValidUrl(project.liveUrl)) {
+        modalButtons.innerHTML += `
+            <a href="${project.liveUrl}" target="_blank" class="cta-button modal-btn primary-btn">
+                <span>${liveLabel}</span>
+                <i class="fas fa-external-link-alt"></i>
+            </a>
+        `;
+    }
+
+    // Button 2: View Code (GitHub)
+    if (isValidUrl(project.github)) {
+        modalButtons.innerHTML += `
+            <a href="${project.github}" target="_blank" class="cta-button modal-btn secondary-btn">
+                <span>${githubLabel}</span>
+                <i class="fab fa-github"></i>
+            </a>
+        `;
+    }
+
+    // Button 3: View Details (internal portfolio link)
+    if (isValidUrl(project.portfolioUrl)) {
+        modalButtons.innerHTML += `
+            <a href="${project.portfolioUrl}" class="cta-button modal-btn tertiary-btn">
+                <span>${detailsLabel}</span>
+            </a>
+        `;
     }
 
     modalOverlay.classList.add('active');

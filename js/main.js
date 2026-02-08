@@ -616,17 +616,45 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
         createCosmicParticles();
         createRealisticStars();
+        // Initialize everything
+        // Initialize everything
         initNavigation();
         initScrollAnimations();
         initMusicPlayer();
         initBackToTop();
-
-        // SINGLE unified scroll listener
-        window.addEventListener('scroll', handleGlobalScroll);
-
-        // RESTORED FUNCTIONS
         initCosmicCursor();
         initDynamicGlow();
+        initShineEffect();
+
+        // Add CV Modal Logic
+        window.openCVModal = function () {
+            const modal = document.getElementById('cvModal');
+            const iframe = document.getElementById('cvFrame');
+            if (modal && iframe) {
+                iframe.src = "CVEzequiel_Morales2025-11.pdf";
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        };
+
+        window.closeCVModal = function () {
+            const modal = document.getElementById('cvModal');
+            const iframe = document.getElementById('cvFrame');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+                // Clear src to stop loading/playing
+                if (iframe) iframe.src = "";
+            }
+        };
+
+        // Close on click outside
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'cvModal') {
+                window.closeCVModal();
+            }
+        });
+        window.addEventListener('scroll', handleGlobalScroll);
 
         // Expose for projects.js via namespace
         window.ForcexPortfolio = window.ForcexPortfolio || {};
@@ -642,9 +670,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (typeof renderProjects === 'function') {
             renderProjects(currentLang);
         }
-
-        // Apply shine
-        initShineEffect();
     } catch (error) {
         console.error("Initialization error:", error);
         // Ensure loader is hidden even on error

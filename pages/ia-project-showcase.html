@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IAImageBetter: Showcase | ForcexDev</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Grotesk:wght@300;400;700&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="../css/page-template.css">
+    <link rel="stylesheet" href="../css/responsive-enhancements.css">
+    <link rel="stylesheet" href="../css/animations.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html#home" class="logo">ForcexDev</a>
+            <ul class="nav-links">
+                <li><a href="../index.html#home" class="nav-link">Home</a></li>
+                <li><a href="../index.html#projects" class="nav-link">Projects</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Background Effects -->
+    <div class="space-canvas">
+        <div class="stars-container"></div>
+    </div>
+
+    <!-- Page Content -->
+    <div class="page-content">
+        <header class="page-header">
+            <h1 class="page-title">IAImageBetter</h1>
+            <p class="page-subtitle">Mejora de imágenes de alta fidelidad mediante Redes Neuronales Convolucionales
+                (SRGAN).</p>
+
+            <div class="page-meta">
+                <span><i class="fas fa-code-branch"></i> v1.2.0</span>
+                <span><i class="fas fa-brain"></i> Multi-Model AI</span>
+                <span><i class="fas fa-check-circle"></i> Status: Production</span>
+            </div>
+
+            <div class="page-tags">
+                <span class="tag">PyTorch</span>
+                <span class="tag">FastAPI</span>
+                <span class="tag">React</span>
+                <span class="tag">Docker</span>
+                <span class="tag">Redis</span>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero-banner">
+            <img src="../img/IAimagebetter.png" alt="IAImageBetter Preview" loading="eager">
+            <div class="hero-banner-overlay">
+                <h2 style="color: white; font-family: 'Orbitron', sans-serif;">Visual Excellence Redefined</h2>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <article class="text-block">
+            <section>
+                <h2><i class="fas fa-star"></i> Visión General</h2>
+                <p>IAImageBetter es una solución integral para el upscaling de imágenes. Utiliza modelos avanzados de
+                    inteligencia artificial para reconstruir detalles perdidos en imágenes de baja resolución,
+                    alcanzando resultados profesionales con un solo click.</p>
+
+                <p>El proyecto combina tecnologías de vanguardia en deep learning con una arquitectura escalable
+                    que puede procesar miles de imágenes simultáneamente.</p>
+            </section>
+
+            <section>
+                <h2><i class="fas fa-laptop-code"></i> Arquitectura del Proyecto</h2>
+                <div class="callout info">
+                    <i class="fas fa-project-diagram"></i>
+                    <div class="callout-content">
+                        <p><strong>Microservicios Escalables:</strong> Diseñado bajo una arquitectura de microservicios
+                            con colas de procesamiento asíncronas para
+                            manejar múltiples peticiones de escalado simultáneamente.</p>
+                    </div>
+                </div>
+                <p>El backend está construido con <strong>FastAPI</strong>, aprovechando la velocidad de Python para la
+                    inferencia de modelos. Se utiliza <strong>Redis</strong> como broker de mensajes y
+                    <strong>Celery</strong> para distribuir la carga de trabajo entre varios workers dedicados.
+                </p>
+
+                <h3><i class="fas fa-cogs"></i> Stack Tecnológico</h3>
+                <ul>
+                    <li><strong>Backend:</strong> FastAPI + Celery + Redis</li>
+                    <li><strong>Frontend:</strong> React + TypeScript + Tailwind CSS</li>
+                    <li><strong>AI Models:</strong> PyTorch + SRGAN + ESRGAN</li>
+                    <li><strong>Infrastructure:</strong> Docker + Kubernetes + AWS S3</li>
+                    <li><strong>Database:</strong> PostgreSQL + MongoDB</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2><i class="fas fa-film"></i> Video Demo</h2>
+                <div class="video-block">
+                    <img src="../img/IAimagebetter.png" alt="IAImageBetter Demo" style="cursor: pointer;">
+                </div>
+                <p style="text-align: center; font-style: italic; color: var(--stellar-dim);">
+                    Demostración del escalado de imagen 480p a 4K en tiempo real.
+                </p>
+            </section>
+
+            <section>
+                <h2><i class="fas fa-images"></i> Results Gallery</h2>
+                <p>A continuación, puedes ver ejemplos de imágenes procesadas con diferentes niveles de upscaling:</p>
+
+                <div class="carousel-container">
+                    <button class="carousel-btn prev" aria-label="Previous image"><i
+                            class="fas fa-chevron-left"></i></button>
+                    <div class="carousel-track">
+                        <div class="carousel-item">
+                            <img src="../img/IAimagebetter.png" alt="Original Image" loading="lazy">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="../img/IAimagebetter.png" alt="Upscaled View 1" loading="lazy">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="../img/IAimagebetter.png" alt="Advanced Details" loading="lazy">
+                        </div>
+                    </div>
+                    <button class="carousel-btn next" aria-label="Next image"><i
+                            class="fas fa-chevron-right"></i></button>
+                </div>
+            </section>
+
+            <section>
+                <h2><i class="fas fa-terminal"></i> Integración API</h2>
+                <p>Cualquier desarrollador puede integrar nuestro motor de IA en su flujo de trabajo mediante nuestra
+                    API REST. La integración es simple y está documentada completamente.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-language">javascript</span>
+                        <button class="copy-btn"><i class="far fa-copy"></i> <span>Copy</span></button>
+                    </div>
+                    <div class="code-content">
+                        <pre><code>async function upscaleImage(imageUrl) {
+    const response = await fetch('https://api.iaimagebetter.com/v1/upscale', {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer YOUR_API_KEY'
+        },
+        body: JSON.stringify({ 
+            url: imageUrl, 
+            scale: 4,
+            model: 'esrgan-x4'
+        })
+    });
+    
+    const data = await response.json();
+    return data.upscaledUrl;
+}</code></pre>
+                    </div>
+                </div>
+
+                <h3><i class="fas fa-code"></i> Ejemplo Python</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-language">python</span>
+                        <button class="copy-btn"><i class="far fa-copy"></i> <span>Copy</span></button>
+                    </div>
+                    <div class="code-content">
+                        <pre><code>import requests
+
+def upscale_image(image_path, scale=4):
+    with open(image_path, 'rb') as f:
+        files = {'image': f}
+        data = {'scale': scale, 'model': 'esrgan-x4'}
+        
+        response = requests.post(
+            'https://api.iaimagebetter.com/v1/upscale',
+            files=files,
+            data=data,
+            headers={'Authorization': 'Bearer YOUR_API_KEY'}
+        )
+        
+        return response.json()['upscaled_url']</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2><i class="fas fa-chart-line"></i> Métricas de Rendimiento</h2>
+                <div class="callout info">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <div class="callout-content">
+                        <p><strong>Performance:</strong> Procesamiento de imágenes 1080p a 4K en menos de 3 segundos con
+                            GPUs NVIDIA A100.</p>
+                    </div>
+                </div>
+                <ul>
+                    <li><strong>PSNR:</strong> 32.5 dB (promedio en dataset de prueba)</li>
+                    <li><strong>SSIM:</strong> 0.92 (excelente preservación de estructura)</li>
+                    <li><strong>Throughput:</strong> 500+ imágenes por minuto</li>
+                    <li><strong>Latencia API:</strong>
+                        <100ms (p95)</li>
+                </ul>
+            </section>
+        </article>
+
+        <footer class="text-block" style="text-align: center; margin-top: 4rem;">
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="https://github.com/ForcexDev" target="_blank" class="cta-button">
+                    <i class="fab fa-github"></i> <span>View Repository</span>
+                </a>
+                <a href="../index.html#projects" class="cta-button secondary-btn">
+                    <span>Back to Portfolio</span>
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <div class="container">
+            <div class="contact-content">
+                <h2 class="section-title">Contact Hub</h2>
+                <p class="contact-text">Ready to explore new frontiers together? Let's connect and create something
+                    extraordinary.</p>
+                <div class="contact-links">
+                    <a href="https://github.com/ForcexDev" target="_blank" class="contact-link">
+                        <i class="fab fa-github"></i>
+                        <span>GitHub</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/ezequielleandromorales/" target="_blank" class="contact-link">
+                        <i class="fab fa-linkedin"></i>
+                        <span>LinkedIn</span>
+                    </a>
+                    <a href="https://tryhackme.com/p/ForcexDev" target="_blank" class="contact-link">
+                        <i class="fas fa-flag"></i>
+                        <span>TryHackMe</span>
+                    </a>
+                    <a href="https://profile.hackthebox.com/profile/019c38be-e58b-70e7-8414-6252a08e0953"
+                        target="_blank" class="contact-link">
+                        <i class="fas fa-cube"></i>
+                        <span>HackTheBox</span>
+                    </a>
+                </div>
+
+                <div class="contact-form-container">
+                    <h3 class="contact-form-title">Send a Direct Message</h3>
+                    <form id="contact-form" class="contact-form">
+                        <div class="form-group">
+                            <label for="from_name">Your Name</label>
+                            <input type="text" id="from_name" name="from_name" required placeholder="John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label for="from_email">Your Email</label>
+                            <input type="email" id="from_email" name="from_email" required
+                                placeholder="john@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Your Message</label>
+                            <textarea id="message" name="message" required
+                                placeholder="Hello, I would like to discuss..."></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn" style="width: 100%;">
+                            <span class="btn-text">Send Transmission</span>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                        <div id="form-status" class="form-status"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 Ezequiel Morales - All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <!-- Back to Top -->
+    <a href="#" id="backToTopBtn" class="back-to-top" title="Volver arriba">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- Scripts -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="../js/contact.js"></script>
+    <script src="../js/page-template.js"></script>
+</body>
+
+</html>

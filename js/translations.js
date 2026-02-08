@@ -33,6 +33,9 @@ const translations = {
         'musicPlay': 'Play',
         'musicPause': 'Pause',
         'aboutCV': 'Download CV',
+        'aboutViewCV': 'View CV',
+        'cvDownload': 'Download PDF',
+        'cvOpenExternal': 'Open in New Tab',
 
         // --- Projects ---
         'projectsTitle': 'Projects',
@@ -105,8 +108,9 @@ const translations = {
         'gameOver': 'Mission Failed!',
         'gameRestart': 'Retry Mission',
 
-        'projectLinkGithub': 'View Code (GitHub)',
-        'projectLinkLive': 'View Live Project',
+        'projectLinkGithub': 'Code',
+        'projectLinkLive': 'Live',
+        'projectLinkDetails': 'Details',
         'projectDetails': 'Read More',
         'closeModal': 'Close',
 
@@ -126,14 +130,14 @@ const translations = {
         'formName': 'Your Name',
         'formEmail': 'Your Email',
         'formMessage': 'Your Message',
-        'formSend': 'Send Transmission',
+        'formSend': 'Send',
         'formSending': 'Transmitting...',
-        'formPlaceholderName': 'John Doe',
-        'formPlaceholderEmail': 'john@example.com',
+        'formPlaceholderName': 'Name',
+        'formPlaceholderEmail': 'email@example.com',
         'formPlaceholderMessage': 'Hello, I would like to discuss...',
 
         // --- Certifications ---
-        'certificationsTitle': 'Certifications & Courses',
+        'certificationsTitle': 'Certifications',
         'cert1Title': 'Introduction to Cybersecurity',
         'cert1Org': 'Cisco Networking Academy',
         'cert2Title': 'Networking Essentials - Network Technician Career Path',
@@ -142,7 +146,7 @@ const translations = {
         'cert3Org': 'FreeCodeCamp',
         'certLinkView': 'View',
         'certLinkProgress': 'In Progress',
-        'viewMore': 'View More Projects'
+        'viewMore': 'View More'
 
     },
 
@@ -179,6 +183,9 @@ const translations = {
         'musicPlay': 'Reproducir',
         'musicPause': 'Pausar',
         'aboutCV': 'Descargar CV',
+        'aboutViewCV': 'Ver CV',
+        'cvDownload': 'Descargar PDF',
+        'cvOpenExternal': 'Abrir en Pestaña',
 
         // --- Projects ---
         'projectsTitle': 'Proyectos',
@@ -254,8 +261,9 @@ const translations = {
         'gameOver': '¡Misión Fallida!',
         'gameRestart': 'Reintentar Misión',
 
-        'projectLinkGithub': 'Ver Código (GitHub)',
-        'projectLinkLive': 'Ver Proyecto en Vivo',
+        'projectLinkGithub': 'Código',
+        'projectLinkLive': 'en Vivo',
+        'projectLinkDetails': 'Detalles',
         'projectDetails': 'Leer Más',
         'closeModal': 'Cerrar',
 
@@ -271,14 +279,14 @@ const translations = {
         'contactChannel': 'Email',
 
         // Contact Form
-        'contactFormTitle': 'Enviar un mensaje directo',
+        'contactFormTitle': 'Mensaje directo',
         'formName': 'Tu Nombre',
         'formEmail': 'Tu Email',
         'formMessage': 'Tu Mensaje',
-        'formSend': 'Enviar Transmisión',
+        'formSend': 'Enviar',
         'formSending': 'Transmitiendo...',
-        'formPlaceholderName': 'Juan Pérez',
-        'formPlaceholderEmail': 'juan@ejemplo.com',
+        'formPlaceholderName': 'Nombre',
+        'formPlaceholderEmail': 'correo@ejemplo.com',
         'formPlaceholderMessage': 'Hola, me gustaría hablar sobre...',
 
         // --- Certifications ---
@@ -291,6 +299,6 @@ const translations = {
         'cert3Org': 'FreeCodeCamp',
         'certLinkView': 'Ver',
         'certLinkProgress': 'En Progreso',
-        'viewMore': 'Ver Más Proyectos'
+        'viewMore': 'Ver Más'
     }
 };

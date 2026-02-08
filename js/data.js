@@ -17,7 +17,8 @@ const projectsData = [
         tags: ['React', 'FastAPI', 'PyTorch', 'Docker', 'Redis'],
         github: 'https://github.com/ForcexDev/IAimageBetter',
         liveUrl: 'https://iaimagebetter.forcex.dev/',
-        detailedDescKey: 'projectIaDetailedDesc'
+        detailedDescKey: 'projectIaDetailedDesc',
+        portfolioUrl: 'pages/ia-project-showcase.html'
     },
     {
         id: 2,
@@ -57,7 +58,8 @@ const projectsData = [
         tags: ['Linux', 'Cybersecurity', 'Bash', 'LaTeX'],
         github: 'https://github.com/ForcexDev/Bandit-WriteUp',
         liveUrl: '#',
-        detailedDescKey: 'project5Desc'
+        detailedDescKey: 'project5Desc',
+        portfolioUrl: 'pages/bandit-walkthrough.html'
     },
     {
         id: 6,
