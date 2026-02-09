@@ -90,18 +90,26 @@ function setLanguage(lang) {
         }
     }
 
-    // Update Typewriter
+    // Update Terminal Output (Static - No Typewriter)
     const txtElement = document.getElementById('typewriter');
     if (txtElement) {
+        // Stop any existing instance just in case
         if (typewriterInstance) {
             typewriterInstance.stop();
+            typewriterInstance = null;
         }
-        const words = translations[lang].typewriterWords;
-        typewriterInstance = new TypeWriter(txtElement, words, 2000);
-    }
 
+        // simple static translation mapping for 'job_title' or similar
+        // utilizing the existing data-key logic if possible, or manual map here
+        const staticOutputs = {
+            'en': "Cybersecurity & Network Engineering",
+            'es': "Ciberseguridad e Ingeniería de Redes"
+        };
+
+        txtElement.textContent = staticOutputs[lang] || staticOutputs['en'];
+    }
     // Update Music Button
-    updateMusicButtonText();
+    // updateMusicButtonText() removed
 
     // Update placeholder translations
     document.querySelectorAll('[data-placeholder-key]').forEach(elem => {
@@ -117,117 +125,8 @@ function setLanguage(lang) {
     }
 }
 
-function updateMusicButtonText() {
-    const musicBtn = document.getElementById('music-toggle');
-    const audio = document.getElementById('bg-music');
-    if (!musicBtn || !audio) return;
-    const text = musicBtn.querySelector('span');
-    if (audio.paused) {
-        text.textContent = translations[currentLang].musicPlay;
-    } else {
-        text.textContent = translations[currentLang].musicPause;
-    }
-}
+// Music Logic Removed
 
-// === PUBLIC MUSIC API ===
-// These functions are exposed globally for use by game.js and other modules
-
-let _mainMusic = null;
-let _musicBtn = null;
-let _musicIcon = null;
-let _musicText = null;
-
-function pauseBackgroundMusic() {
-    if (_mainMusic && !_mainMusic.paused) {
-        _mainMusic.pause();
-        if (_musicIcon) _musicIcon.classList.replace('fa-pause', 'fa-play');
-        if (_musicText) _musicText.textContent = translations[currentLang].musicPlay;
-        if (_musicBtn) _musicBtn.classList.remove('playing');
-    }
-}
-
-// Pause for game - ONLY pauses audio, does NOT change button state
-// This matches original behavior where button stayed in 'playing' state
-function pauseBackgroundMusicForGame() {
-    if (_mainMusic && !_mainMusic.paused) {
-        _mainMusic.pause();
-        // Intentionally NOT updating button/icon state
-        // So we can detect it was playing when game ends
-    }
-}
-
-function playBackgroundMusic() {
-    const gameContainer = document.getElementById('gameContainer');
-    if (gameContainer && gameContainer.classList.contains('game-active')) {
-        return; // Don't play if game is active
-    }
-    if (_mainMusic && _mainMusic.paused) {
-        _mainMusic.play().catch(e => console.error("Audio play failed:", e));
-        if (_musicIcon) _musicIcon.classList.replace('fa-play', 'fa-pause');
-        if (_musicText) _musicText.textContent = translations[currentLang].musicPause;
-        if (_musicBtn) _musicBtn.classList.add('playing');
-    }
-}
-
-// Resume after game - checks if button has 'playing' class (matches original behavior)
-function resumeBackgroundMusicAfterGame() {
-    // Button keeps 'playing' class when pauseBackgroundMusicForGame is called
-    // So we can check if music was playing before the game started
-    if (_musicBtn && _musicBtn.classList.contains('playing') && _mainMusic && _mainMusic.paused) {
-        _mainMusic.play().catch(e => console.error("Audio resume failed:", e));
-        // No need to update button/icon - they never changed
-    }
-}
-
-function isBackgroundMusicPlaying() {
-    return _mainMusic && !_mainMusic.paused;
-}
-
-// Expose Music API via namespace
-window.ForcexPortfolio = window.ForcexPortfolio || {};
-window.ForcexPortfolio.pauseBackgroundMusic = pauseBackgroundMusic;
-window.ForcexPortfolio.pauseBackgroundMusicForGame = pauseBackgroundMusicForGame;
-window.ForcexPortfolio.playBackgroundMusic = playBackgroundMusic;
-window.ForcexPortfolio.resumeBackgroundMusicAfterGame = resumeBackgroundMusicAfterGame;
-window.ForcexPortfolio.isBackgroundMusicPlaying = isBackgroundMusicPlaying;
-
-// Legacy support - keep direct window references for game.js compatibility
-window.pauseBackgroundMusicForGame = pauseBackgroundMusicForGame;
-window.resumeBackgroundMusicAfterGame = resumeBackgroundMusicAfterGame;
-
-// Logic for Main Music
-function initMusicPlayer() {
-    _mainMusic = document.getElementById('bg-music');
-    _musicBtn = document.getElementById('music-toggle');
-    const ctaButton = document.querySelector('.cta-button[href="#about"]');
-
-    if (_mainMusic && _musicBtn && ctaButton) {
-        _mainMusic.volume = 0.17;
-        _musicIcon = _musicBtn.querySelector('i');
-        _musicText = _musicBtn.querySelector('span');
-        let musicStartedByListener = false;
-
-        const startMusicOnInteraction = () => {
-            if (!musicStartedByListener && _mainMusic.paused) {
-                playBackgroundMusic();
-                musicStartedByListener = true;
-            }
-        };
-
-        // One-time listeners for first interaction
-        window.addEventListener('scroll', startMusicOnInteraction, { once: true });
-        ctaButton.addEventListener('click', startMusicOnInteraction, { once: true });
-
-        _musicBtn.addEventListener('click', () => {
-            musicStartedByListener = true;
-            if (_mainMusic.paused) {
-                playBackgroundMusic();
-            } else {
-                pauseBackgroundMusic();
-            }
-        });
-    }
-}
 
 // Cosmic Particles (Original User Version)
 function createCosmicParticles() {
@@ -403,21 +302,35 @@ function initNavigation() {
 // Scroll Animations (uses IntersectionObserver, not scroll event)
 function initScrollAnimations() {
     const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
+        threshold: 0.05, // Lower threshold for faster trigger
+        rootMargin: '0px 0px -80px 0px' // Trigger slightly before it fully enters
     };
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('animate');
+                // Once animated, no need to observe anymore for better performance
+                observer.unobserve(entry.target);
             }
         });
     }, observerOptions);
 
-    // Observe static elements
-    document.querySelectorAll('.skill-item').forEach((item, index) => {
-        item.style.animationDelay = `${index * 0.05}s`;
+    // Observe Skills (Index reset for this section)
+    document.querySelectorAll('#skills .skill-item').forEach((item, index) => {
+        item.style.animationDelay = `${(index % 6) * 0.08}s`; // Limit max delay spread
         observer.observe(item);
+    });
+
+    // Observe Certifications (Index reset for this section)
+    document.querySelectorAll('#certifications .skill-item').forEach((item, index) => {
+        item.style.animationDelay = `${index * 0.1}s`; // Smooth stagger for certs
+        observer.observe(item);
+    });
+
+    // Observe Project Cards (if any not handled by dynamic loader)
+    document.querySelectorAll('.project-card').forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+        observer.observe(card);
     });
 
     // Expose observer
@@ -551,36 +464,6 @@ function initGlowForElement(el) {
     });
 }
 
-// Helper to init shine on a single element (exposed for dynamic content)
-function initShineSingle(el) {
-    if (!isDesktop()) return;
-
-    el.addEventListener('mousemove', (e) => {
-        const rect = el.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-
-        const moveX = (x - centerX) / 30;
-        const moveY = (y - centerY) / 30;
-
-        el.style.transform = `perspective(1000px) rotateX(${-moveY}deg) rotateY(${moveX}deg) scale(1.02)`;
-    });
-
-    el.addEventListener('mouseleave', () => {
-        el.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
-    });
-}
-
-// Restore initShineEffect for static elements
-function initShineEffect() {
-    if (!isDesktop()) return;
-    const shineElements = document.querySelectorAll('.project-card, .skill-item');
-    shineElements.forEach(el => initShineSingle(el));
-}
-
 // Init
 document.addEventListener('DOMContentLoaded', () => {
     currentLang = getInitialLanguage();
@@ -606,7 +489,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Attempt to hide after load
     window.addEventListener('load', () => {
-        setTimeout(hideLoader, 800);
+        setTimeout(hideLoader, 300);
     });
 
     // Fallback: Force hide after 3 seconds max (in case window.load hangs)
@@ -620,11 +503,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Initialize everything
         initNavigation();
         initScrollAnimations();
-        initMusicPlayer();
+        // initMusicPlayer() removed
         initBackToTop();
-        initCosmicCursor();
+        // initCosmicCursor(); // Removed by user request
         initDynamicGlow();
-        initShineEffect();
 
         // Add CV Modal Logic
         window.openCVModal = function () {
@@ -666,17 +548,132 @@ document.addEventListener('DOMContentLoaded', () => {
         // Expose for projects.js via namespace
         window.ForcexPortfolio = window.ForcexPortfolio || {};
         window.ForcexPortfolio.initGlowForElement = initGlowForElement;
-        window.ForcexPortfolio.initShineSingle = initShineSingle;
         window.ForcexPortfolio.globalObserver = window.globalObserver;
 
         // Legacy compatibility
         window.initGlowForElement = initGlowForElement;
-        window.initShineSingle = initShineSingle;
 
         // Render Projects
         if (typeof renderProjects === 'function') {
             renderProjects(currentLang);
         }
+        // Terminal Animation
+        // Terminal Animation Sequence
+        async function initTerminalAnimation() {
+            const cmdElement = document.getElementById('typeCommand');
+            const typewriterElement = document.getElementById('typewriter');
+            const cursor = document.getElementById('cmdCursor');
+
+            if (!cmdElement || !typewriterElement) return;
+
+            typewriterElement.classList.remove('active');
+            typewriterElement.textContent = "";
+            cmdElement.textContent = "";
+
+            // Helper for delay
+            const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+            // Helper to type command
+            async function typeCommand(text) {
+                cursor.style.display = 'inline'; // Show cursor while typing
+                for (let char of text) {
+                    cmdElement.textContent += char;
+                    await wait(Math.random() * 30 + 20); // Faster, snappy typing
+                }
+                await wait(200); // Shorter pause
+            }
+
+            // Helper to clear command input (backspace effect or instant)
+            async function clearCommandInput() {
+                cmdElement.textContent = "";
+                await wait(200);
+            }
+
+            // Sequence Data
+            const sequences = [
+                {
+                    cmd: "whoami",
+                    output_en: "Cybersecurity & Network Engineering",
+                    output_es: "Ciberseguridad e Ingeniería de Redes",
+                    delayAfter: 1500, // Faster
+                    action: "output"
+                },
+                {
+                    cmd: "clear",
+                    action: "clear",
+                    delayAfter: 300
+                },
+                {
+                    cmd: "cat profile.txt",
+                    output_en: "Pentesting | Network Security | CTF Participant | Hackathon Participant",
+                    output_es: "Pentesting | Seguridad de Redes | Participante CTF | Participante Hackathon",
+                    delayAfter: 2000, // Faster
+                    action: "output"
+                },
+                {
+                    cmd: "clear",
+                    action: "clear",
+                    delayAfter: 300
+                },
+                {
+                    cmd: "echo $Passion",
+                    output_en: "Breaking & securing systems, loving every challenge along the way.",
+                    output_es: "Rompiendo y asegurando sistemas, amando cada desafío en el camino.",
+                    delayAfter: 3500, // Faster
+                    action: "output"
+                },
+                {
+                    cmd: "clear",
+                    action: "clear",
+                    delayAfter: 100
+                }
+            ];
+
+            await wait(500); // Faster initial delay
+
+            // Run Loop
+            while (true) {
+                for (const step of sequences) {
+                    // Type the command
+                    await typeCommand(step.cmd);
+
+                    // Press Enter (Visual delay)
+                    await wait(200);
+
+                    if (step.action === "clear") {
+                        // Clear Action - Fade Out
+                        typewriterElement.classList.remove('active');
+
+                        // Wait for Opacity (0.5s)
+                        await wait(500);
+
+                        // Now clear text
+                        typewriterElement.textContent = "";
+
+                        // Clear the command line itself for next input
+                        await clearCommandInput();
+                    } else {
+                        // Show Output
+                        const lang = currentLang;
+                        const text = step[`output_${lang}`] || step.output_en;
+
+                        cursor.style.display = 'none'; // Hide cursor on output
+                        typewriterElement.textContent = text;
+                        typewriterElement.classList.add('active');
+
+                        // Wait for reading time
+                        await wait(step.delayAfter);
+
+                        // Clear command line to prepare for next
+                        await clearCommandInput();
+                    }
+
+                    // Small pause between steps
+                    await wait(100);
+                }
+            }
+        }
+        initTerminalAnimation();
     } catch (error) {
         console.error("Initialization error:", error);
         // Ensure loader is hidden even on error

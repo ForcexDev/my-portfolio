@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 2. AUDIO ---
     // !! CAMBIA ESTO por las rutas a tus archivos de sonido !!
     const audio = {
-        background: new Audio('Derezzed.mp3'),
+        background: new Audio('../../assets/audio/Derezzed.mp3'),
         shoot: new Audio(''),
         explosion: new Audio('')
     };

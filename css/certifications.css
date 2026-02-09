@@ -30,6 +30,21 @@
     text-align: center;
 }
 
+.cert-icon-img {
+    width: 50px;
+    height: 50px;
+    margin-right: 1.5rem;
+    object-fit: contain;
+    transition: var(--space-transition);
+    /* Make them white/silver by default to match the premium theme */
+    filter: brightness(0) saturate(100%) invert(94%) sepia(6%) saturate(158%) hue-rotate(184deg) brightness(96%) contrast(96%);
+}
+
+.skill-item.cert-card:hover .cert-icon-img {
+    filter: brightness(0) saturate(100%) invert(100%) drop-shadow(0 0 10px rgba(66, 153, 225, 0.8));
+    transform: scale(1.1);
+}
+
 .cert-info h4 {
     color: var(--stellar-white);
     font-size: 1.1rem;

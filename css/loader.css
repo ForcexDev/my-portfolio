@@ -80,13 +80,16 @@
     }
 }
 
-/* Orbits Ring */
+/* Orbits Ring - Neon & Visible */
 .orbital-ring {
     position: absolute;
-    width: 180px;
-    height: 180px;
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    /* Brighter border */
+    border: 2px solid rgba(0, 243, 255, 0.3);
+    /* Glow effect */
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.2), inset 0 0 10px rgba(0, 243, 255, 0.1);
     transform: translate(-50%, -50%) rotateX(75deg) rotateY(-10deg);
     transform-style: preserve-3d;
     z-index: 5;
@@ -94,58 +97,132 @@
     top: 50%;
 }
 
-/* Satellite Container */
+/* Satellite Container - Rotates the dot */
 .satellite-orbit {
     position: absolute;
-    width: 180px;
-    height: 180px;
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
     transform-style: preserve-3d;
-    animation: orbitRotate 5s linear infinite;
+    animation: orbitRotate 4s linear infinite;
+    /* Faster orbit */
     left: 50%;
     top: 50%;
-    margin-left: -90px;
-    margin-top: -90px;
+    margin-left: -100px;
+    /* Half of width */
+    margin-top: -100px;
 }
 
-/* Satellite Dot */
+/* Satellite Dot - 3D Sphere */
 .satellite {
     position: absolute;
     top: 0;
     left: 50%;
-    transform: translate(-50%, -50%);
-    width: 6px;
-    height: 6px;
-    background: #fff;
+    margin-left: -4px;
+    /* Center dot (half width) */
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle at 30% 30%, #fff, #a0eaff);
+    /* Sphere Shading */
     border-radius: 50%;
-    box-shadow: 0 0 10px #fff, 0 0 20px #4facfe;
+    box-shadow: 0 0 15px #fff, 0 0 30px #00f3ff;
+
+    /* 
+       Key Trick:
+       1. depthScale handles size/blur.
+       2. counterRotate keeps the "face" of the dot to the camera so it doesn't flatten.
+    */
+    animation: depthScale 4s linear infinite, counterRotate 4s linear infinite;
 }
+
+/* Counter-Rotate to face camera always */
+@keyframes counterRotate {
+    0% {
+        transform: rotateZ(0deg) rotateY(10deg) rotateX(-75deg);
+    }
+
+    100% {
+        transform: rotateZ(-360deg) rotateY(10deg) rotateX(-75deg);
+    }
+}
+
+/* Rotate the Orbit container */
+/* Sync Animation for correct depth perception
+   Cycle: Right -> Bottom (Front) -> Left -> Top (Back) -> Right
+*/
 
 @keyframes orbitRotate {
     0% {
         transform: rotateX(75deg) rotateY(-10deg) rotateZ(0deg);
-        z-index: 20;
+        /* 3 o'clock (Right) */
+        z-index: 5;
     }
 
     25% {
+        /* 6 o'clock (Bottom - Closest) */
         z-index: 20;
     }
 
     26% {
+        z-index: 20;
+    }
+
+    50% {
+        /* 9 o'clock (Left) */
         z-index: 5;
     }
 
     75% {
-        z-index: 5;
-    }
-
-    76% {
-        z-index: 20;
+        /* 12 o'clock (Top - Furthest) */
+        z-index: 1;
+        /* Force behind planet */
     }
 
     100% {
         transform: rotateX(75deg) rotateY(-10deg) rotateZ(360deg);
-        z-index: 20;
+        z-index: 5;
+    }
+}
+
+/* Depth Scale + Blur + Brightness */
+/* Depth Scale Only - No Transform Conflict */
+@keyframes depthScale {
+    0% {
+        transform: scale(1);
+        opacity: 0.9;
+        filter: blur(0px);
+        box-shadow: 0 0 15px #fff, 0 0 30px #00f3ff;
+    }
+
+    25% {
+        transform: scale(1.6);
+        /* Close */
+        opacity: 1;
+        filter: blur(0px);
+        box-shadow: 0 0 25px #fff, 0 0 50px #00f3ff;
+    }
+
+    50% {
+        transform: scale(1);
+        opacity: 0.9;
+        filter: blur(0px);
+        box-shadow: 0 0 15px #fff, 0 0 30px #00f3ff;
+    }
+
+    75% {
+        transform: scale(0.4);
+        /* Far */
+        opacity: 0.5;
+        /* Fade out */
+        filter: blur(2px);
+        box-shadow: none;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 0.9;
+        filter: blur(0px);
+        box-shadow: 0 0 15px #fff, 0 0 30px #00f3ff;
     }
 }
 

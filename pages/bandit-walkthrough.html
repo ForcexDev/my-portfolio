@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Grotesk:wght@300;400;700&family=Fira+Code:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap"
         rel="stylesheet">
 
     <!-- Font Awesome -->
@@ -33,10 +33,14 @@
         <div class="nav-container">
             <a href="../index.html#home" class="logo">ForcexDev</a>
             <ul class="nav-links">
-                <li><a href="../index.html#home" class="nav-link">Home</a></li>
-                <li><a href="../index.html#projects" class="nav-link">Projects</a></li>
-                <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li><a href="../index.html#home" class="nav-link" data-key="navHome">Home</a></li>
+                <li><a href="../index.html#projects" class="nav-link" data-key="navProjects">Projects</a></li>
+                <li><a href="#contact" class="nav-link" data-key="navContact">Contact</a></li>
+                <li><button id="lang-toggle" class="lang-btn" aria-label="Cambiar idioma">EN | ES</button></li>
             </ul>
+            <button class="mobile-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </nav>
 
@@ -171,48 +175,57 @@ cat readme</code></pre>
     <section id="contact" class="section">
         <div class="container">
             <div class="contact-content">
-                <h2 class="section-title">Contact Hub</h2>
-                <p class="contact-text">Ready to explore new frontiers together? Let's connect and create something
-                    extraordinary.</p>
+                <h2 class="section-title" data-key="contactTitle"></h2>
+                <p class="contact-text" data-key="contactText"></p>
                 <div class="contact-links">
                     <a href="https://github.com/ForcexDev" target="_blank" class="contact-link">
                         <i class="fab fa-github"></i>
-                        <span>GitHub</span>
+                        <span data-key="contactRepo">GitHub</span>
                     </a>
                     <a href="https://www.linkedin.com/in/ezequielleandromorales/" target="_blank" class="contact-link">
                         <i class="fab fa-linkedin"></i>
-                        <span>LinkedIn</span>
+                        <span data-key="contactNetwork">LinkedIn</span>
                     </a>
                     <a href="https://tryhackme.com/p/ForcexDev" target="_blank" class="contact-link">
-                        <i class="fas fa-flag"></i>
-                        <span>TryHackMe</span>
+                        <img src="../icons/tryhackme.svg" alt="TryHackMe" class="skill-icon-img contact-icon">
+                        <span data-key="contactMissions">TryHackMe</span>
                     </a>
                     <a href="https://profile.hackthebox.com/profile/019c38be-e58b-70e7-8414-6252a08e0953"
                         target="_blank" class="contact-link">
-                        <i class="fas fa-cube"></i>
-                        <span>HackTheBox</span>
+                        <img src="../icons/hackthebox.svg" alt="HackTheBox" class="skill-icon-img contact-icon">
+                        <span data-key="contactHTB">HackTheBox</span>
+                    </a>
+                    <a href="https://leetcode.com/u/ForcexDev/" target="_blank" class="contact-link">
+                        <img src="../icons/leetcode.svg" alt="LeetCode" class="skill-icon-img contact-icon">
+                        <span data-key="contactLeet">LeetCode</span>
+                    </a>
+                    <a href="https://www.hackerrank.com/profile/ezequiel_morales" target="_blank" class="contact-link">
+                        <img src="../icons/hackerrank.svg" alt="HackerRank" class="skill-icon-img contact-icon">
+                        <span data-key="contactHacker">HackerRank</span>
                     </a>
                 </div>
 
                 <div class="contact-form-container">
-                    <h3 class="contact-form-title">Send a Direct Message</h3>
+                    <h3 class="contact-form-title" data-key="contactFormTitle"></h3>
                     <form id="contact-form" class="contact-form">
                         <div class="form-group">
-                            <label for="from_name">Your Name</label>
-                            <input type="text" id="from_name" name="from_name" required placeholder="John Doe">
+                            <label for="from_name" data-key="formName"></label>
+                            <input type="text" id="from_name" name="from_name" required placeholder="John Doe"
+                                data-placeholder-key="formPlaceholderName">
                         </div>
                         <div class="form-group">
-                            <label for="from_email">Your Email</label>
+                            <label for="from_email" data-key="formEmail"></label>
                             <input type="email" id="from_email" name="from_email" required
-                                placeholder="john@example.com">
+                                placeholder="john@example.com" data-placeholder-key="formPlaceholderEmail">
                         </div>
                         <div class="form-group">
-                            <label for="message">Your Message</label>
+                            <label for="message" data-key="formMessage"></label>
                             <textarea id="message" name="message" required
-                                placeholder="Hello, I would like to discuss..."></textarea>
+                                placeholder="Hello, I would like to discuss..."
+                                data-placeholder-key="formPlaceholderMessage"></textarea>
                         </div>
                         <button type="submit" class="submit-btn" style="width: 100%;">
-                            <span class="btn-text">Send Transmission</span>
+                            <span class="btn-text" data-key="formSend">Send Transmission</span>
                             <i class="fas fa-paper-plane"></i>
                         </button>
                         <div id="form-status" class="form-status"></div>
@@ -225,7 +238,7 @@ cat readme</code></pre>
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>© 2026 Ezequiel Morales - All Rights Reserved</p>
+            <p>© 2026 Ezequiel Morales</p>
         </div>
     </footer>
 
@@ -237,6 +250,7 @@ cat readme</code></pre>
     <!-- Scripts -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="../js/contact.js"></script>
+    <script src="../js/translations.js"></script>
     <script src="../js/page-template.js"></script>
 </body>
 

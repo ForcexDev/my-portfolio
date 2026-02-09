@@ -60,6 +60,7 @@ const translations = {
 
         // --- Skills ---
         'skillsTitle': 'Technical Skills',
+        'skillsSubtitle': 'Technologies I\'ve worked with',
         // Categorías
         'skillsCat1': 'Cybersecurity & Cloud Infrastructure',
         'skillsCat2': 'Backend & Data',
@@ -135,6 +136,9 @@ const translations = {
         'formPlaceholderName': 'Name',
         'formPlaceholderEmail': 'email@example.com',
         'formPlaceholderMessage': 'Hello, I would like to discuss...',
+        'formSuccess': 'Message sent successfully! I\'ll respond soon.',
+        'formError': 'Failed to send message. Please try again or use email directly.',
+        'formErrorConfig': 'Contact form not configured. Please use email link above.',
 
         // --- Certifications ---
         'certificationsTitle': 'Certifications',
@@ -210,6 +214,7 @@ const translations = {
 
         // --- Skills ---
         'skillsTitle': 'Habilidades Técnicas',
+        'skillsSubtitle': 'Tecnologías con las que he trabajado',
         // Categorías
         'skillsCat1': 'Ciberseguridad e Infraestructura Cloud',
         'skillsCat2': 'Backend y Datos',
@@ -288,6 +293,9 @@ const translations = {
         'formPlaceholderName': 'Nombre',
         'formPlaceholderEmail': 'correo@ejemplo.com',
         'formPlaceholderMessage': 'Hola, me gustaría hablar sobre...',
+        'formSuccess': '¡Mensaje enviado exitosamente! Responderé pronto.',
+        'formError': 'Error al enviar el mensaje. Por favor intenta de nuevo o usa el email directamente.',
+        'formErrorConfig': 'Formulario no configurado. Por favor usa el enlace de email arriba.',
 
         // --- Certifications ---
         'certificationsTitle': 'Certificaciones',

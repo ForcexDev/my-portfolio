@@ -35,9 +35,14 @@ function initContactForm() {
             return;
         }
 
+        const btnText = submitBtn.querySelector('.btn-text');
+        const originalText = btnText ? btnText.textContent : 'Send Transmission';
+
         // Show loading state
         submitBtn.classList.add('loading');
         submitBtn.disabled = true;
+        if (btnText) btnText.textContent = getFormText('formSending') || 'Transmitting...';
+
         statusDiv.className = 'form-status';
         statusDiv.textContent = '';
 
@@ -68,36 +73,68 @@ function initContactForm() {
             // Remove loading state
             submitBtn.classList.remove('loading');
             submitBtn.disabled = false;
+            if (btnText) btnText.textContent = originalText;
         }
     });
 }
 
-function showStatus(type, message) {
+async function showStatus(type, message) {
     const statusDiv = document.getElementById('form-status');
     if (!statusDiv) return;
 
-    statusDiv.className = `form-status ${type}`;
-    statusDiv.textContent = message;
+    const lang = typeof window.currentLang !== 'undefined' ? window.currentLang : (localStorage.getItem('lang') || 'en');
 
-    // Auto-hide after 5 seconds
+    // Reset and show
+    statusDiv.className = `form-status ${type} active`;
+    statusDiv.textContent = ''; // Clear previous
+
+    const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+    // Add a small terminal prompt
+    const successPrompt = lang === 'es' ? '[ÉXITO] > ' : '[SUCCESS] > ';
+    const errorPrompt = lang === 'es' ? '[ERROR] > ' : '[ERROR] > ';
+    const prompt = type === 'success' ? successPrompt : errorPrompt;
+    statusDiv.textContent = prompt;
+
+    // Type the message
+    for (let char of message) {
+        statusDiv.textContent += char;
+        await wait(Math.random() * 20 + 10); // Snappy typing
+    }
+
+    // Auto-hide after 6 seconds (slightly longer to allow reading)
     setTimeout(() => {
-        statusDiv.className = 'form-status';
-        statusDiv.textContent = '';
-    }, 5000);
+        statusDiv.classList.remove('active');
+        // Optional: clear text after fade out
+        setTimeout(() => {
+            if (!statusDiv.classList.contains('active')) {
+                statusDiv.textContent = '';
+            }
+        }, 500);
+    }, 6000);
 }
 
 function getFormText(key) {
-    const lang = typeof currentLang !== 'undefined' ? currentLang : 'en';
+    const lang = typeof window.currentLang !== 'undefined' ? window.currentLang : (localStorage.getItem('lang') || 'en');
+
+    // Check if global translations exist
+    if (typeof translations !== 'undefined' && translations[lang] && translations[lang][key]) {
+        return translations[lang][key];
+    }
+
+    // Fallback internal texts (just in case)
     const texts = {
         en: {
             formSuccess: 'Message sent successfully! I\'ll respond soon.',
             formError: 'Failed to send message. Please try again or use email directly.',
-            formErrorConfig: 'Contact form not configured. Please use email link above.'
+            formErrorConfig: 'Contact form not configured. Please use email link above.',
+            formSending: 'Transmitting...'
         },
         es: {
             formSuccess: '¡Mensaje enviado exitosamente! Responderé pronto.',
             formError: 'Error al enviar el mensaje. Por favor intenta de nuevo o usa el email directamente.',
-            formErrorConfig: 'Formulario no configurado. Por favor usa el enlace de email arriba.'
+            formErrorConfig: 'Formulario no configurado. Por favor usa el enlace de email arriba.',
+            formSending: 'Transmitiendo...'
         }
     };
     return texts[lang]?.[key] || texts.en[key];

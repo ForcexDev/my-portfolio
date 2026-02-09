@@ -9,10 +9,65 @@ document.addEventListener('DOMContentLoaded', () => {
     createStars();
     initDynamicGlow();
     initSubpageNavbar();
+    initMobileMenu();
     initLightbox();
     initCarousel();
     initResponsiveImages();
+    initTranslation();
 });
+
+/**
+ * Lightweight Translation System for Subpages
+ * Handles Navbar and Contact Hub translations
+ */
+function initTranslation() {
+    const langToggle = document.getElementById('lang-toggle');
+    if (!langToggle || typeof translations === 'undefined') return;
+
+    // Get saved language or default to 'en'
+    let currentLang = localStorage.getItem('lang') || 'en';
+
+    // Update content on load
+    updateContent(currentLang);
+
+    // Toggle Event
+    langToggle.addEventListener('click', () => {
+        currentLang = currentLang === 'en' ? 'es' : 'en';
+        localStorage.setItem('lang', currentLang);
+        updateContent(currentLang);
+
+        // Dispatch event in case other scripts need to know (like contact.js)
+        window.currentLang = currentLang; // Global var for contact.js
+    });
+
+    function updateContent(lang) {
+        // Update stored global for contact.js
+        window.currentLang = lang;
+
+        // 1. Update text content
+        document.querySelectorAll('[data-key]').forEach(el => {
+            const key = el.getAttribute('data-key');
+            if (translations[lang] && translations[lang][key]) {
+                el.textContent = translations[lang][key];
+            }
+        });
+
+        // 2. Update placeholders
+        document.querySelectorAll('[data-placeholder-key]').forEach(el => {
+            const key = el.getAttribute('data-placeholder-key');
+            if (translations[lang] && translations[lang][key]) {
+                el.placeholder = translations[lang][key];
+            }
+        });
+
+        // 3. Update Toggle Button Text (Sync with main.js style)
+        if (lang === 'es') {
+            langToggle.innerHTML = 'EN | <span style="color: var(--nebula-blue); font-weight: 700;">ES</span>';
+        } else {
+            langToggle.innerHTML = '<span style="color: var(--nebula-blue); font-weight: 700;">EN</span> | ES';
+        }
+    }
+}
 
 /**
  * Navbar logic for subpages
@@ -36,6 +91,57 @@ function initSubpageNavbar() {
         const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
         const scrolled = (winScroll / height) * 100;
         document.documentElement.style.setProperty('--scroll-progress', scrolled + '%');
+    });
+}
+
+/**
+ * Mobile Menu Toggle for Subpages
+ */
+function initMobileMenu() {
+    const mobileToggle = document.querySelector('.mobile-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    const links = document.querySelectorAll('.nav-link');
+
+    if (!mobileToggle || !navLinks) return;
+
+    mobileToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        mobileToggle.classList.toggle('active');
+        const icon = mobileToggle.querySelector('i');
+
+        if (navLinks.classList.contains('active')) {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-times');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
+        } else {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+            document.body.style.overflow = '';
+        }
+    });
+
+    // Close when clicking a link
+    links.forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            mobileToggle.classList.remove('active');
+            const icon = mobileToggle.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+            document.body.style.overflow = '';
+        });
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!navLinks.contains(e.target) && !mobileToggle.contains(e.target) && navLinks.classList.contains('active')) {
+            navLinks.classList.remove('active');
+            mobileToggle.classList.remove('active');
+            const icon = mobileToggle.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+            document.body.style.overflow = '';
+        }
     });
 }
 

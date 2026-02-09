@@ -9,69 +9,465 @@
     overflow: hidden;
 }
 
-.hero-content {
-    max-width: 800px;
-    padding: 0 2rem;
-    z-index: 2;
+/* --- Unified System Window (RGB Border) --- */
+.sys-window {
+    background: rgba(10, 10, 20, 0.95);
+    /* border: 1px solid rgba(66, 153, 225, 0.2); Replacement by RGB border */
+    border-radius: 8px;
+    width: 100%;
+    max-width: 900px;
+    min-height: 440px;
+    /* Reserve space for content to prevent CLS */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    /* Important for clipping the pseudo-element */
+    animation: revealHero 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.5s forwards;
+    opacity: 0;
+    margin-bottom: 2rem;
+    position: relative;
+    /* Context for pseudo-element */
+    padding: 1px;
+    /* Space for the border */
+    z-index: 1;
+}
+
+/* RGB Gradient Animation */
+.sys-window::before {
+    content: '';
+    position: absolute;
+    /* Full Continuous RGB Border (No Gaps) */
+    background: conic-gradient(from 0deg, #00f3ff, #bc13fe, #00f3ff, #bc13fe, #00f3ff);
+    animation: rotateBorder 4s linear infinite;
+    z-index: -2;
+
+    /* Ensure no cutting - Big Canvas */
+    width: 250%;
+    height: 250%;
+    top: -75%;
+    left: -75%;
+}
+
+/* Inner Background to hide current content behind border */
+/* Inner Background to hide current content behind border */
+.sys-window::after {
+    content: '';
+    position: absolute;
+    /* Use explicit offsets instead of inset for compat */
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    background: #0a0a14;
+    /* SOLID COLOR - No transparency */
+    border-radius: 8px;
+    z-index: -1;
+}
+
+@keyframes rotateBorder {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes revealHero {
+    from {
+        transform: translateY(20px) scale(0.98);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+.sys-header {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.8rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    /* Ensure it sits above ::after */
+    z-index: 10;
+}
+
+.sys-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+/* Replaced specific colors with Cosmic theme variants if desired, or keep traffic lights */
+.sys-dot.red {
+    background: #ff5f56;
+}
+
+.sys-dot.yellow {
+    background: #ffbd2e;
+}
+
+.sys-dot.green {
+    background: #00f3ff;
+    /* Cyan traffic light */
+}
+
+.sys-title {
+    margin-left: auto;
+    margin-right: auto;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.sys-body {
+    padding: 2rem;
+    position: relative;
+    z-index: 10;
+}
+
+/* --- Neofetch Layout Content --- */
+.hero-content.neofetch-layout {
     display: flex;
     flex-direction: column;
     align-items: center;
+    /* removed gap as window handles spacing */
+    width: 100%;
+}
+
+.hero-main-row {
+    display: flex;
+    align-items: center;
     justify-content: center;
-    text-align: center;
+    gap: 3rem;
     width: 100%;
-    transform: translateY(-12vh);
+    margin-bottom: 2rem;
+    /* Space between info & prompt */
+    flex-wrap: wrap;
+    /* Stack on mobile */
 }
 
-.hero-greeting {
-    font-size: 1.2rem;
-    color: var(--nebula-blue);
-    margin-bottom: 1rem;
-    opacity: 0;
-    animation: fadeInUp 0.6s ease-out 0.3s forwards;
+/* Logo Side */
+.hero-logo-side {
+    flex-shrink: 0;
 }
 
-.hero-greeting:empty {
-    display: none;
+.hero-logo-neo {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    object-fit: cover;
+    /* No float animation - Static */
+    /* box-shadow: none; or subtle */
+    /* Cosmic Border */
+    border: 3px solid rgba(0, 243, 255, 0.3);
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.1);
 }
 
-.hero-title {
-    font-family: 'Orbitron', monospace;
-    font-size: clamp(3rem, 8vw, 6rem);
-    font-weight: 800;
-    margin-bottom: 1rem;
-    background: linear-gradient(135deg, var(--stellar-white) 0%, var(--nebula-blue) 50%, var(--cosmic-purple) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    opacity: 0;
-    animation: epicTitle 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
-    text-shadow: 0 0 30px rgba(66, 153, 225, 0.5);
-    letter-spacing: 3px;
+/* Info Side */
+.hero-info-side {
+    font-family: 'Fira Code', monospace;
     text-align: center;
-    width: 100%;
-    perspective: 1000px;
+    /* Center text */
+    flex: 1;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Center children */
 }
 
-.hero-subtitle {
+.hero-info-header {
     font-size: 1.8rem;
-    color: var(--stellar-silver);
+    /* Larger */
+    font-weight: 800;
+    /* Bolder */
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+    /* Pure White */
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    /* Subtle glow to "stand out" */
+    letter-spacing: 0.5px;
+}
+
+/* Cosmic Colors: Cyan & Purple */
+.info-user {
+    color: #00f3ff;
+}
+
+/* Cyan */
+.info-at {
+    color: var(--stellar-white);
+}
+
+.info-host {
+    color: #bc13fe;
+}
+
+/* Purple */
+
+.hero-info-separator {
+    height: 2px;
+    background: linear-gradient(90deg, #00f3ff, #bc13fe, transparent);
+    width: 100%;
     margin-bottom: 1rem;
-    opacity: 0;
-    animation: textReveal 0.8s ease-out 1s forwards;
+}
+
+/* List Items */
+.hero-info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.hero-info-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: #a0aec0;
+    /* Lighter grey */
+    margin-bottom: 0.3rem;
+}
+
+.info-key {
+    color: #00f3ff;
+    /* Cyan keys */
+    font-weight: 600;
+    min-width: 80px;
+}
+
+.info-val {
+    color: #e2e8f0;
+    /* White-ish values */
+}
+
+/* Icons Colors - Cosmic Palette */
+.icon-green {
+    color: #00f3ff;
+}
+
+/* Projects -> Cyan */
+.icon-blue {
+    color: #4299e1;
+}
+
+/* Stack -> Blue */
+.icon-purple {
+    color: #bc13fe;
+}
+
+/* CTFs -> Purple */
+.icon-red {
+    color: #f56565;
+}
+
+/* Certs -> Red remains for contrast */
+.icon-yellow {
+    color: #ecc94b;
+}
+
+.icon-cyan {
+    color: #00f3ff;
+}
+
+/* --- Console (Integrated) --- */
+/* --- Console (Integrated) --- */
+.hero-terminal {
+    background: transparent;
+    border: none;
+    width: 100%;
+    max-width: 100%;
+    text-align: left;
+    padding: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+    animation: none;
+    opacity: 1;
+}
+
+.terminal-body {
+    padding: 0;
+}
+
+/* Clean Terminal Prompt */
+.terminal-line {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 1.1rem;
+    font-weight: 600;
+    gap: 0 !important;
+    /* Force tight spacing */
+}
+
+.prompt-user {
+    color: #bc13fe;
+    /* Purple */
+    margin: 0 !important;
+    font-weight: 700;
+}
+
+.prompt-colon {
+    color: #e2e8f0;
+    /* Silver */
+    margin: 0 !important;
+    /* NO separation */
+    font-weight: 700;
+}
+
+.prompt-path {
+    color: #00f3ff;
+    /* Cyan */
+    margin: 0 !important;
+    font-weight: 700;
+}
+
+.prompt-char {
+    color: #e2e8f0;
+    /* Silver */
+    margin: 0 0.5rem 0 0 !important;
+    /* Space AFTER $, none before */
+    font-weight: 700;
+}
+
+.terminal-cmd {
+    /* color: var(--stellar-white); */
+    color: #e2e8f0;
+    /* White/Silver for command text */
     font-weight: 600;
 }
 
-.hero-tagline {
-    font-size: 1.3rem;
-    color: var(--nebula-blue);
-    margin-bottom: 0.5rem;
-    opacity: 0;
-    animation: textReveal 0.8s ease-out 1.3s forwards;
-    font-style: normal;
-    font-weight: 500;
-    text-shadow: 0 0 15px rgba(66, 153, 225, 0.4);
-    letter-spacing: 2px;
-    text-transform: uppercase;
+@keyframes blink {
+
+    from,
+    to {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Blinking Cursor | */
+.cursor {
+    display: inline-block;
+    color: #00f3ff;
+    /* Cyan cursor */
+    font-weight: 700;
+    margin-left: 2px;
+    animation: blink 1s step-end infinite;
+    vertical-align: baseline;
+}
+
+/* Mobile Responsiveness for Layout */
+/* Float Animations */
+@keyframes floatLogo {
+
+    0%,
+    100% {
+        transform: translateY(0) rotateX(0);
+        filter: drop-shadow(0 0 15px rgba(66, 153, 225, 0.4));
+    }
+
+    50% {
+        transform: translateY(-10px) rotateX(5deg);
+        filter: drop-shadow(0 0 30px rgba(66, 153, 225, 0.6));
+    }
+}
+
+/* --- RESPONSIVE OPTIMIZATION (Mobile, 1080p, 2K) --- */
+
+/* Mobile Devices (Portrait) */
+@media (max-width: 768px) {
+    .hero-main-row {
+        flex-direction: column;
+        gap: 1.5rem;
+        /* Tighter gap */
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero-logo-neo {
+        width: 160px;
+        /* Smaller logo */
+        height: 160px;
+    }
+
+    .hero-info-side {
+        width: 100%;
+        text-align: center;
+    }
+
+    .hero-info-header {
+        font-size: 1.5rem;
+        /* Scale down name */
+    }
+
+    .sys-body {
+        padding: 1.5rem 1rem;
+        /* Less padding to maximize space */
+    }
+
+    .hero-info-list li {
+        justify-content: center;
+        font-size: 0.9rem;
+    }
+
+    .terminal-line {
+        justify-content: flex-start;
+        /* Left align */
+        font-size: 0.95rem;
+    }
+
+    .typewriter {
+        justify-content: flex-start;
+        /* Left align output */
+        text-align: left;
+        font-size: 0.95rem;
+    }
+}
+
+/* 2K / 4K Screens (Ultra Wide) */
+@media (min-width: 1921px) {
+    .sys-window {
+        max-width: 1200px;
+        /* Wider terminal for big screens */
+    }
+
+    .sys-body {
+        padding: 3rem;
+        /* More breathing room */
+    }
+
+    .hero-logo-neo {
+        width: 280px;
+        /* Larger logo */
+        height: 280px;
+    }
+
+    .hero-info-header {
+        font-size: 2.5rem;
+        /* Big name */
+    }
+
+    .terminal-line,
+    .typewriter {
+        font-size: 1.3rem;
+        /* Readable code */
+    }
+
+    .hero-info-list {
+        font-size: 1.1rem;
+    }
 }
 
 .hero-subtitle-2 {
@@ -82,106 +478,4 @@
     animation: stellarGlow 0.8s ease-out 1.5s forwards;
     text-transform: uppercase;
     letter-spacing: 1px;
-}
-
-/* Space Battle Game Styles */
-.game-container {
-    position: relative;
-    max-width: 800px;
-    margin: 0 auto;
-    border-radius: 20px;
-    overflow: hidden;
-    border: 2px solid var(--nebula-blue);
-    box-shadow: var(--stellar-shadow);
-    user-select: none;
-    -webkit-user-select: none;
-    cursor: none;
-}
-
-#spaceCanvasGame {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 4 / 3;
-    background: transparent;
-    display: block;
-}
-
-.game-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 17, 0.85);
-    backdrop-filter: blur(10px);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    z-index: 10;
-    transition: opacity 0.5s ease;
-    padding: 1rem;
-}
-
-.game-overlay.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-#gameMessage {
-    font-size: 1.5rem;
-    color: var(--stellar-white);
-    margin-bottom: 2rem;
-}
-
-#gameScore {
-    font-family: 'Orbitron', monospace;
-    font-size: 2rem;
-    color: var(--nebula-blue);
-    text-shadow: 0 0 10px var(--nebula-blue);
-    margin-bottom: 1.5rem;
-}
-
-.mobile-controls {
-    display: none;
-    width: 100%;
-    position: absolute;
-    bottom: 1.5rem;
-    left: 0;
-    z-index: 11;
-    padding: 0 1.5rem;
-    justify-content: space-between;
-}
-
-.game-active.touch-device .mobile-controls {
-    display: flex;
-}
-
-.touch-control {
-    background: rgba(66, 153, 225, 0.2);
-    border: 2px solid var(--nebula-blue);
-    color: var(--stellar-white);
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5rem;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.touch-control:active {
-    background: rgba(66, 153, 225, 0.5);
-    transform: scale(0.95);
-}
-
-.touch-control.shoot {
-    background: rgba(220, 50, 50, 0.3);
-    border-color: rgba(220, 50, 50, 0.8);
-}
-
-.touch-control.shoot:active {
-    background: rgba(220, 50, 50, 0.6);
 }

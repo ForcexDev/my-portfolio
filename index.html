@@ -58,13 +58,12 @@
     <link rel="stylesheet" href="css/pages.css">
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/responsive-enhancements.css">
     <link rel="stylesheet" href="css/loader.css">
+    <link rel="stylesheet" href="css/games/space-battle.css">
 </head>
 
-<audio id="bg-music" loop>
-    <source src="./CornfieldChase.mp3" type="audio/mpeg">
-    Tu navegador no soporta el elemento de audio.
-</audio>
+
 
 <body>
     <!-- Loading Screen -->
@@ -101,8 +100,8 @@
                 <li><a href="#home" class="nav-link active" data-key="navHome">Home</a></li>
                 <li><a href="#about" class="nav-link" data-key="navAbout">About</a></li>
                 <li><a href="#projects" class="nav-link" data-key="navProjects">Projects</a></li>
-                <li><a href="#certifications" class="nav-link" data-key="navCertifications">Certifications</a></li>
                 <li><a href="#skills" class="nav-link" data-key="navSkills">Skills</a></li>
+                <li><a href="#certifications" class="nav-link" data-key="navCertifications">Certifications</a></li>
                 <li><a href="#contact" class="nav-link" data-key="navContact">Contact</a></li>
                 <li><button id="lang-toggle" class="lang-btn" aria-label="Cambiar idioma">EN | ES</button></li>
             </ul>
@@ -114,18 +113,80 @@
 
     <section id="home" class="hero">
         <div class="particles"></div>
-        <div class="hero-content">
-            <p class="hero-greeting" data-key="heroGreeting"></p>
-            <h1 class="hero-title">ForcexDev</h1>
-            <h2 class="hero-subtitle" data-key="heroName"></h2>
-            <p class="hero-tagline" data-key="heroTagline"></p>
-            <div class="typewriter" id="typewriter"></div>
-            <a href="#about" class="cta-button" data-key="heroCTA"></a>
+        <div class="hero-content neofetch-layout">
+
+            <!-- Unified System Window -->
+            <div class="sys-window">
+                <div class="sys-header">
+                    <span class="sys-dot red"></span>
+                    <span class="sys-dot yellow"></span>
+                    <span class="sys-dot green"></span>
+                    <!-- Title removed for cleaner look -->
+                </div>
+
+                <div class="sys-body">
+                    <div class="hero-main-row">
+                        <!-- Left: Logo -->
+                        <div class="hero-logo-side">
+                            <img src="img/ForcexDev.png" alt="ForcexDev Logo" class="hero-logo-neo" width="220"
+                                height="220" fetchpriority="high">
+                        </div>
+
+                        <!-- Right: System Info List -->
+                        <div class="hero-info-side">
+                            <div class="hero-info-header">
+                                Ezequiel Morales
+                            </div>
+                            <div class="hero-info-separator"></div>
+                            <ul class="hero-info-list">
+                                <li>
+                                    <i class="fas fa-user-secret icon-green"></i> <span class="info-key">Role:</span>
+                                    <span class="info-val">Cybersecurity & Network Eng.</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-laptop-code icon-blue"></i> <span class="info-key">Stack:</span>
+                                    <span class="info-val">Python, Linux, C++, Bash</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-terminal icon-purple"></i> <span class="info-key">Shell:</span>
+                                    <span class="info-val">Zsh + Powerlevel10k</span>
+                                </li>
+                                <li>
+                                    <i class="fab fa-linux icon-cyan"></i> <span class="info-key">OS:</span>
+                                    <span class="info-val">Kali Linux / Arch</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-crosshairs icon-red"></i> <span class="info-key">Focus:</span>
+                                    <span class="info-val">Offensive Security & CTFs</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-brain icon-yellow"></i> <span class="info-key">Uptime:</span>
+                                    <span class="info-val">Always Learning</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Console / Terminal Area -->
+                    <div class="hero-terminal">
+                        <div class="terminal-body">
+                            <div class="terminal-line"><span class="prompt-user">root@ForcexDev</span><span
+                                    class="prompt-colon">:</span><span class="prompt-path">~</span><span
+                                    class="prompt-char">$</span><span class="terminal-cmd" id="typeCommand"></span><span
+                                    class="cursor" id="cmdCursor">|</span></div>
+                            <div class="terminal-output" id="terminalOutput">
+                                <div class="typewriter" id="typewriter"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-        <div class="scroll-indicator">
+        <a href="#about" class="scroll-indicator">
             <p data-key="scrollExplore"></p>
             <i class="fas fa-chevron-down"></i>
-        </div>
+        </a>
     </section>
 
     <section id="about" class="section">
@@ -141,12 +202,7 @@
 
                     <div class="about-buttons-container">
 
-                        <div class="music-player-section">
-                            <button id="music-toggle" class="music-play-btn">
-                                <i class="fas fa-play"></i>
-                                <span data-key="musicPlay"></span>
-                            </button>
-                        </div>
+
 
                         <div class="cv-buttons-group">
                             <button onclick="openCVModal()" class="cv-view-btn">
@@ -202,6 +258,138 @@
         </div>
     </div>
 
+    <section id="skills" class="section">
+        <div class="container skills-container">
+            <h2 class="section-title" data-key="skillsTitle"></h2>
+            <p class="section-subtitle" data-key="skillsSubtitle"></p>
+
+            <!-- Column 1: Cybersecurity & Infrastructure -->
+            <!-- Column 1: Cybersecurity & Infrastructure -->
+            <h3 class="skill-category-title" data-key="skillsCat1"></h3>
+            <div class="skills-grid">
+
+                <div class="skill-item">
+                    <i class="devicon-bash-plain skill-icon"></i>
+                    <h4>Bash</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-docker-plain skill-icon"></i>
+                    <h4>Docker</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-kubernetes-plain skill-icon"></i>
+                    <h4>Kubernetes</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="fab fa-aws skill-icon"></i>
+                    <h4>AWS</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="fab fa-cloudflare skill-icon"></i>
+                    <h4>Cloudflare</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-oracle-original skill-icon"></i>
+                    <h4>Oracle Cloud</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-nginx-original skill-icon"></i>
+                    <h4>Nginx</h4>
+                </div>
+                <div class="skill-item">
+                    <img src="icons/wireshark.svg" class="skill-icon-img" alt="Wireshark">
+                    <h4>Wireshark</h4>
+                </div>
+                <div class="skill-item">
+                    <img src="icons/burpsuite.svg" class="skill-icon-img" alt="Burp Suite">
+                    <h4>Burp Suite</h4>
+                </div>
+                <div class="skill-item">
+                    <img src="icons/metasploit.svg" class="skill-icon-img" alt="Metasploit">
+                    <h4>Metasploit</h4>
+                </div>
+            </div>
+
+            <!-- Column 2: Backend & Data-->
+            <h3 class="skill-category-title" data-key="skillsCat2"></h3>
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <i class="devicon-cplusplus-plain skill-icon"></i>
+                    <h4>C++</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-java-plain skill-icon"></i>
+                    <h4>Java</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-python-plain skill-icon"></i>
+                    <h4>Python</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-lua-plain skill-icon"></i>
+                    <h4>Lua</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-nodejs-plain skill-icon"></i>
+                    <h4>Node.js</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-express-original skill-icon"></i>
+                    <h4>Express</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-redis-plain skill-icon"></i>
+                    <h4>Redis</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-postgresql-plain skill-icon"></i>
+                    <h4>PostgreSQL</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-mongodb-plain skill-icon"></i>
+                    <h4>MongoDB</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-arduino-plain skill-icon"></i>
+                    <h4>Arduino</h4>
+                </div>
+            </div>
+
+            <!-- Column 3: Frontend & Modern Web -->
+            <h3 class="skill-category-title" data-key="skillsCat3"></h3>
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <i class="devicon-react-original skill-icon"></i>
+                    <h4>React</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-tailwindcss-plain skill-icon"></i>
+                    <h4>Tailwind</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-javascript-plain skill-icon"></i>
+                    <h4>JavaScript</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-html5-plain skill-icon"></i>
+                    <h4>HTML</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-css3-plain skill-icon"></i>
+                    <h4>CSS</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-git-plain skill-icon"></i>
+                    <h4>Git</h4>
+                </div>
+                <div class="skill-item">
+                    <i class="devicon-latex-original skill-icon"></i>
+                    <h4>LaTeX</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="certifications" class="section">
         <div class="container">
             <h2 class="section-title" data-key="certificationsTitle"></h2>
@@ -209,7 +397,7 @@
             <div class="skills-grid">
 
                 <div class="skill-item cert-card">
-                    <i class="fas fa-award skill-icon"></i>
+                    <img src="icons/cisco.svg" alt="Cisco" class="skill-icon-img cert-icon-img">
                     <div class="skill-info">
                         <h4 data-key="cert1Title"></h4>
                         <p data-key="cert1Org"></p>
@@ -219,7 +407,7 @@
                 </div>
 
                 <div class="skill-item cert-card">
-                    <i class="fas fa-award skill-icon"></i>
+                    <img src="icons/cisco.svg" alt="Cisco" class="skill-icon-img cert-icon-img">
                     <div class="skill-info">
                         <h4 data-key="cert2Title"></h4>
                         <p data-key="cert2Org"></p>
@@ -229,7 +417,7 @@
                 </div>
 
                 <div class="skill-item cert-card">
-                    <i class="fas fa-award skill-icon"></i>
+                    <img src="icons/freecodecamp.svg" alt="freeCodeCamp" class="skill-icon-img cert-icon-img">
                     <div class="skill-info">
                         <h4 data-key="cert3Title"></h4>
                         <p data-key="cert3Org"></p>
@@ -237,229 +425,6 @@
                     <span class="cert-link in-progress" data-key="certLinkProgress"></span>
                 </div>
 
-            </div>
-        </div>
-    </section>
-
-    <section id="skills" class="section">
-        <div class="container skills-container">
-            <h2 class="section-title" data-key="skillsTitle"></h2>
-
-            <!-- Column 1: Cybersecurity & Infrastructure -->
-            <h3 class="skill-category-title" data-key="skillsCat1"></h3>
-            <div class="skills-grid">
-                <div class="skill-item">
-                    <i class="fas fa-shield-alt skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>Cybersecurity</h4>
-                        <p data-key="skillCyber"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="devicon-linux-plain skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>Linux (Kali/Hyprland)</h4>
-                        <p data-key="skillLinux"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="devicon-bash-plain skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>Bash Scripting</h4>
-                        <p data-key="skillBash"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="devicon-docker-plain skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>Docker</h4>
-                        <p data-key="skillDocker"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="devicon-kubernetes-plain skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>Kubernetes</h4>
-                        <p data-key="skillKubernetes"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="fab fa-aws skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>AWS</h4>
-                        <p data-key="skillAWS"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="fas fa-cloud-meatball skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>Cloudflare</h4>
-                        <p data-key="skillCloudflare"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="fas fa-database skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>Oracle Cloud</h4>
-                        <p data-key="skillOracle"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="devicon-nginx-original skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>Nginx</h4>
-                        <p data-key="skillNginx"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="fas fa-broadcast-tower skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>Wireshark</h4>
-                        <p data-key="skillWireshark"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="fas fa-bug skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>Burp Suite</h4>
-                        <p data-key="skillBurp"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="fas fa-user-secret skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>Metasploit</h4>
-                        <p data-key="skillMetasploit"></p>
-                    </div>
-                </div>
-            </div>
-            <!-- Column 2: Backend & Data-->
-            <h3 class="skill-category-title" data-key="skillsCat2"></h3>
-            <div class="skills-grid">
-                <div class="skill-item">
-                    <i class="devicon-cplusplus-plain skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>C++</h4>
-                        <p data-key="skillCpp"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="devicon-java-plain skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>Java</h4>
-                        <p data-key="skillJava"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="devicon-python-plain skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>Python (FastAPI)</h4>
-                        <p data-key="skillPython"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="devicon-lua-plain skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>Lua</h4>
-                        <p data-key="skillLua"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="devicon-nodejs-plain skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>Node.js</h4>
-                        <p data-key="skillNode"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="devicon-express-original skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>Express</h4>
-                        <p data-key="skillExpress"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="devicon-redis-plain skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>Redis</h4>
-                        <p data-key="skillRedis"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="devicon-postgresql-plain skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>PostgreSQL</h4>
-                        <p data-key="skillPostgres"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="devicon-mongodb-plain skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>MongoDB</h4>
-                        <p data-key="skillMongoDB"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="devicon-arduino-plain skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>Arduino</h4>
-                        <p data-key="skillArduino"></p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Column 3: Frontend & Modern Web -->
-            <h3 class="skill-category-title" data-key="skillsCat3"></h3>
-            <div class="skills-grid">
-                <div class="skill-item">
-                    <i class="devicon-react-original skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>React</h4>
-                        <p data-key="skillReact"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="devicon-tailwindcss-plain skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>Tailwind CSS</h4>
-                        <p data-key="skillTailwind"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="devicon-javascript-plain skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>JavaScript (ES6+)</h4>
-                        <p data-key="skillJS"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="devicon-html5-plain skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>HTML</h4>
-                        <p data-key="skillHTML"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="devicon-css3-plain skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>CSS</h4>
-                        <p data-key="skillCSS"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="devicon-git-plain skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>Git & GitHub</h4>
-                        <p data-key="skillGit"></p>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <i class="devicon-latex-original skill-icon"></i>
-                    <div class="skill-info">
-                        <h4>LaTeX</h4>
-                        <p data-key="skillLatex"></p>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
@@ -500,20 +465,20 @@
                         <span data-key="contactNetwork"></span>
                     </a>
                     <a href="https://tryhackme.com/p/ForcexDev" target="_blank" class="contact-link">
-                        <i class="fas fa-flag"></i>
+                        <img src="icons/tryhackme.svg" alt="TryHackMe" class="skill-icon-img contact-icon">
                         <span data-key="contactMissions"></span>
                     </a>
                     <a href="https://profile.hackthebox.com/profile/019c38be-e58b-70e7-8414-6252a08e0953"
                         target="_blank" class="contact-link">
-                        <i class="fas fa-cube"></i>
+                        <img src="icons/hackthebox.svg" alt="HackTheBox" class="skill-icon-img contact-icon">
                         <span data-key="contactHTB"></span>
                     </a>
                     <a href="https://leetcode.com/u/ForcexDev/" target="_blank" class="contact-link">
-                        <i class="fa fa-code"></i>
+                        <img src="icons/leetcode.svg" alt="LeetCode" class="skill-icon-img contact-icon">
                         <span data-key="contactLeet"></span>
                     </a>
                     <a href="https://www.hackerrank.com/profile/ezequiel_morales" target="_blank" class="contact-link">
-                        <i class="fas fa-user-secret"></i>
+                        <img src="icons/hackerrank.svg" alt="HackerRank" class="skill-icon-img contact-icon">
                         <span data-key="contactHacker"></span>
                     </a>
                 </div>
@@ -555,7 +520,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p>© 2026 Ezequiel Morales - All Rights Reserved</p>
+            <p>© 2026 Ezequiel Morales</p>
         </div>
     </footer>
 
@@ -565,7 +530,7 @@
     <script src="js/translations.js"></script>
     <script src="js/data.js"></script>
     <script src="js/projects.js"></script>
-    <script src="js/game.js"></script>
+    <script src="js/games/space-battle.js"></script>
     <script src="js/contact.js"></script>
     <script src="js/main.js"></script>
 
