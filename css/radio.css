@@ -264,6 +264,8 @@
 /* MOBILE (max-width: 480px) - CENTERED & COMPACT */
 @media (max-width: 480px) {
     .radio-widget {
+        display: none !important;
+        /* Hidden on mobile by user request */
         width: 90%;
         max-width: 340px;
         max-height: 100px;
