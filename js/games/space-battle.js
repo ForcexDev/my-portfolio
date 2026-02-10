@@ -190,6 +190,11 @@ document.addEventListener('DOMContentLoaded', () => {
             window.pauseBackgroundMusicForGame();
         }
 
+        // Pause Radio if playing
+        if (typeof window.pauseRadio === 'function') {
+            window.pauseRadio();
+        }
+
         audio.background.currentTime = 0;
         audio.background.play().catch(e => console.warn("Audio de fondo bloqueado"));
 
@@ -299,6 +304,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Use public API from main.js - resumes music if it was playing before game
         if (typeof window.resumeBackgroundMusicAfterGame === 'function') {
             window.resumeBackgroundMusicAfterGame();
+        }
+
+        // Resume Radio if it was paused by the game
+        if (typeof window.resumeRadio === 'function') {
+            window.resumeRadio();
         }
 
 

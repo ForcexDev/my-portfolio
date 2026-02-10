@@ -172,7 +172,7 @@
 
 /* Info Side */
 .hero-info-side {
-    font-family: 'Fira Code', monospace;
+    font-family: 'Orbitron', monospace;
     text-align: center;
     /* Center text */
     flex: 1;
@@ -221,6 +221,8 @@
 
 /* List Items */
 .hero-info-list {
+    font-family: 'Fira Code', monospace;
+    /* Keep tech details in code font */
     list-style: none;
     padding: 0;
     margin: 0;

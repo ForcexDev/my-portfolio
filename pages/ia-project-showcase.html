@@ -10,11 +10,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap"
         rel="stylesheet">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
 
     <!-- Styles -->
     <link rel="stylesheet" href="../css/variables.css">
@@ -24,6 +27,7 @@
     <link rel="stylesheet" href="../css/responsive.css">
     <link rel="stylesheet" href="../css/page-template.css">
     <link rel="stylesheet" href="../css/responsive-enhancements.css">
+    <link rel="stylesheet" href="../css/radio.css">
     <link rel="stylesheet" href="../css/animations.css">
 </head>
 
@@ -63,11 +67,11 @@
             </div>
 
             <div class="page-tags">
-                <span class="tag">PyTorch</span>
-                <span class="tag">FastAPI</span>
-                <span class="tag">React</span>
-                <span class="tag">Docker</span>
-                <span class="tag">Redis</span>
+                <span class="tag"><i class="devicon-pytorch-original"></i> PyTorch</span>
+                <span class="tag"><i class="devicon-fastapi-plain"></i> FastAPI</span>
+                <span class="tag"><i class="devicon-react-original"></i> React</span>
+                <span class="tag"><i class="devicon-docker-plain"></i> Docker</span>
+                <span class="tag"><i class="devicon-redis-plain"></i> Redis</span>
             </div>
         </header>
 
@@ -107,13 +111,16 @@
                 </p>
 
                 <h3><i class="fas fa-cogs"></i> Stack Tecnológico</h3>
-                <ul>
-                    <li><strong>Backend:</strong> FastAPI + Celery + Redis</li>
-                    <li><strong>Frontend:</strong> React + TypeScript + Tailwind CSS</li>
-                    <li><strong>AI Models:</strong> PyTorch + SRGAN + ESRGAN</li>
-                    <li><strong>Infrastructure:</strong> Docker + Kubernetes + AWS S3</li>
-                    <li><strong>Database:</strong> PostgreSQL + MongoDB</li>
-                </ul>
+                <div class="project-tags" style="justify-content: center; gap: 1rem; margin-top: 1rem;">
+                    <span class="tag"><i class="devicon-fastapi-plain"></i> FastAPI</span>
+                    <span class="tag"><i class="devicon-redis-plain"></i> Redis</span>
+                    <span class="tag"><i class="devicon-react-original"></i> React</span>
+                    <span class="tag"><i class="devicon-typescript-plain"></i> TypeScript</span>
+                    <span class="tag"><i class="devicon-pytorch-original"></i> PyTorch</span>
+                    <span class="tag"><i class="devicon-docker-plain"></i> Docker</span>
+                    <span class="tag"><i class="devicon-postgresql-plain"></i> PostgreSQL</span>
+                    <span class="tag"><i class="devicon-mongodb-plain"></i> MongoDB</span>
+                </div>
             </section>
 
             <section>
@@ -243,32 +250,39 @@ def upscale_image(image_path, scale=4):
             <div class="contact-content">
                 <h2 class="section-title" data-key="contactTitle"></h2>
                 <p class="contact-text" data-key="contactText"></p>
-                <div class="contact-links">
-                    <a href="https://github.com/ForcexDev" target="_blank" class="contact-link">
-                        <i class="fab fa-github"></i>
-                        <span data-key="contactRepo">GitHub</span>
-                    </a>
-                    <a href="https://www.linkedin.com/in/ezequielleandromorales/" target="_blank" class="contact-link">
-                        <i class="fab fa-linkedin"></i>
-                        <span data-key="contactNetwork">LinkedIn</span>
-                    </a>
-                    <a href="https://tryhackme.com/p/ForcexDev" target="_blank" class="contact-link">
-                        <img src="../icons/tryhackme.svg" alt="TryHackMe" class="skill-icon-img contact-icon">
-                        <span data-key="contactMissions">TryHackMe</span>
-                    </a>
-                    <a href="https://profile.hackthebox.com/profile/019c38be-e58b-70e7-8414-6252a08e0953"
-                        target="_blank" class="contact-link">
-                        <img src="../icons/hackthebox.svg" alt="HackTheBox" class="skill-icon-img contact-icon">
-                        <span data-key="contactHTB">HackTheBox</span>
-                    </a>
-                    <a href="https://leetcode.com/u/ForcexDev/" target="_blank" class="contact-link">
-                        <img src="../icons/leetcode.svg" alt="LeetCode" class="skill-icon-img contact-icon">
-                        <span data-key="contactLeet">LeetCode</span>
-                    </a>
-                    <a href="https://www.hackerrank.com/profile/ezequiel_morales" target="_blank" class="contact-link">
-                        <img src="../icons/hackerrank.svg" alt="HackerRank" class="skill-icon-img contact-icon">
-                        <span data-key="contactHacker">HackerRank</span>
-                    </a>
+                <!-- Floating Contact Hub -->
+                <div class="contact-hub-bar">
+                    <div class="contact-icons-row">
+                        <a href="https://github.com/ForcexDev" target="_blank" class="social-icon" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                            <span class="tooltip">GitHub</span>
+                        </a>
+                        <a href="https://www.linkedin.com/in/ezequielleandromorales/" target="_blank"
+                            class="social-icon" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                            <span class="tooltip">LinkedIn</span>
+                        </a>
+                        <a href="https://tryhackme.com/p/ForcexDev" target="_blank" class="social-icon"
+                            aria-label="TryHackMe">
+                            <img src="../icons/tryhackme.svg" alt="THM">
+                            <span class="tooltip">TryHackMe</span>
+                        </a>
+                        <a href="https://profile.hackthebox.com/profile/019c38be-e58b-70e7-8414-6252a08e0953"
+                            target="_blank" class="social-icon" aria-label="HackTheBox">
+                            <img src="../icons/hackthebox.svg" alt="HTB">
+                            <span class="tooltip">HackTheBox</span>
+                        </a>
+                        <a href="https://leetcode.com/u/ForcexDev/" target="_blank" class="social-icon"
+                            aria-label="LeetCode">
+                            <img src="../icons/leetcode.svg" alt="LeetCode">
+                            <span class="tooltip">LeetCode</span>
+                        </a>
+                        <a href="https://www.hackerrank.com/profile/ezequiel_morales" target="_blank"
+                            class="social-icon" aria-label="HackerRank">
+                            <img src="../icons/hackerrank.svg" alt="HackerRank">
+                            <span class="tooltip">HackerRank</span>
+                        </a>
+                    </div>
                 </div>
 
                 <div class="contact-form-container">
@@ -285,6 +299,11 @@ def upscale_image(image_path, scale=4):
                                 placeholder="john@example.com" data-placeholder-key="formPlaceholderEmail">
                         </div>
                         <div class="form-group">
+                            <label for="subject" data-key="formSubject"></label>
+                            <input type="text" id="subject" name="subject" required placeholder="Project Inquiry"
+                                data-placeholder-key="formPlaceholderSubject">
+                        </div>
+                        <div class="form-group">
                             <label for="message" data-key="formMessage"></label>
                             <textarea id="message" name="message" required
                                 placeholder="Hello, I would like to discuss..."
@@ -292,6 +311,10 @@ def upscale_image(image_path, scale=4):
                         </div>
                         <button type="submit" class="submit-btn" style="width: 100%;">
                             <span class="btn-text" data-key="formSend">Send Transmission</span>
+                            <span class="btn-loading">
+                                <i class="fas fa-spinner"></i>
+                                <span data-key="formSending">Sending...</span>
+                            </span>
                             <i class="fas fa-paper-plane"></i>
                         </button>
                         <div id="form-status" class="form-status"></div>
@@ -309,14 +332,47 @@ def upscale_image(image_path, scale=4):
     </footer>
 
     <!-- Back to Top -->
-    <a href="#" id="backToTopBtn" class="back-to-top" title="Volver arriba">
-        <i class="fas fa-arrow-up"></i>
-    </a>
+    <!-- Radio Widget (macOS Style) -->
+    <div id="radio-widget" class="radio-widget">
+        <button id="radio-close" class="radio-close-btn" aria-label="Close Radio">&times;</button>
+        <div class="radio-glass-bg"></div>
+        <div class="radio-content-wrapper">
+            <div class="radio-art">
+                <img src="https://media.giphy.com/media/U3qYN8S0j3bpK/giphy.gif" alt="Station Art" class="radio-cover">
+                <div class="radio-status-badge">
+                    <span class="status-dot"></span> LIVE
+                </div>
+            </div>
+            <div class="radio-details">
+                <div class="radio-title-scroll">
+                    <span class="radio-title-text">Space Ambient Radio - Cosmic Relaxation</span>
+                </div>
+                <div class="radio-controls-main">
+                    <button id="radio-prev" class="radio-btn nav-btn" aria-label="Previous">
+                        <i class="fas fa-step-backward"></i>
+                    </button>
+                    <button id="radio-toggle" class="radio-btn play-btn" aria-label="Play/Pause">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button id="radio-next" class="radio-btn nav-btn" aria-label="Next">
+                        <i class="fas fa-step-forward"></i>
+                    </button>
+                </div>
+                <div class="volume-container">
+                    <i class="fas fa-volume-down volume-icon"></i>
+                    <input type="range" id="radio-volume" class="volume-slider" min="0" max="100" value="30">
+                </div>
+            </div>
+        </div>
+        <!-- Hidden YouTube Player -->
+        <div id="radio-player-container"></div>
+    </div>
 
     <!-- Scripts -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="../js/contact.js"></script>
     <script src="../js/translations.js"></script>
+    <script src="../js/radio.js"></script>
     <script src="../js/page-template.js"></script>
 </body>
 

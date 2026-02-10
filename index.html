@@ -41,7 +41,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap"
         rel="stylesheet">
 
     <!-- Font Awesome -->
@@ -55,6 +55,7 @@
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/radio.css">
     <link rel="stylesheet" href="css/pages.css">
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/responsive.css">
@@ -455,34 +456,43 @@
             <div class="contact-content">
                 <h2 class="section-title" data-key="contactTitle"></h2>
                 <p class="contact-text" data-key="contactText"></p>
-                <div class="contact-links">
-                    <a href="https://github.com/ForcexDev" target="_blank" class="contact-link">
-                        <i class="fab fa-github"></i>
-                        <span data-key="contactRepo"></span>
-                    </a>
-                    <a href="https://www.linkedin.com/in/ezequielleandromorales/" target="_blank" class="contact-link">
-                        <i class="fab fa-linkedin"></i>
-                        <span data-key="contactNetwork"></span>
-                    </a>
-                    <a href="https://tryhackme.com/p/ForcexDev" target="_blank" class="contact-link">
-                        <img src="icons/tryhackme.svg" alt="TryHackMe" class="skill-icon-img contact-icon">
-                        <span data-key="contactMissions"></span>
-                    </a>
-                    <a href="https://profile.hackthebox.com/profile/019c38be-e58b-70e7-8414-6252a08e0953"
-                        target="_blank" class="contact-link">
-                        <img src="icons/hackthebox.svg" alt="HackTheBox" class="skill-icon-img contact-icon">
-                        <span data-key="contactHTB"></span>
-                    </a>
-                    <a href="https://leetcode.com/u/ForcexDev/" target="_blank" class="contact-link">
-                        <img src="icons/leetcode.svg" alt="LeetCode" class="skill-icon-img contact-icon">
-                        <span data-key="contactLeet"></span>
-                    </a>
-                    <a href="https://www.hackerrank.com/profile/ezequiel_morales" target="_blank" class="contact-link">
-                        <img src="icons/hackerrank.svg" alt="HackerRank" class="skill-icon-img contact-icon">
-                        <span data-key="contactHacker"></span>
-                    </a>
+                <!-- Floating Contact Hub -->
+                <div class="contact-hub-bar">
+                    <div class="contact-icons-row">
+                        <a href="https://github.com/ForcexDev" target="_blank" class="social-icon" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                            <span class="tooltip">GitHub</span>
+                        </a>
+                        <a href="https://www.linkedin.com/in/ezequielleandromorales/" target="_blank"
+                            class="social-icon" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                            <span class="tooltip">LinkedIn</span>
+                        </a>
+                        <a href="https://tryhackme.com/p/ForcexDev" target="_blank" class="social-icon"
+                            aria-label="TryHackMe">
+                            <img src="icons/tryhackme.svg" alt="THM">
+                            <span class="tooltip">TryHackMe</span>
+                        </a>
+                        <a href="https://profile.hackthebox.com/profile/019c38be-e58b-70e7-8414-6252a08e0953"
+                            target="_blank" class="social-icon" aria-label="HackTheBox">
+                            <img src="icons/hackthebox.svg" alt="HTB">
+                            <span class="tooltip">HackTheBox</span>
+                        </a>
+                        <a href="https://leetcode.com/u/ForcexDev/" target="_blank" class="social-icon"
+                            aria-label="LeetCode">
+                            <img src="icons/leetcode.svg" alt="LeetCode">
+                            <span class="tooltip">LeetCode</span>
+                        </a>
+                        <a href="https://www.hackerrank.com/profile/ezequiel_morales" target="_blank"
+                            class="social-icon" aria-label="HackerRank">
+                            <img src="icons/hackerrank.svg" alt="HackerRank">
+                            <span class="tooltip">HackerRank</span>
+                        </a>
+                    </div>
+
                 </div>
-                <!-- Contact Form with EmailJS -->
+
+                <!-- Contact Form (Directly on page) -->
                 <div class="contact-form-container">
                     <h3 class="contact-form-title" data-key="contactFormTitle"></h3>
                     <form id="contact-form" class="contact-form">
@@ -497,11 +507,16 @@
                                 placeholder="john@example.com" data-placeholder-key="formPlaceholderEmail">
                         </div>
                         <div class="form-group">
+                            <label for="subject" data-key="formSubject"></label>
+                            <input type="text" id="subject" name="subject" required placeholder="Project Inquiry"
+                                data-placeholder-key="formPlaceholderSubject">
+                        </div>
+                        <div class="form-group">
                             <label for="message" data-key="formMessage"></label>
                             <textarea id="message" name="message" required placeholder="Hello, I'd like to discuss..."
                                 data-placeholder-key="formPlaceholderMessage"></textarea>
                         </div>
-                        <button type="submit" class="submit-btn">
+                        <button type="submit" class="submit-btn" style="width: 100%;">
                             <span class="btn-text" data-key="formSend"></span>
                             <span class="btn-loading">
                                 <i class="fas fa-spinner"></i>
@@ -529,33 +544,78 @@
 
     <script src="js/translations.js"></script>
     <script src="js/data.js"></script>
-    <script src="js/projects.js"></script>
-    <script src="js/games/space-battle.js"></script>
-    <script src="js/contact.js"></script>
-    <script src="js/main.js"></script>
-
-    <a href="#home" id="backToTopBtn" class="back-to-top" title="Volver arriba">
-        <i class="fas fa-long-arrow-alt-up"></i>
-    </a>
-
-</body>
-
-</html><!-- CV Viewer Modal -->
-<div id="cvModal" class="project-modal-overlay">
-    <div class="project-modal-content cv-modal-content">
-        <button class="close-modal" onclick="closeCVModal()">&times;</button>
-        <div class="modal-body cv-modal-body">
-            <div class="cv-container">
-                <iframe id="cvFrame" src="" width="100%" height="100%" style="border: none;"></iframe>
-            </div>
-            <div class="modal-buttons cv-modal-buttons">
-                <a href="CVEzequiel_Morales2025-11.pdf" download class="cta-button modal-btn primary-btn">
-                    <i class="fas fa-download"></i> <span data-key="cvDownload">Download PDF</span>
-                </a>
-                <a href="CVEzequiel_Morales2025-11.pdf" target="_blank" class="cta-button modal-btn secondary-btn">
-                    <i class="fas fa-external-link-alt"></i> <span data-key="cvOpenExternal">Open in New Tab</span>
-                </a>
+    <!-- CV Viewer Modal -->
+    <div id="cvModal" class="project-modal-overlay">
+        <div class="project-modal-content cv-modal-content">
+            <button class="close-modal" onclick="closeCVModal()">&times;</button>
+            <div class="modal-body cv-modal-body">
+                <div class="cv-container">
+                    <iframe id="cvFrame" src="" width="100%" height="100%" style="border: none;"></iframe>
+                </div>
+                <div class="modal-buttons cv-modal-buttons">
+                    <a href="CVEzequiel_Morales2025-11.pdf" download class="cta-button modal-btn primary-btn">
+                        <i class="fas fa-download"></i> <span data-key="cvDownload">Download PDF</span>
+                    </a>
+                    <a href="CVEzequiel_Morales2025-11.pdf" target="_blank" class="cta-button modal-btn secondary-btn">
+                        <i class="fas fa-external-link-alt"></i> <span data-key="cvOpenExternal">Open in New Tab</span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <!-- Radio Widget (macOS Style) -->
+    <div id="radio-widget" class="radio-widget">
+        <button id="radio-close" class="radio-close-btn" aria-label="Close Radio">&times;</button>
+        <div class="radio-glass-bg"></div>
+        <div class="radio-content-wrapper">
+            <div class="radio-art">
+                <img src="https://i.pinimg.com/originals/f3/1c/37/f31c37d04bc557d383802be552140a80.gif" alt="Lofi Art"
+                    class="radio-cover">
+                <div class="radio-status-badge">
+                    <span class="status-dot"></span> LIVE
+                </div>
+            </div>
+            <div class="radio-details">
+                <div class="radio-title-scroll">
+                    <span class="radio-title-text">Lofi Girl - constant companion</span>
+                </div>
+                <div class="radio-controls-main">
+                    <button id="radio-prev" class="radio-btn nav-btn" aria-label="Previous">
+                        <i class="fas fa-step-backward"></i>
+                    </button>
+                    <button id="radio-toggle" class="radio-btn play-btn" aria-label="Play/Pause">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button id="radio-next" class="radio-btn nav-btn" aria-label="Next">
+                        <i class="fas fa-step-forward"></i>
+                    </button>
+                </div>
+                <div class="volume-container">
+                    <i class="fas fa-volume-down volume-icon"></i>
+                    <input type="range" id="radio-volume" class="volume-slider" min="0" max="100" value="30">
+                </div>
+            </div>
+        </div>
+        <!-- Hidden YouTube Player -->
+        <div id="radio-player-container"></div>
+    </div>
+
+
+
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <script src="js/translations.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/projects.js"></script>
+    <script src="js/games/space-battle.js"></script>
+    <script src="js/contact.js"></script>
+    <script src="js/radio.js"></script> <!-- New Radio Script -->
+    <script src="js/main.js"></script>
+
+
+
+</body>
+
+</html>

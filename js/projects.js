@@ -33,8 +33,47 @@ function renderProjects(lang) {
         // Add stagger for animation
         card.style.animationDelay = `${index * 0.1}s`;
 
-        // Tags HTML
-        const tagsHtml = project.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+        // Helper to map tags to devicons
+        const getIconClass = (tag) => {
+            const map = {
+                'React': 'devicon-react-original',
+                'Node.js': 'devicon-nodejs-plain',
+                'Socket.IO': 'devicon-socketio-original',
+                'MongoDB': 'devicon-mongodb-plain',
+                'Express': 'devicon-express-original',
+                'Cloudflare': 'fas fa-cloud', // FontAwesome fallback
+                'Real-time': 'fas fa-clock',
+                'FastAPI': 'devicon-fastapi-plain',
+                'PyTorch': 'devicon-pytorch-original',
+                'Docker': 'devicon-docker-plain',
+                'Redis': 'devicon-redis-plain',
+                'Java': 'devicon-java-plain',
+                'Data Structures': 'fas fa-code-branch',
+                'Algorithms': 'fas fa-microchip',
+                'Networking': 'fas fa-network-wired',
+                'TCP/IP': 'fas fa-server',
+                'Routing': 'fas fa-route',
+                'Python': 'devicon-python-plain',
+                'Jupyter': 'devicon-jupyter-plain',
+                'Programming': 'fas fa-laptop-code',
+                'Linux': 'devicon-linux-plain',
+                'Cybersecurity': 'fas fa-shield-alt',
+                'Bash': 'devicon-bash-plain',
+                'LaTeX': 'devicon-latex-original',
+                'SQL': 'fas fa-database',
+                'PostgreSQL': 'devicon-postgresql-plain',
+                'Database': 'fas fa-database'
+            };
+            return map[tag] || 'fas fa-code'; // Default icon
+        };
+
+        // Tags HTML with Icons
+        const tagsHtml = project.tags.map(tag => `
+            <span class="tag">
+                <i class="${getIconClass(tag)}"></i>
+                ${tag}
+            </span>
+        `).join('');
 
         card.innerHTML = `
             <div class="project-image-container">
@@ -65,33 +104,51 @@ function renderProjects(lang) {
         }
     });
 
-    // Add "View More" Button Logic
+    // Add "View More" Toggle Logic
     if (hasMore) {
         const btnContainer = document.createElement('div');
         btnContainer.className = 'load-more-container';
 
         const btn = document.createElement('button');
         btn.className = 'cta-button';
-        // Ensure translations exist
-        const viewMoreText = translations[lang]['viewMore'] || 'View More Projects';
 
-        btn.innerHTML = `
-            <span>${viewMoreText}</span>
-            <i class="fas fa-chevron-down" style="font-size: 0.8em; margin-left: 8px;"></i>
-        `;
+        let isExpanded = false;
+
+        const updateBtn = () => {
+            const viewMoreText = translations[lang]['viewMore'] || 'View More';
+            const viewLessText = translations[lang]['viewLess'] || 'View Less';
+
+            btn.innerHTML = `
+                <span>${isExpanded ? viewLessText : viewMoreText}</span>
+                <i class="fas fa-chevron-${isExpanded ? 'up' : 'down'}" style="font-size: 0.8em; margin-left: 8px;"></i>
+            `;
+        };
+
+        updateBtn();
 
         btn.onclick = () => {
             const hiddenProjects = document.querySelectorAll('.hidden-project');
-            hiddenProjects.forEach((p, i) => {
-                p.style.display = 'flex';
-                // Trigger reflow/animation
-                p.style.animation = 'none';
-                p.offsetHeight; /* trigger reflow */
-                p.style.animation = `cosmicEmergence 0.6s ease-out ${i * 0.1}s forwards`;
-                p.style.opacity = '0'; // reset for animation
-                p.classList.remove('hidden-project');
-            });
-            btnContainer.remove(); // Remove button after showing all
+
+            if (!isExpanded) {
+                // EXPAND
+                hiddenProjects.forEach((p, i) => {
+                    p.style.display = 'flex';
+                    // Trigger reflow/animation
+                    p.style.animation = 'none';
+                    p.offsetHeight; /* trigger reflow */
+                    p.style.animation = `cosmicEmergence 0.6s ease-out ${i * 0.1}s forwards`;
+                    p.style.opacity = '0'; // reset for animation
+                });
+                isExpanded = true;
+            } else {
+                // COLLAPSE
+                hiddenProjects.forEach(p => {
+                    p.style.display = 'none';
+                });
+
+                isExpanded = false;
+            }
+            updateBtn();
         };
 
         btnContainer.appendChild(btn);
@@ -128,10 +185,51 @@ function openProjectModal(projectId) {
     const modalTags = document.getElementById('modalTags');
     const modalButtons = document.querySelector('.modal-buttons');
 
+    // Helper to map tags to devicons (duplicated for safety)
+    const getIconClass = (tag) => {
+        const map = {
+            'React': 'devicon-react-original',
+            'Node.js': 'devicon-nodejs-plain',
+            'Socket.IO': 'devicon-socketio-original',
+            'MongoDB': 'devicon-mongodb-plain',
+            'Express': 'devicon-express-original',
+            'Cloudflare': 'fas fa-cloud',
+            'Real-time': 'fas fa-clock',
+            'FastAPI': 'devicon-fastapi-plain',
+            'PyTorch': 'devicon-pytorch-original',
+            'Docker': 'devicon-docker-plain',
+            'Redis': 'devicon-redis-plain',
+            'Java': 'devicon-java-plain',
+            'Data Structures': 'fas fa-code-branch',
+            'Algorithms': 'fas fa-microchip',
+            'Networking': 'fas fa-network-wired',
+            'TCP/IP': 'fas fa-server',
+            'Routing': 'fas fa-route',
+            'Python': 'devicon-python-plain',
+            'Jupyter': 'devicon-jupyter-plain',
+            'Programming': 'fas fa-laptop-code',
+            'Linux': 'devicon-linux-plain',
+            'Cybersecurity': 'fas fa-shield-alt',
+            'Bash': 'devicon-bash-plain',
+            'LaTeX': 'devicon-latex-original',
+            'SQL': 'fas fa-database',
+            'PostgreSQL': 'devicon-postgresql-plain',
+            'Database': 'fas fa-database'
+        };
+        return map[tag] || 'fas fa-code';
+    };
+
     modalTitle.textContent = title;
     modalImage.src = project.image;
     modalDesc.textContent = fullDesc;
-    modalTags.innerHTML = project.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+
+    // Updated Tags with Icons
+    modalTags.innerHTML = project.tags.map(tag => `
+        <span class="tag">
+            <i class="${getIconClass(tag)}"></i>
+            ${tag}
+        </span>
+    `).join('');
 
     // Clear existing buttons and rebuild dynamically
     modalButtons.innerHTML = '';

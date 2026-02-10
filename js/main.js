@@ -212,7 +212,7 @@ function createRealisticStars() {
 let _navbar = null;
 let _sections = null;
 let _navLinks = null;
-let _toTopBtn = null;
+
 
 function handleGlobalScroll() {
     const scrollY = window.scrollY;
@@ -247,14 +247,7 @@ function handleGlobalScroll() {
         });
     }
 
-    // 3. Back to top button visibility
-    if (_toTopBtn) {
-        if (scrollY > 300) {
-            _toTopBtn.classList.add('visible');
-        } else {
-            _toTopBtn.classList.remove('visible');
-        }
-    }
+
 }
 
 // Navigation
@@ -337,16 +330,7 @@ function initScrollAnimations() {
     window.globalObserver = observer;
 }
 
-// Back To Top (click handler only, scroll handled by unified handler)
-function initBackToTop() {
-    _toTopBtn = document.getElementById('backToTopBtn');
-    if (_toTopBtn) {
-        _toTopBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    }
-}
+
 
 // === MISSING FUNCTIONS RESTORED ===
 
@@ -504,7 +488,7 @@ document.addEventListener('DOMContentLoaded', () => {
         initNavigation();
         initScrollAnimations();
         // initMusicPlayer() removed
-        initBackToTop();
+
         // initCosmicCursor(); // Removed by user request
         initDynamicGlow();
 
@@ -680,3 +664,4 @@ document.addEventListener('DOMContentLoaded', () => {
         hideLoader();
     }
 });
+

@@ -111,7 +111,8 @@
 
 .cta-button {
     display: inline-block;
-    padding: 1.2rem 2.5rem;
+    padding: 0.8rem 2rem;
+    /* Slimmer, like CV button */
     background: transparent;
     border: 2px solid var(--nebula-blue);
     color: var(--stellar-white);
@@ -125,7 +126,8 @@
     animation: stellarGlow 0.8s ease-out 1.7s forwards;
     text-transform: uppercase;
     letter-spacing: 1px;
-    font-size: 1rem;
+    font-size: 0.9rem;
+    /* Matches CV button */
 }
 
 .cta-button:before {
@@ -192,7 +194,7 @@
     display: grid;
     /* Responsive Grid: min 350px per card, fits 3 on large screens */
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 2.5rem;
+    gap: 1.5rem;
     margin-top: 3rem;
 }
 
@@ -265,7 +267,7 @@
 
 .project-image-container {
     width: 100%;
-    height: 220px;
+    height: 240px;
     /* Fixed height for image */
     order: 1;
     /* Image first */
@@ -331,21 +333,51 @@
 }
 
 .tag {
-    background: rgba(66, 153, 225, 0.08);
-    color: var(--nebula-blue);
+    /* Clean Minimalist Pill */
+    display: inline-flex;
+    align-items: center;
     padding: 0.4rem 1rem;
-    border-radius: 25px;
+    border-radius: 50px;
+    /* Back to Pill shape */
+    background: rgba(66, 153, 225, 0.1);
+    color: var(--stellar-silver);
+    /* Softer white */
     font-size: 0.85rem;
-    font-weight: 600;
-    border: 1px solid rgba(66, 153, 225, 0.2);
-    text-shadow: 0 0 8px rgba(66, 153, 225, 0.3);
-    transition: var(--space-transition);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(66, 153, 225, 0.15);
+    transition: all 0.3s ease;
+}
+
+.tag i {
+    margin-right: 0.5rem;
+    font-size: 1em;
+    /* Match text size */
+    color: var(--nebula-bright);
 }
 
 .tag:hover {
-    background: rgba(66, 153, 225, 0.15);
+    background: var(--nebula-blue);
+    color: var(--deep-space);
+    /* High contrast dark text */
     border-color: var(--nebula-blue);
-    transform: scale(1.05);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(66, 153, 225, 0.3);
+}
+
+.tag:hover i {
+    color: var(--deep-space);
+}
+
+/* Compact Tags for Project Cards to save space */
+.project-card .project-tags {
+    gap: 0.4rem;
+    margin-bottom: 1.5rem;
+}
+
+.project-card .tag {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
 }
 
 .project-link {
@@ -472,7 +504,7 @@
 }
 
 .skill-info h4 {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 1.15rem;
     font-weight: 600;
     color: var(--stellar-white);
@@ -525,7 +557,7 @@
 }
 
 #skills .skill-item h4 {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--stellar-white);
@@ -565,78 +597,136 @@
     margin-bottom: 3rem;
 }
 
-.contact-links {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 3rem;
-}
-
-.contact-link {
+/* === CONTACT HUB (Floating Bar) === */
+.contact-hub-bar {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
-    padding: 1.5rem 2.5rem;
-    background: linear-gradient(135deg, rgba(26, 31, 58, 0.6) 0%, rgba(15, 20, 25, 0.8) 100%);
-    border: 2px solid rgba(66, 153, 225, 0.2);
+    /* Center icons */
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(66, 153, 225, 0.15);
     border-radius: 50px;
+    padding: 1rem 2rem;
+    max-width: fit-content;
+    /* Shrink to fit content */
+    margin: 0 auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.contact-icons-row {
+    display: flex;
+    gap: 1.2rem;
+    align-items: center;
+}
+
+.social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    /* Circle */
     color: var(--stellar-silver);
-    text-decoration: none;
-    font-weight: 600;
-    transition: var(--float-transition);
+    font-size: 1.4rem;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     position: relative;
-    overflow: hidden;
-    backdrop-filter: blur(10px);
-    text-shadow: 0 0 8px rgba(66, 153, 225, 0.2);
+    text-decoration: none;
 }
 
-.contact-link::before {
-    content: '';
+.social-icon img {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) invert(0.8);
+    /* Silver look */
+    transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+    background: rgba(66, 153, 225, 0.15);
+    border-color: var(--nebula-blue);
+    color: var(--stellar-white);
+    transform: scale(1.15) translateY(-3px);
+    box-shadow: 0 5px 15px rgba(66, 153, 225, 0.2);
+}
+
+.social-icon:hover img {
+    filter: brightness(0) invert(1);
+    /* Pure white */
+}
+
+/* Tooltip */
+.social-icon .tooltip {
     position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, var(--nebula-blue), var(--cosmic-purple));
-    transition: var(--float-transition);
-    z-index: -1;
+    bottom: 115%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: var(--deep-space);
+    color: var(--nebula-blue);
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(66, 153, 225, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    white-space: nowrap;
 }
 
-.contact-link:hover {
-    color: var(--deep-space);
-    border-color: var(--stellar-white);
-    /* No movement */
-    box-shadow: 0 15px 40px rgba(66, 153, 225, 0.3), 0 0 30px rgba(66, 153, 225, 0.5);
+.social-icon:hover .tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
 }
 
-.contact-link:hover::before {
-    left: 0;
+
+
+/* === RESPONSIVE CONTACT HUB === */
+@media (max-width: 768px) {
+    .contact-hub-bar {
+        flex-direction: column;
+        padding: 1.5rem;
+        border-radius: 20px;
+        gap: 1.5rem;
+    }
+
+    .contact-icons-row {
+        flex-wrap: wrap;
+        /* Grid-like behavior */
+        justify-content: center;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .social-icon {
+        width: 60px;
+        /* Bigger on mobile for touch */
+        height: 60px;
+        font-size: 1.6rem;
+    }
+
+    .contact-divider {
+        display: none;
+        /* Hide divider on vertical layout */
+    }
+
+    .msg-btn {
+        width: 100%;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 0.8rem;
+        border-radius: 12px;
+    }
 }
 
-.contact-link .contact-icon {
-    width: 1.5rem;
-    height: 1.5rem;
-    /* Make it white/silver to match text */
-    filter: brightness(0) saturate(100%) invert(90%) sepia(8%) saturate(300%) hue-rotate(180deg) brightness(100%) contrast(95%);
-    transition: var(--float-transition);
-}
 
-.contact-link:hover .contact-icon {
-    /* Turn black/dark on hover to match text */
-    filter: brightness(0) saturate(100%);
-    transform: scale(1.15);
-}
-
-.contact-link i {
-    font-size: 1.5rem;
-    transition: var(--space-transition);
-}
-
-.contact-link:hover i {
-    transform: scale(1.15);
-    filter: drop-shadow(0 0 8px currentColor);
-}
 
 /* === CONTACT FORM === */
 .contact-form-container {

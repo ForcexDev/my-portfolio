@@ -130,11 +130,13 @@ const translations = {
         'contactFormTitle': 'Send a direct message',
         'formName': 'Your Name',
         'formEmail': 'Your Email',
+        'formSubject': 'Subject', // New
         'formMessage': 'Your Message',
         'formSend': 'Send',
         'formSending': 'Transmitting...',
         'formPlaceholderName': 'Name',
         'formPlaceholderEmail': 'email@example.com',
+        'formPlaceholderSubject': 'Project Inquiry', // New
         'formPlaceholderMessage': 'Hello, I would like to discuss...',
         'formSuccess': 'Message sent successfully! I\'ll respond soon.',
         'formError': 'Failed to send message. Please try again or use email directly.',
@@ -150,7 +152,8 @@ const translations = {
         'cert3Org': 'FreeCodeCamp',
         'certLinkView': 'View',
         'certLinkProgress': 'In Progress',
-        'viewMore': 'View More'
+        'viewMore': 'View More',
+        'viewLess': 'View Less'
 
     },
 
@@ -287,11 +290,13 @@ const translations = {
         'contactFormTitle': 'Mensaje directo',
         'formName': 'Tu Nombre',
         'formEmail': 'Tu Email',
+        'formSubject': 'Asunto',
         'formMessage': 'Tu Mensaje',
         'formSend': 'Enviar',
         'formSending': 'Transmitiendo...',
         'formPlaceholderName': 'Nombre',
         'formPlaceholderEmail': 'correo@ejemplo.com',
+        'formPlaceholderSubject': 'Consulta de Proyecto',
         'formPlaceholderMessage': 'Hola, me gustaría hablar sobre...',
         'formSuccess': '¡Mensaje enviado exitosamente! Responderé pronto.',
         'formError': 'Error al enviar el mensaje. Por favor intenta de nuevo o usa el email directamente.',
@@ -307,6 +312,7 @@ const translations = {
         'cert3Org': 'FreeCodeCamp',
         'certLinkView': 'Ver',
         'certLinkProgress': 'En Progreso',
-        'viewMore': 'Ver Más'
+        'viewMore': 'Ver Más',
+        'viewLess': 'Ver Menos'
     }
 };

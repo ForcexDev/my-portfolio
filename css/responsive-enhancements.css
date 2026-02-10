@@ -125,8 +125,9 @@ html {
 
 @media (min-width: 1920px) {
     .cta-button {
-        padding: 1.1rem 2.5rem;
-        font-size: 1.1rem;
+        padding: 0.9rem 2.2rem;
+        /* Slimmer for large screens too */
+        font-size: 1rem;
     }
 
     .submit-btn {
@@ -367,5 +368,30 @@ textarea:focus-visible {
 
     .hero-banner {
         max-height: 1000px;
+    }
+
+    /* Force wider project cards on ultra-wide screens */
+    .projects-grid {
+        grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+        gap: 2.5rem;
+        /* More gap on huge screens */
+    }
+}
+
+@media (min-width: 1920px) {
+
+    /* Larger cards for 2K/4K */
+    .projects-grid {
+        grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+        gap: 2rem;
+    }
+
+    .project-image-container {
+        height: 280px;
+        /* Taller images */
+    }
+
+    .project-title {
+        font-size: 1.8rem;
     }
 }

@@ -51,6 +51,7 @@ function initContactForm() {
             const templateParams = {
                 from_name: form.from_name.value,
                 from_email: form.from_email.value,
+                subject: form.subject.value, // New field
                 message: form.message.value,
                 to_name: 'Ezequiel' // Your name
             };
