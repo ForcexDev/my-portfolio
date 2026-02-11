@@ -3,11 +3,12 @@ const projectsData = [
         id: 1,
         titleKey: 'project1Title',
         descKey: 'project1Desc',
-        image: 'img/ajedrez.png',
+        image: 'img/GCA-logo.png',
         tags: ['Node.js', 'Socket.IO', 'MongoDB', 'Express', 'Cloudflare', 'Real-time'],
-        github: 'https://github.com/ForcexDev/GrandChessAuto',
+        github: 'https://github.com/ForcexDev/GrandChessAuto_DesarrolloWeb',
         liveUrl: 'https://grandchessauto.forcex.dev/',
-        detailedDescKey: 'project1DetailedDesc'
+        detailedDescKey: 'project1DetailedDesc',
+        portfolioUrl: 'pages/grand-chess-auto-showcase.html'
     },
     {
         id: 7, // New ID
