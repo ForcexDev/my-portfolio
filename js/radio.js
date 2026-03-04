@@ -13,7 +13,7 @@ var currentStationIndex = 0;
 // Station Playlist
 const stations = [
     {
-        id: 'QOzC_AbsPlw',
+        id: 'AXvnFk38sDQ',
         title: 'Cosmic Radio - Deep Space Ambient',
         image: 'https://i.giphy.com/eHXed39iQn3TrMAZJO.webp' // Astronaut/Space
     },
