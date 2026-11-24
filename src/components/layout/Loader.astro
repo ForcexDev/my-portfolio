@@ -1,0 +1,329 @@
+---
+/**
+ * Pantalla de carga: el planeta con su satélite orbitando.
+ *
+ * Es CSS y no Three.js a propósito: esto tiene que estar pintado en el primer
+ * fotograma, y para entonces no ha llegado un solo byte de JavaScript.
+ *
+ * La esfera es limpia a propósito: un disco oscuro, un filo de luz nítido en
+ * el lado iluminado y un halo corto. Las manchas girando que tenía antes eran
+ * lo que la hacía parecer un planeta de salvapantallas de 2006 — un borde bien
+ * dibujado dice «esfera» mejor que cuatro degradados borrosos.
+ *
+ * El satélite conserva el truco del sitio viejo: `orbita` y `profundidad`
+ * comparten el mismo reloj de 4s, así crece y se pone delante del planeta a la
+ * vez (segundo 1) y encoge y se esconde detrás a la vez (segundo 3). La
+ * contrarrotación evita que el punto se aplaste al estar el aro inclinado.
+ */
+import { bootLog } from '@/data/hero';
+import type { Idioma } from '@/i18n';
+
+interface Props {
+  idioma: Idioma;
+}
+const { idioma } = Astro.props;
+---
+
+<div id="cosmic-loader" class="cosmic-loader">
+  <div class="loader-content">
+    <div class="mundo">
+      <div class="planeta"></div>
+      <span class="aire"></span>
+      <div class="aro"></div>
+      <div class="aro aro--segundo"></div>
+      <div class="orbita"><span class="satelite"></span></div>
+    </div>
+
+    <ul class="boot-log" aria-hidden="true">
+      {
+        bootLog.map((linea, i) => (
+          <li style={`--linea: ${i}`}>
+            <span class="boot-t">[ {linea.t} ]</span>
+            <span class="boot-msg">{linea.msg[idioma]}</span>
+            {i === bootLog.length - 1 && <span class="boot-ok">[ OK ]</span>}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>
+
+<script>
+  // Se esconde al terminar de cargar, con red de seguridad a los 3s por si
+  // `load` no llega nunca (una imagen colgada basta para eso).
+  const loader = document.getElementById('cosmic-loader');
+  const esconder = () => loader?.classList.add('hidden');
+  window.addEventListener('load', () => setTimeout(esconder, 400));
+  setTimeout(esconder, 3000);
+</script>
+
+<style>
+  .cosmic-loader {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    transition:
+      opacity 0.8s ease-out,
+      visibility 0.8s ease-out;
+  }
+  .cosmic-loader.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .loader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  /* --- el sistema --- */
+  .mundo {
+    position: relative;
+    width: 230px;
+    height: 230px;
+    margin-bottom: 3rem;
+    transform-style: preserve-3d;
+    perspective: 700px;
+    animation: flota 6s ease-in-out infinite;
+  }
+
+  /* Disco oscuro con un filo de luz arriba a la izquierda. El `inset` blanco
+     dibuja el borde iluminado y el negro hunde el lado de la noche: dos
+     sombras, ninguna textura. */
+  .planeta {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 132px;
+    height: 132px;
+    margin: -66px 0 0 -66px;
+    z-index: 10;
+    border-radius: 50%;
+    background: radial-gradient(circle at 34% 30%, #12365f 0%, #08182e 52%, #030a17 100%);
+    box-shadow:
+      inset 3px 3px 10px -2px rgb(186 232 255 / 0.85),
+      inset -22px -18px 34px -10px rgb(0 0 0 / 0.9),
+      0 0 60px rgb(66 153 225 / 0.28);
+  }
+
+  /* El filo de atmósfera: un anillo finísimo justo por fuera de la esfera. */
+  .aire {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 168px;
+    height: 168px;
+    margin: -84px 0 0 -84px;
+    z-index: 2;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle, transparent 77.5%, rgb(0 243 255 / 0.55) 79.5%, transparent 83%),
+      radial-gradient(circle, rgb(66 153 225 / 0.14) 0%, transparent 74%);
+    animation: var(--animate-pulse-glow);
+    pointer-events: none;
+  }
+
+  .aro {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 210px;
+    height: 210px;
+    margin: -105px 0 0 -105px;
+    z-index: 5;
+    border: 1px solid rgb(0 243 255 / 0.22);
+    border-radius: 50%;
+    box-shadow: 0 0 12px rgb(0 243 255 / 0.12);
+    transform: rotateX(74deg) rotateY(-10deg);
+    transform-style: preserve-3d;
+  }
+
+  /* Un segundo aro en otro plano: dos elipses finas cruzándose es lo que hace
+     que se lea como un sistema y no como un círculo con un borde. */
+  .aro--segundo {
+    width: 178px;
+    height: 178px;
+    margin: -89px 0 0 -89px;
+    border-color: rgb(159 122 234 / 0.2);
+    box-shadow: none;
+    transform: rotateX(68deg) rotateY(38deg) rotateZ(24deg);
+  }
+
+  .orbita {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 210px;
+    height: 210px;
+    margin: -105px 0 0 -105px;
+    border-radius: 50%;
+    transform-style: preserve-3d;
+    animation: orbita 4s linear infinite;
+  }
+  .satelite {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 9px;
+    height: 9px;
+    margin-left: -4.5px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #fff, #a0eaff);
+    box-shadow:
+      0 0 15px #fff,
+      0 0 30px var(--color-neon-cyan);
+    animation:
+      profundidad 4s linear infinite,
+      contragiro 4s linear infinite;
+  }
+
+  /* --- log de arranque --- */
+  /* Antes era de 0.75rem y en gris apagado: en mono, a ese tamaño y con ese
+     contraste, no se leía. `tabular-nums` alinea los tiempos en columna sin
+     rellenar con espacios a mano. */
+  .boot-log {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 2;
+    letter-spacing: 0.01em;
+    color: var(--color-silver);
+    font-variant-numeric: tabular-nums;
+    text-align: left;
+    min-width: min(22rem, 88vw);
+  }
+  .boot-log li {
+    display: flex;
+    gap: 0.9rem;
+    opacity: 0;
+    animation: bootIn 0.3s ease-out forwards;
+    /* cada línea entra 0.35s después de la anterior */
+    animation-delay: calc(var(--linea) * 0.35s + 0.2s);
+  }
+  .boot-t {
+    color: var(--color-nebula);
+    opacity: 0.85;
+  }
+  .boot-ok {
+    color: #4ade80;
+    margin-left: auto;
+  }
+
+  @keyframes bootIn {
+    from {
+      opacity: 0;
+      transform: translateX(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* La cara del satélite mira siempre a cámara: si no, el aro inclinado 74° lo
+     dejaría como una raya en vez de una esfera. */
+  @keyframes contragiro {
+    0% {
+      transform: rotateZ(0deg) rotateY(10deg) rotateX(-74deg);
+    }
+    100% {
+      transform: rotateZ(-360deg) rotateY(10deg) rotateX(-74deg);
+    }
+  }
+
+  /* Recorrido: 3h (derecha) → 6h (delante) → 9h (izquierda) → 12h (detrás).
+     El z-index cambia en los mismos puntos que la escala. */
+  @keyframes orbita {
+    0% {
+      transform: rotateX(74deg) rotateY(-10deg) rotateZ(0deg);
+      z-index: 5;
+    }
+    25% {
+      z-index: 20;
+    }
+    26% {
+      z-index: 20;
+    }
+    50% {
+      z-index: 5;
+    }
+    75% {
+      z-index: 1;
+    }
+    100% {
+      transform: rotateX(74deg) rotateY(-10deg) rotateZ(360deg);
+      z-index: 5;
+    }
+  }
+
+  @keyframes profundidad {
+    0% {
+      transform: scale(1);
+      opacity: 0.9;
+      filter: blur(0);
+      box-shadow:
+        0 0 15px #fff,
+        0 0 30px #00f3ff;
+    }
+    25% {
+      transform: scale(1.6);
+      opacity: 1;
+      filter: blur(0);
+      box-shadow:
+        0 0 25px #fff,
+        0 0 50px #00f3ff;
+    }
+    50% {
+      transform: scale(1);
+      opacity: 0.9;
+      filter: blur(0);
+      box-shadow:
+        0 0 15px #fff,
+        0 0 30px #00f3ff;
+    }
+    75% {
+      transform: scale(0.4);
+      opacity: 0.5;
+      filter: blur(2px);
+      box-shadow: none;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0.9;
+      filter: blur(0);
+      box-shadow:
+        0 0 15px #fff,
+        0 0 30px #00f3ff;
+    }
+  }
+
+  @keyframes flota {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  /* Quien pidió menos movimiento ve el planeta quieto, no una pantalla en blanco */
+  @media (prefers-reduced-motion: reduce) {
+    .mundo,
+    .aire,
+    .orbita,
+    .satelite,
+    .boot-log li {
+      animation: none;
+    }
+    .boot-log li {
+      opacity: 1;
+    }
+  }
+</style>

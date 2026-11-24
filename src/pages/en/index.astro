@@ -1,0 +1,32 @@
+---
+import Base from '@/layouts/Base.astro';
+import Hero from '@/components/hero/Hero.astro';
+import SobreMi from '@/components/sections/SobreMi.astro';
+import Proyectos from '@/components/sections/Proyectos.astro';
+import Trayectoria from '@/components/sections/Trayectoria.astro';
+import Skills from '@/components/sections/Skills.astro';
+import Logros from '@/components/sections/Logros.astro';
+import Certificaciones from '@/components/sections/Certificaciones.astro';
+import Juego from '@/components/widgets/Juego.astro';
+import Contacto from '@/components/sections/Contacto.astro';
+import { ruta } from '@/i18n';
+
+const idioma = 'en' as const;
+---
+
+<Base
+  titulo="ForcexDev — Ezequiel Morales"
+  descripcion="Ezequiel Morales' portfolio: cybersecurity, networking and secure development. Projects, timeline and certifications."
+  {idioma}
+  rutaAlterna={ruta('', 'es')}
+>
+  <Hero {idioma} />
+  <SobreMi {idioma} />
+  <Proyectos {idioma} />
+  <Trayectoria {idioma} />
+  <Skills {idioma} />
+  <Logros {idioma} />
+  <Certificaciones {idioma} />
+  <Juego {idioma} />
+  <Contacto {idioma} />
+</Base>

@@ -1,0 +1,91 @@
+---
+titulo: 'Grand Chess Auto: Reimagined'
+resumen: 'Ajedrez multijugador en tiempo real con estética Retrowave/GTA. Sincronización por WebSockets, relojes con compensación de latencia y self-hosting tras Cloudflare Zero Trust.'
+area: 'full-stack'
+estado: 'desplegado'
+anio: 2025
+rol: 'Full Stack Architect y DevOps'
+stack:
+  - 'Node.js'
+  - 'Express'
+  - 'Socket.IO'
+  - 'MongoDB'
+  - 'Handlebars'
+  - 'Cloudflare'
+imagen: '../../../assets/img/GCA-logo.png'
+imagenAlt: 'Logotipo de Grand Chess Auto'
+enlaces:
+  repo: 'https://github.com/ForcexDev/GrandChessAuto_DesarrolloWeb'
+  demo: 'https://grandchessauto.forcex.dev/'
+orden: 5
+---
+
+import Funciones from '@/components/content/Funciones.astro';
+import HojaDeRuta from '@/components/content/HojaDeRuta.astro';
+import Callout from '@/components/content/Callout.astro';
+import Figura from '@/components/content/Figura.astro';
+
+Ajedrez online multijugador con estética Retrowave/GTA. Nace de chocar con los
+límites de una versión anterior: donde el proyecto original se paró, este empieza,
+reescribiendo el núcleo desde cero.
+
+## De "Fase 3" a "Reimagined"
+
+| | Legado (Fase 3) | Reimagined |
+|---|---|---|
+| Sincronización | *Polling* con `fetch`, lento | WebSockets con Socket.IO |
+| Motor lógico | Básico e incompleto | Chess.js modificado |
+| Interfaz | CSS estándar | Glassmorphism |
+| Modo offline | No funcionaba | Persistente en LocalStorage |
+| Seguridad | Básica | Sesiones robustas y WAF |
+
+## Sincronización en tiempo real
+
+Cada movimiento, captura y mensaje viaja por **WebSockets**. La diferencia con el
+*polling* de la versión anterior no es de velocidad: es que el servidor avisa cuando
+pasa algo, en vez de que el cliente pregunte cada pocos segundos si pasó algo.
+
+Los relojes llevan **compensación de latencia** cliente-servidor, que es lo que
+evita que quien tenga peor conexión pierda por tiempo sin merecerlo.
+
+<Figura video="video/responsive-ui" alt="La interfaz adaptándose a varios tamaños de pantalla" pie="La interfaz, de un monitor 4K a un móvil, con la misma estética." />
+
+## Funcionalidades
+
+<Funciones items={[
+  { icono: 'lucide:eye', titulo: 'Modo espectador', texto: 'Ver partidas en curso sin interrumpirlas, actualizándose en tiempo real.' },
+  { icono: 'lucide:timer', titulo: 'Relojes de precisión', texto: 'Compensación automática de latencia servidor-cliente para que el reloj sea justo.' },
+  { icono: 'lucide:message-square', titulo: 'Chat integrado', texto: 'Canal global y canal por sala, para hablar con el rival durante la partida.' },
+  { icono: 'lucide:crown', titulo: 'Coronación táctil', texto: 'Selección gráfica de la pieza al coronar un peón, pensada para pantalla táctil.' },
+  { icono: 'lucide:volume-2', titulo: 'Sonido con intención', texto: 'Un sonido distinto por movimiento, captura y jaque: se oye el estado de la partida.' },
+  { icono: 'lucide:radio', titulo: 'Radio dentro del juego', texto: 'Reproductor LoFi integrado, para que el ambiente retro-futurista no dependa de otra pestaña.' },
+]} />
+
+## Infraestructura
+
+- **Identidad**: autenticación por correo con Resend API, firmando desde el dominio
+  `forcex.dev`.
+- **Seguridad**: WAF de Cloudflare con reglas propias y **Turnstile** contra bots.
+- **Alojamiento**: corre en un servidor propio (homelab), expuesto por **Cloudflare
+  Zero Trust Tunnels**.
+
+<Callout tipo="seguridad" titulo="Por qué un túnel y no abrir puertos">
+  El túnel establece la conexión desde dentro hacia fuera, así que el router no
+  necesita ningún puerto abierto a internet. No hay superficie que escanear: lo que
+  no está publicado, no se ataca.
+</Callout>
+
+## Hoja de ruta
+
+<HojaDeRuta hitos={[
+  { estado: 'hecho', titulo: 'Motor de ajedrez completo', texto: 'Movimientos legales, jaque mate, tablas, enroque y validación estricta.' },
+  { estado: 'hecho', titulo: 'Chat en tiempo real', texto: 'Canales globales y por sala de juego.' },
+  { estado: 'curso', titulo: 'Historial de partidas en PGN', texto: 'Guardado en MongoDB para poder revisar y analizar las jugadas después.' },
+  { estado: 'pendiente', titulo: 'Sistema de clasificación ELO', texto: 'Emparejamiento por nivel y tabla de líderes global.' },
+]} />
+
+## Créditos
+
+**ForcexDev** — dirección técnica, infraestructura, motor lógico y reescritura del
+núcleo.
+**BurnedGPU** — cofundador en las fases tempranas del diseño original.

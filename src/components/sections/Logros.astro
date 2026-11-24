@@ -1,0 +1,151 @@
+---
+/**
+ * Sección nueva: los CTF y la maratón de programación del CV, que en el sitio
+ * viejo no aparecían por ningún lado.
+ *
+ * Cada logro lleva un resultado en grande (`destacado`) y debajo el historial
+ * de ediciones, porque en un CTF lo interesante no es solo la última posición
+ * sino que se repite la participación.
+ */
+import { Icon } from 'astro-icon/components';
+import Seccion from '@/components/layout/Seccion.astro';
+import { useTraducciones, type Idioma } from '@/i18n';
+import { logros } from '@/data/achievements';
+import { mes } from '@/utils/fechas';
+
+interface Props {
+  idioma: Idioma;
+}
+const { idioma } = Astro.props;
+const t = useTraducciones(idioma);
+---
+
+<Seccion id="logros" titulo={t('logros.titulo')} subtitulo={t('logros.subtitulo')}>
+  <div class="rejilla">
+    {
+      logros.map((logro) => (
+        <article class="logro sys-window sys-window--hover reveal">
+          <div class="sys-body logro__cuerpo">
+            <header class="logro__cabecera">
+              <span class="logro__ico">
+                <Icon name={logro.icono} />
+              </span>
+              <div>
+                <h3 class="logro__titulo">{logro.titulo}</h3>
+                <p class="logro__org">{logro.organizador[idioma]}</p>
+              </div>
+            </header>
+
+            <p class="logro__destacado">
+              {logro.destacado[idioma]}
+              <span class="logro__periodo">{logro.periodo}</span>
+            </p>
+
+            <ul class="ediciones">
+              {logro.ediciones.map((edicion) => (
+                <li>
+                  <span class="ediciones__fecha">{mes(edicion.fecha, idioma)}</span>
+                  <span>{edicion.resultado[idioma]}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</Seccion>
+
+<style>
+  .rejilla {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+    gap: 1.5rem;
+  }
+
+  .logro__cuerpo {
+    padding: 1.5rem 1.6rem;
+    border-radius: 0.45rem;
+  }
+
+  .logro__cabecera {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    margin-bottom: 1.2rem;
+  }
+  .logro__ico {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 2.6rem;
+    height: 2.6rem;
+    border: 1px solid rgb(66 153 225 / 0.25);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--color-cosmic) 15%, transparent);
+    color: var(--color-neon-cyan);
+    font-size: 1.2rem;
+  }
+  .logro__titulo {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.12rem;
+    color: var(--color-stellar);
+  }
+  .logro__org {
+    margin: 0.2rem 0 0;
+    color: var(--color-dim);
+    font-size: 0.82rem;
+  }
+
+  .logro__destacado {
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+    margin: 0 0 1.1rem;
+    padding-bottom: 1.1rem;
+    border-bottom: 1px solid rgb(66 153 225 / 0.12);
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    /* El degradado sobre el texto: el mismo truco del título del hero. */
+    background: linear-gradient(120deg, var(--color-neon-cyan), var(--color-magenta));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+  .logro__periodo {
+    color: var(--color-dim);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    /* hereda el `color: transparent` de arriba si no se corta aquí */
+    background: none;
+    -webkit-text-fill-color: var(--color-dim);
+  }
+
+  .ediciones {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .ediciones li {
+    display: grid;
+    grid-template-columns: 5.6rem 1fr;
+    gap: 0.8rem;
+    padding: 0.4rem 0;
+    color: var(--color-silver);
+    font-size: 0.86rem;
+    line-height: 1.5;
+  }
+  .ediciones__fecha {
+    color: var(--color-nebula);
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+  }
+
+  @media (max-width: 520px) {
+    .ediciones li {
+      grid-template-columns: 1fr;
+      gap: 0.15rem;
+    }
+  }
+</style>

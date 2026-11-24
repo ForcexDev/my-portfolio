@@ -1,0 +1,161 @@
+---
+/**
+ * Certificaciones e idiomas, de src/data/certifications.ts.
+ *
+ * La tarjeta es la `.skill-item.cert-card` del sitio viejo, copiada de
+ * css/components.css:421-464 (la caja y su barrido al pasar el ratón) y
+ * :921-955 (la píldora redonda de "Ver" / "En Progreso"): logo a la izquierda,
+ * título y emisor en medio, píldora a la derecha.
+ *
+ * El logo sale de astro-icon y pinta con `currentColor`, así que el color lo
+ * pone la propia tarjeta. El sitio viejo lo conseguía con un `filter:
+ * brightness(0) invert(...)` de siete funciones sobre un SVG negro, porque
+ * css/certifications.css (75 líneas) nunca llegó a enlazarse.
+ */
+import { Icon } from 'astro-icon/components';
+import Seccion from '@/components/layout/Seccion.astro';
+import { useTraducciones, type Idioma } from '@/i18n';
+import { certificaciones, idiomas } from '@/data/certifications';
+
+interface Props {
+  idioma: Idioma;
+}
+const { idioma } = Astro.props;
+const t = useTraducciones(idioma);
+---
+
+<Seccion id="certificaciones" titulo={t('certs.titulo')}>
+  <div class="rejilla">
+    {
+      certificaciones.map((cert) => (
+        <article class="cert panel reveal">
+          <Icon name={cert.icono} class="cert__ico" />
+
+          <div class="cert__texto">
+            <h3 class="cert__titulo">{cert.titulo[idioma]}</h3>
+            <p class="cert__emisor">{cert.emisor}</p>
+          </div>
+
+          {cert.url ? (
+            <a href={cert.url} class="pildora" target="_blank" rel="noopener noreferrer">
+              {t('certs.ver')}
+            </a>
+          ) : (
+            <span class="pildora pildora--curso">{t('certs.enCurso')}</span>
+          )}
+        </article>
+      ))
+    }
+
+    {/* Los idiomas son del CV y no tenían sitio en la web vieja. Van como una
+        tarjeta más para que no desentonen con las de arriba. */}
+    <article class="cert panel reveal">
+      <Icon name="lucide:languages" class="cert__ico" />
+      <div class="cert__texto">
+        <h3 class="cert__titulo">{t('certs.idiomas')}</h3>
+        <p class="cert__emisor">
+          {idiomas.map((lengua) => `${lengua.nombre[idioma]} ${lengua.nivel}`).join(' · ')}
+        </p>
+      </div>
+    </article>
+  </div>
+</Seccion>
+
+<style>
+  .rejilla {
+    display: grid;
+    /* 340 y no los 250 del sitio viejo: con títulos de tres palabras a 250 px
+       la píldora se le montaba encima al texto. */
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+    gap: 2rem;
+  }
+
+  /* La pinta (cristal, destello y encendido) la pone `.panel` en cosmic.css;
+     aqui solo como se colocan las tres piezas dentro. */
+  .cert {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1.8rem;
+  }
+
+  .cert__ico {
+    flex-shrink: 0;
+    width: 45px;
+    height: 45px;
+    color: var(--color-nebula);
+    transition: all 0.3s var(--ease-space);
+  }
+  .cert:hover .cert__ico {
+    color: var(--color-stellar);
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 10px rgb(66 153 225 / 0.8));
+  }
+
+  /* `min-width: 0` para que un título largo parta línea en vez de empujar la
+     píldora fuera de la tarjeta (css/components.css:916-919). */
+  .cert__texto {
+    flex-grow: 1;
+    min-width: 0;
+  }
+  .cert__titulo {
+    margin: 0 0 0.4rem;
+    overflow-wrap: break-word;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--color-stellar);
+    text-shadow: 0 0 8px rgb(255 255 255 / 0.2);
+  }
+  .cert__emisor {
+    margin: 0;
+    color: var(--color-dim);
+    font-size: 0.95rem;
+  }
+
+  /* css/components.css:921-955 */
+  .pildora {
+    display: inline-block;
+    flex-shrink: 1;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-nebula);
+    border-radius: 25px;
+    background: transparent;
+    color: var(--color-nebula);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: all 0.3s var(--ease-space);
+  }
+  /* Se tiñe, no se rellena: el azul solido del sitio viejo rompia el cristal
+     de la tarjeta que la contiene. */
+  .pildora:hover,
+  .pildora:focus-visible {
+    background: rgb(66 153 225 / 0.18);
+    color: var(--color-stellar);
+    box-shadow: 0 0 15px rgb(66 153 225 / 0.4);
+    transform: scale(1.05);
+  }
+  /* La de "en progreso" no lleva a ningún sitio: apagada y sin reaccionar. */
+  .pildora--curso,
+  .pildora--curso:hover {
+    border-color: var(--color-dim);
+    background: transparent;
+    color: var(--color-dim);
+    cursor: default;
+    box-shadow: none;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cert__ico,
+    .pildora {
+      transition: none;
+    }
+    .cert:hover .cert__ico,
+    .pildora:hover {
+      transform: none;
+    }
+  }
+</style>

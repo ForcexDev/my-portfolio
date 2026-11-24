@@ -1,0 +1,202 @@
+---
+/**
+ * Sección nueva: no había nada parecido en el sitio viejo, y era justo lo que
+ * faltaba del CV — las dos ayudantías, la práctica de investigación y lo laboral.
+ *
+ * Se lee de src/data/experience.ts y se ordena sola por fecha, así que una
+ * entrada nueva se pega en cualquier posición del array y cae donde toca.
+ *
+ * Las fechas se formatean con Intl, que ya sabe decir «ago. 2026» y «Aug 2026»
+ * sin que haya que mantener una tabla de meses por idioma.
+ */
+import { Icon } from 'astro-icon/components';
+import Seccion from '@/components/layout/Seccion.astro';
+import { useTraducciones, type Idioma } from '@/i18n';
+import { trayectoriaOrdenada } from '@/data/experience';
+import { mes } from '@/utils/fechas';
+
+interface Props {
+  idioma: Idioma;
+}
+const { idioma } = Astro.props;
+const t = useTraducciones(idioma);
+
+const iconos = {
+  educacion: 'lucide:graduation-cap',
+  academico: 'lucide:flask-conical',
+  laboral: 'lucide:briefcase',
+} as const;
+---
+
+<Seccion
+  id="trayectoria"
+  titulo={t('trayectoria.titulo')}
+  subtitulo={t('trayectoria.subtitulo')}
+>
+  <ol class="linea">
+    {
+      trayectoriaOrdenada.map((entrada) => (
+        <li class={`hito hito--${entrada.tipo} reveal`}>
+          <span class="hito__nodo" aria-hidden="true">
+            <Icon name={iconos[entrada.tipo]} />
+          </span>
+
+          <div class="hito__caja panel panel--quieto">
+            <p class="hito__fechas">
+              <span class="hito__tipo">{t(`trayectoria.${entrada.tipo}`)}</span>
+              <span>
+                {mes(entrada.desde, idioma)} — {entrada.hasta ? mes(entrada.hasta, idioma) : t('trayectoria.actualidad')}
+              </span>
+            </p>
+
+            <h3 class="hito__rol">{entrada.rol[idioma]}</h3>
+            <p class="hito__lugar">
+              {entrada.lugar[idioma]}
+              <span class="hito__sep" aria-hidden="true">·</span>
+              {entrada.ubicacion}
+            </p>
+
+            <ul class="hito__puntos">
+              {entrada.puntos[idioma].map((punto) => (
+                <li>{punto}</li>
+              ))}
+            </ul>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</Seccion>
+
+<style>
+  .linea {
+    position: relative;
+    max-width: 52rem;
+    margin: 0 auto;
+    padding: 0 0 0 2.6rem;
+    list-style: none;
+  }
+  /* El hilo vertical. Se desvanece abajo para que no acabe en corte seco. */
+  .linea::before {
+    content: '';
+    position: absolute;
+    top: 0.6rem;
+    bottom: 2rem;
+    left: 0.72rem;
+    width: 2px;
+    background: linear-gradient(
+      to bottom,
+      var(--color-nebula),
+      var(--color-cosmic) 60%,
+      transparent
+    );
+  }
+
+  .hito {
+    position: relative;
+    margin-bottom: 1.6rem;
+  }
+  .hito:last-child {
+    margin-bottom: 0;
+  }
+
+  .hito__nodo {
+    position: absolute;
+    top: 1.15rem;
+    left: -2.6rem;
+    display: grid;
+    place-items: center;
+    width: 1.7rem;
+    height: 1.7rem;
+    border: 1px solid var(--tono);
+    border-radius: 50%;
+    background: var(--color-space);
+    color: var(--tono);
+    font-size: 0.82rem;
+  }
+  .hito--educacion {
+    --tono: var(--color-magenta);
+  }
+  .hito--academico {
+    --tono: var(--color-neon-cyan);
+  }
+  .hito--laboral {
+    --tono: var(--color-nebula);
+  }
+
+  .hito__caja {
+    padding: 1.2rem 1.4rem;
+    border-radius: 12px;
+    border-left: 2px solid var(--tono);
+  }
+
+  .hito__fechas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0 0 0.5rem;
+    color: var(--color-dim);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+  }
+  .hito__tipo {
+    padding: 0.12rem 0.5rem;
+    border: 1px solid var(--tono);
+    border-radius: 999px;
+    color: var(--tono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 0.66rem;
+  }
+
+  .hito__rol {
+    margin: 0 0 0.25rem;
+    font-family: var(--font-display);
+    font-size: 1.08rem;
+    line-height: 1.3;
+    color: var(--color-stellar);
+  }
+  .hito__lugar {
+    margin: 0 0 0.8rem;
+    color: var(--color-silver);
+    font-size: 0.86rem;
+  }
+  .hito__sep {
+    margin: 0 0.35rem;
+    opacity: 0.5;
+  }
+
+  .hito__puntos {
+    margin: 0;
+    padding-left: 1.1rem;
+    list-style: disc;
+    color: var(--color-dim);
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+  .hito__puntos li {
+    margin: 0.35rem 0;
+  }
+  .hito__puntos li::marker {
+    color: var(--tono);
+  }
+
+  @media (max-width: 600px) {
+    .linea {
+      padding-left: 1.9rem;
+    }
+    .linea::before {
+      left: 0.42rem;
+    }
+    .hito__nodo {
+      left: -1.9rem;
+      width: 1.3rem;
+      height: 1.3rem;
+      font-size: 0.66rem;
+    }
+    .hito__caja {
+      padding: 1rem 1.1rem;
+    }
+  }
+</style>

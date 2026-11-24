@@ -1,0 +1,100 @@
+---
+/**
+ * Hoja de ruta: lo hecho, lo que está en marcha y lo que viene.
+ *
+ *   <HojaDeRuta hitos={[
+ *     { estado: 'hecho', titulo: 'Motor completo', texto: '...' },
+ *     { estado: 'curso', titulo: 'Historial PGN', texto: '...' },
+ *     { estado: 'pendiente', titulo: 'ELO', texto: '...' },
+ *   ]} />
+ */
+import { Icon } from 'astro-icon/components';
+
+interface Hito {
+  estado: 'hecho' | 'curso' | 'pendiente';
+  titulo: string;
+  texto: string;
+}
+interface Props {
+  hitos: Hito[];
+}
+const { hitos } = Astro.props;
+
+const iconos = {
+  hecho: 'lucide:circle-check',
+  curso: 'lucide:loader-circle',
+  pendiente: 'lucide:circle-dashed',
+} as const;
+---
+
+<ol class="ruta">
+  {
+    hitos.map((h) => (
+      <li class={`hito hito--${h.estado}`}>
+        <Icon name={iconos[h.estado]} class="ico" />
+        <div>
+          <p class="titulo">{h.titulo}</p>
+          <p class="texto">{h.texto}</p>
+        </div>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .ruta {
+    position: relative;
+    margin: 1.75rem 0;
+    padding-left: 0.4rem;
+  }
+  /* La línea vertical que une los hitos */
+  .ruta::before {
+    content: '';
+    position: absolute;
+    top: 0.9rem;
+    bottom: 0.9rem;
+    left: 0.85rem;
+    width: 2px;
+    background: linear-gradient(180deg, var(--color-nebula), rgb(66 153 225 / 0.08));
+  }
+
+  .hito {
+    position: relative;
+    display: flex;
+    gap: 0.9rem;
+    padding: 0.65rem 0;
+  }
+  .ico {
+    flex-shrink: 0;
+    z-index: 1;
+    margin-top: 0.1rem;
+    font-size: 1rem;
+    border-radius: 50%;
+    background: var(--color-space);
+    box-shadow: 0 0 0 4px var(--color-space);
+  }
+  .hito--hecho .ico {
+    color: #4ade80;
+  }
+  .hito--curso .ico {
+    color: var(--color-neon-cyan);
+  }
+  .hito--pendiente .ico {
+    color: var(--color-dim);
+    opacity: 0.5;
+  }
+
+  .titulo {
+    font-weight: 600;
+    color: var(--color-stellar);
+  }
+  .hito--pendiente .titulo {
+    color: var(--color-dim);
+  }
+  .texto {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--color-dim);
+    opacity: 0.85;
+  }
+</style>

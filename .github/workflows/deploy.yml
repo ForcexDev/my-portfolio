@@ -1,0 +1,42 @@
+# Publica el sitio en GitHub Pages en cada push a main.
+#
+# PASO MANUAL, una sola vez: Settings → Pages → Source → "GitHub Actions".
+# Mientras esté en "Deploy from a branch" este workflow construye pero no
+# publica nada, y el sitio se queda con lo último que hubiera en la rama.
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  # para poder relanzarlo a mano desde la pestaña Actions
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Si se empujan dos commits seguidos, el segundo espera al primero en vez de
+# pelearse por el despliegue.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  # withastro/action instala, construye y sube dist/ como artefacto de Pages.
+  # La versión de Node y el gestor los saca del lockfile; no hay que decirle nada.
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: withastro/action@v6
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

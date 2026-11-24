@@ -1,0 +1,76 @@
+---
+titulo: 'Bandit (OverTheWire)'
+resumen: 'Documentación en LaTeX de la metodología y solución del wargame Bandit: comandos de Linux, permisos y explotación básica, nivel a nivel.'
+area: 'seguridad'
+estado: 'en-curso'
+anio: 2026
+rol: 'Documentación propia'
+stack:
+  - 'Linux'
+  - 'Bash'
+  - 'SSH'
+  - 'LaTeX'
+imagen: '../../../assets/img/bandit.png'
+imagenAlt: 'Portada del write-up de Bandit'
+enlaces:
+  repo: 'https://github.com/ForcexDev/Bandit-WriteUp'
+orden: 7
+---
+
+import Callout from '@/components/content/Callout.astro';
+
+Bandit es el wargame con el que casi todo el mundo empieza en OverTheWire. Cada
+nivel esconde la contraseña del siguiente en algún sitio del sistema, y para
+sacarla hay que aprender una cosa nueva de Linux.
+
+Esto no es una lista de respuestas: es el **porqué** de cada comando, escrito
+mientras lo resolvía.
+
+<Callout tipo="aviso" titulo="Si lo estás jugando">
+  Leer la solución antes de intentarlo te ahorra media hora y te quita el nivel
+  entero. El valor de Bandit está en pelearse con él; esto es para después, o para
+  cuando lleves un rato atascado de verdad.
+</Callout>
+
+## Nivel 0 → 1: entrar
+
+Los datos de acceso son públicos y siempre los mismos:
+
+```bash
+ssh bandit0@bandit.labs.overthewire.org -p 2220
+# contraseña: bandit0
+```
+
+El `-p 2220` es lo primero que enseña: SSH no siempre está en el 22. Ya dentro, la
+contraseña del nivel 1 está en un archivo `readme` del directorio personal.
+
+```bash
+ls
+cat readme
+```
+
+## Nivel 1 → 2: un archivo llamado `-`
+
+La contraseña está en un archivo cuyo nombre es un solo guion. Y `cat -` no lo lee:
+se queda esperando, porque para `cat` un guion suelto significa *lee de la entrada
+estándar*, no *abre el archivo llamado guion*.
+
+La salida es dar una ruta que el comando no pueda confundir con una opción:
+
+```bash
+cat ./-
+```
+
+Ese `./` es la lección entera del nivel: **un nombre de archivo que empieza por `-`
+hay que desambiguarlo**, y lo mismo vale para archivos con espacios, con saltos de
+línea o con nombres que parecen banderas.
+
+## Lo que se aprende
+
+- Conexión remota por **SSH** y puertos no estándar.
+- Navegación del sistema de archivos de Linux.
+- Archivos con nombres hostiles y cómo desambiguarlos.
+- Rutas relativas frente a absolutas, y por qué la diferencia importa.
+
+El write-up completo, en LaTeX, está en
+[github.com/ForcexDev/Bandit-WriteUp](https://github.com/ForcexDev/Bandit-WriteUp).

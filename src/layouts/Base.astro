@@ -1,0 +1,199 @@
+---
+/**
+ * El armazón de todas las páginas: <head>, fondo espacial, barra de
+ * navegación, pie y radio.
+ *
+ * Esas ~181 líneas estaban copiadas literalmente en index.html y en las tres
+ * subpáginas. Ahora existen una sola vez: cambiar un enlace del menú o el año
+ * del pie es una edición, no cuatro.
+ *
+ * Cada página pasa `rutaAlterna`: la URL de ella misma en el otro idioma. Es
+ * explícito a propósito, porque el slug cambia entre idiomas
+ * (`/proyectos/memsim` ↔ `/en/projects/memsim`).
+ */
+import { Font } from 'astro:assets';
+import { site } from '@/data/site';
+import type { Idioma } from '@/i18n';
+import Navbar from '@/components/layout/Navbar.astro';
+import Footer from '@/components/layout/Footer.astro';
+import SpaceCanvas from '@/components/layout/SpaceCanvas.astro';
+import Loader from '@/components/layout/Loader.astro';
+import Radio from '@/components/widgets/Radio.astro';
+import '@/styles/global.css';
+
+interface Props {
+  titulo: string;
+  descripcion: string;
+  idioma: Idioma;
+  rutaAlterna: string;
+  /** Imagen para la previsualización en redes: relativa a public/ o ya absoluta */
+  imagen?: string;
+  /** Medidas reales de esa imagen, para que WhatsApp no la recorte mal */
+  imagenAncho?: number;
+  imagenAlto?: number;
+  /** true en las páginas de proyecto: los anclajes del menú vuelven al home */
+  fueraDelHome?: boolean;
+}
+
+const {
+  titulo,
+  descripcion,
+  idioma,
+  rutaAlterna,
+  imagen = 'img/preview.jpg',
+  imagenAncho = 1200,
+  imagenAlto = 630,
+  fueraDelHome = false,
+} = Astro.props;
+
+// Absolutas y con el `base` puesto. El sitio viejo las tenía apuntando a
+// /Portfolio/, que no existe, así que las previews de WhatsApp y LinkedIn
+// daban 404. Con `site` + `base` en astro.config.mjs se arregla solo.
+const canonica = new URL(Astro.url.pathname, Astro.site);
+// Las portadas de proyecto llegan ya procesadas por astro:assets, con el `base`
+// incluido; las de public/ llegan relativas. Se distinguen por la barra inicial.
+const ogImagen = new URL(
+  imagen.startsWith('/') ? imagen : `${import.meta.env.BASE_URL}/${imagen}`.replace(/\/+/g, '/'),
+  Astro.site,
+);
+const alterna = new URL(rutaAlterna, Astro.site);
+---
+
+<!doctype html>
+<html lang={idioma}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titulo}</title>
+    <meta name="description" content={descripcion} />
+    <meta name="author" content={site.nombreCompleto} />
+    <link rel="canonical" href={canonica} />
+    <link rel="icon" href={`${import.meta.env.BASE_URL}/favicon.svg`.replace(/\/+/g, '/')} type="image/svg+xml" />
+
+    <link rel="alternate" hreflang={idioma} href={canonica} />
+    <link rel="alternate" hreflang={idioma === 'es' ? 'en' : 'es'} href={alterna} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonica} />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descripcion} />
+    <meta property="og:image" content={ogImagen} />
+    <meta property="og:image:width" content={String(imagenAncho)} />
+    <meta property="og:image:height" content={String(imagenAlto)} />
+    <meta property="og:locale" content={idioma === 'es' ? 'es_CL' : 'en_US'} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={titulo} />
+    <meta name="twitter:description" content={descripcion} />
+    <meta name="twitter:image" content={ogImagen} />
+
+    <meta name="theme-color" content="#000011" />
+    <meta name="generator" content={Astro.generator} />
+
+    {/* Sin esto, `fonts` en astro.config.mjs no sirve de nada: declara las
+        fuentes pero no emite ni un @font-face, y `var(--font-orbitron)` se
+        queda sin valor. El sitio entero cae al sans del sistema. */}
+    <Font cssVariable="--font-orbitron" preload />
+    <Font cssVariable="--font-inter" preload />
+    <Font cssVariable="--font-fira" />
+
+    {/* Marca que hay JS antes de pintar nada. Sin esto, quien tenga JS
+        desactivado se quedaría con las secciones en opacity:0 para siempre
+        — que es justo lo que le pasa hoy a quien pide menos movimiento. */}
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+
+  <body>
+    <Loader {idioma} />
+    <SpaceCanvas />
+
+    <a href="#contenido" class="salto">{idioma === 'es' ? 'Saltar al contenido' : 'Skip to content'}</a>
+
+    <Navbar {idioma} {rutaAlterna} {fueraDelHome} />
+
+    <main id="contenido">
+      <slot />
+    </main>
+
+    <Footer {idioma} />
+    <Radio {idioma} />
+
+    <script>
+      // Aparición al hacer scroll. Una sola instancia para toda la página, y
+      // se desconecta de cada elemento en cuanto entra: no hay nada que
+      // recalcular al seguir bajando.
+      const observer = new IntersectionObserver(
+        (entradas, obs) => {
+          for (const e of entradas) {
+            if (!e.isIntersecting) continue;
+            e.target.classList.add('is-visible');
+            obs.unobserve(e.target);
+          }
+        },
+        { rootMargin: '0px 0px -10% 0px' },
+      );
+      document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+      // En qué zona del espacio estás. La banda es una franja fina en mitad de
+      // la pantalla: la sección que la cruza es la que manda, así el fondo
+      // cambia cuando esa sección es de verdad la que estás mirando y no en
+      // cuanto asoma un píxel por abajo.
+      const raiz = document.documentElement;
+      const zonas = new IntersectionObserver(
+        (entradas) => {
+          for (const e of entradas) {
+            if (e.isIntersecting) raiz.dataset.zona = e.target.id;
+          }
+        },
+        { rootMargin: '-45% 0px -45% 0px' },
+      );
+      document.querySelectorAll('main > section[id]').forEach((el) => zonas.observe(el));
+
+      // La linterna. Un solo oyente para toda la página, y solo escribe las dos
+      // variables que lee `.panel::after` en cosmic.css: nada de `getBoundingRect`
+      // por tarjeta ni un oyente por cada una de las sesenta que hay.
+      let pendiente = false;
+      let ultimo: PointerEvent | null = null;
+
+      addEventListener(
+        'pointermove',
+        (evento) => {
+          ultimo = evento;
+          if (pendiente) return;
+          pendiente = true;
+          // Una escritura por fotograma: el ratón dispara muchos más eventos que
+          // fotogramas pinta el navegador.
+          requestAnimationFrame(() => {
+            pendiente = false;
+            const tarjeta = (ultimo!.target as HTMLElement)?.closest<HTMLElement>('.panel, .sys-window');
+            if (!tarjeta) return;
+            const caja = tarjeta.getBoundingClientRect();
+            tarjeta.style.setProperty('--mx', `${ultimo!.clientX - caja.left}px`);
+            tarjeta.style.setProperty('--my', `${ultimo!.clientY - caja.top}px`);
+          });
+        },
+        { passive: true },
+      );
+    </script>
+
+    <style>
+      /* Enlace para saltar el menú con el teclado. Solo se ve al enfocarlo. */
+      .salto {
+        position: absolute;
+        left: -9999px;
+        z-index: 10000;
+        padding: 0.7rem 1.2rem;
+        border-radius: 0 0 8px 0;
+        background: var(--color-nebula);
+        color: var(--color-void);
+        font-weight: 600;
+      }
+      .salto:focus {
+        left: 0;
+        top: 0;
+      }
+    </style>
+  </body>
+</html>

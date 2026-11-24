@@ -1,0 +1,184 @@
+---
+/**
+ * El bloque neofetch: logo a la izquierda, ficha alineada a la derecha.
+ *
+ * Antes eran 6 <li> con el texto en inglés escrito a mano, que nunca se
+ * traducían y que decían cosas como "Uptime: Always Learning". Ahora salen de
+ * src/data/hero.ts, van en los dos idiomas, y las columnas están alineadas de
+ * verdad con grid — que es lo "pulcro" que faltaba.
+ */
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import logo from '@/assets/img/ForcexDev.png';
+import { neofetch } from '@/data/hero';
+import { site } from '@/data/site';
+import { useTraducciones, type Idioma } from '@/i18n';
+
+interface Props {
+  idioma: Idioma;
+}
+const { idioma } = Astro.props;
+const t = useTraducciones(idioma);
+---
+
+<div class="neofetch">
+  <div class="logo-lado">
+    <Image
+      src={logo}
+      alt={`Logo de ${site.alias}`}
+      widths={[180, 280, 360]}
+      sizes="(max-width: 720px) 180px, 280px"
+      loading="eager"
+      fetchpriority="high"
+      class="logo"
+    />
+  </div>
+
+  <div class="ficha">
+    <h1 class="nombre">{site.nombre}</h1>
+    <p class="titular">{t('hero.titular')}</p>
+    <p class="quien">
+      <span class="usuario">{neofetch.usuario}</span><span class="arroba">@</span><span class="host"
+        >{neofetch.host}</span
+      >
+    </p>
+    <div class="regla"></div>
+
+    <dl class="lineas">
+      {
+        neofetch.lineas.map((linea) => (
+          <div class="linea">
+            <dt>
+              <Icon name={linea.icono} class="ico" />
+              <span>{linea.clave[idioma]}</span>
+            </dt>
+            <dd>{linea.valor[idioma]}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</div>
+
+<style>
+  .neofetch {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 2rem;
+    padding: 1.75rem 1.5rem 1.25rem;
+    text-align: left;
+  }
+  .logo-lado {
+    display: grid;
+    place-items: center;
+  }
+  .logo {
+    width: clamp(7rem, 18vw, 14rem);
+    height: auto;
+    filter: drop-shadow(0 0 22px rgb(66 153 225 / 0.35));
+    animation: var(--animate-bob);
+  }
+
+  /* El nombre en grande era la mitad del hero viejo y se había perdido. Además
+     es el único <h1> de la portada, que antes no tenía ninguno. */
+  .nombre {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 4.5vw, 2.6rem);
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    color: var(--color-stellar);
+    text-shadow: 0 0 24px rgb(255 255 255 / 0.25);
+  }
+  .titular {
+    margin: 0.35rem 0 0.85rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 2px solid transparent;
+    border-image: linear-gradient(90deg, var(--color-nebula), var(--color-cosmic), transparent) 1;
+    color: var(--color-neon-cyan);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+  }
+
+  .quien {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .usuario {
+    color: var(--color-neon-cyan);
+  }
+  .arroba {
+    color: var(--color-dim);
+    opacity: 0.6;
+  }
+  .host {
+    color: var(--color-magenta);
+  }
+  .regla {
+    height: 1px;
+    margin: 0.5rem 0 0.9rem;
+    background: linear-gradient(90deg, rgb(66 153 225 / 0.45), transparent);
+  }
+
+  /* UNA sola rejilla para las siete filas: así `max-content` mide la clave más
+     larga de todas y las aplica a todas por igual. Si cada fila fuese su propia
+     rejilla, cada una calcularía su ancho y los valores saldrían escalonados.
+     `display: contents` disuelve el div de la fila para que dt y dd sean hijos
+     directos de la rejilla. */
+  .lineas {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.4rem 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.84rem;
+  }
+  .linea {
+    display: contents;
+  }
+  dt {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-nebula);
+    font-weight: 600;
+  }
+  .ico {
+    font-size: 0.95rem;
+    opacity: 0.85;
+  }
+  dd {
+    color: var(--color-silver);
+  }
+
+  @media (max-width: 720px) {
+    .neofetch {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      justify-items: center;
+      text-align: center;
+    }
+    .ficha {
+      width: 100%;
+    }
+    .lineas {
+      grid-template-columns: 1fr;
+      gap: 0.15rem;
+      justify-items: center;
+    }
+    dd {
+      margin-bottom: 0.45rem;
+    }
+    .regla {
+      background: linear-gradient(90deg, transparent, rgb(66 153 225 / 0.45), transparent);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .logo {
+      animation: none;
+    }
+  }
+</style>

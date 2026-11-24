@@ -1,0 +1,61 @@
+---
+/**
+ * Rejilla de funcionalidades. Rescatada de las 164 líneas de <style> que
+ * estaban encerradas dentro de pages/grand-chess-auto-showcase.html y no se
+ * podían usar en ninguna otra página.
+ *
+ *   <Funciones items={[
+ *     { icono: 'lucide:eye', titulo: 'Modo espectador', texto: '...' },
+ *   ]} />
+ */
+import { Icon } from 'astro-icon/components';
+
+interface Item {
+  icono: string;
+  titulo: string;
+  texto: string;
+}
+interface Props {
+  items: Item[];
+}
+const { items } = Astro.props;
+---
+
+<ul class="funciones">
+  {
+    items.map((item) => (
+      <li class="panel panel--quieto">
+        <Icon name={item.icono} class="ico" />
+        <p class="titulo">{item.titulo}</p>
+        <p class="texto">{item.texto}</p>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .funciones {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1rem;
+    margin: 1.75rem 0;
+  }
+  /* La pinta la pone `.panel` en cosmic.css. */
+  li {
+    padding: 1.2rem;
+  }
+  .ico {
+    font-size: 1.4rem;
+    color: var(--color-neon-cyan);
+  }
+  .titulo {
+    margin: 0.6rem 0 0.3rem;
+    font-weight: 600;
+    color: var(--color-stellar);
+  }
+  .texto {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--color-dim);
+  }
+</style>

@@ -1,0 +1,163 @@
+---
+/**
+ * Habilidades técnicas: el sistema orbital arriba y la lista de siempre debajo.
+ *
+ * La órbita es lo bonito y la lista es lo útil — un clic en un satélite baja a
+ * su baldosa y la enciende, así que no son dos cosas separadas. En pantalla
+ * pequeña la órbita no se dibuja (se pisarían los satélites) y queda la lista,
+ * que es la que sirve para buscar algo concreto.
+ *
+ * Todo sale de src/data/skills.ts: añadir una habilidad es una línea en el
+ * array del grupo que toque, y aparece en los dos sitios a la vez.
+ */
+import { Icon } from 'astro-icon/components';
+import Seccion from '@/components/layout/Seccion.astro';
+import Orbita from '@/components/skills/Orbita.astro';
+import { useTraducciones, type Idioma } from '@/i18n';
+import { skillGroups } from '@/data/skills';
+import { slugSkill } from '@/utils/skills';
+
+interface Props {
+  idioma: Idioma;
+}
+const { idioma } = Astro.props;
+const t = useTraducciones(idioma);
+---
+
+<Seccion id="skills" titulo={t('skills.titulo')} subtitulo={t('skills.subtitulo')}>
+  <Orbita {idioma} />
+
+  <div class="grupos">
+    {
+      skillGroups.map((grupo) => (
+        <article class="grupo panel reveal">
+          <h3 class="grupo__titulo">
+            <span class="grupo__hash">#</span>
+            {grupo.titulo[idioma]}
+            <span class="grupo__cuenta">{grupo.items.length}</span>
+          </h3>
+
+          <ul class="lista">
+            {grupo.items.map((skill) => (
+              <li class="skill panel panel--quieto" id={`skill-${slugSkill(skill.nombre)}`}>
+                <Icon name={skill.icono} class="skill__ico" />
+                <span>{skill.nombre}</span>
+              </li>
+            ))}
+          </ul>
+        </article>
+      ))
+    }
+  </div>
+</Seccion>
+
+<style>
+  .grupos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+    gap: 1.2rem;
+  }
+
+  /* La pinta (cristal, destello, encendido) la ponen `.panel` y
+     `.panel--quieto` en cosmic.css. Aquí solo lo que es de esta sección. */
+  .grupo {
+    padding: 1.4rem 1.5rem;
+  }
+
+  .grupo__titulo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 1.1rem;
+    font-family: var(--font-display);
+    font-size: 1.02rem;
+    color: var(--color-stellar);
+  }
+  .grupo__hash {
+    color: var(--color-nebula);
+    font-family: var(--font-mono);
+    opacity: 0.6;
+  }
+  .grupo__cuenta {
+    /* `auto` lo manda al extremo derecho sin necesidad de otro contenedor */
+    margin-left: auto;
+    color: var(--color-dim);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    opacity: 0.5;
+  }
+
+  /* Baldosas, no etiquetas: en el sitio viejo cada tecnología era un cuadro con
+     su logo a color, y eso era lo que se reconocía de un vistazo. `auto-fill`
+     con mínimo de 5.5rem las cuadra solas sea cual sea el ancho del grupo. */
+  .lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr));
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .skill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.85rem 0.4rem;
+    border-radius: 12px;
+    color: var(--color-silver);
+    font-size: 0.72rem;
+    text-align: center;
+    /* Sin esto el `scrollIntoView` de la órbita la deja debajo de la barra. */
+    scroll-margin: 7rem;
+  }
+  .skill:hover .skill__ico {
+    transform: scale(1.12);
+    filter: drop-shadow(0 0 10px rgb(66 153 225 / 0.8));
+  }
+
+  /* Los `devicon:` traen su propio color dentro del SVG y se ignoran el
+     `color`; el que se aplica aquí es para los `lucide:` y `simple-icons:`,
+     que se pintan con currentColor. */
+  .skill__ico {
+    width: 1.9rem;
+    height: 1.9rem;
+    color: var(--color-nebula);
+    filter: drop-shadow(0 2px 6px rgb(0 0 0 / 0.5));
+    transition:
+      transform 0.25s var(--ease-space),
+      filter 0.25s var(--ease-space);
+  }
+
+  /* Lo que se enciende al llegar desde un satélite de la órbita. */
+  .skill.es-destino {
+    animation: aterriza 1.6s var(--ease-space);
+  }
+  @keyframes aterriza {
+    0%,
+    100% {
+      border-color: rgb(66 153 225 / 0.12);
+      box-shadow: none;
+    }
+    15%,
+    65% {
+      border-color: var(--color-neon-cyan);
+      box-shadow:
+        0 0 26px rgb(0 243 255 / 0.55),
+        inset 0 0 18px rgb(0 243 255 / 0.18);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .skill__ico {
+      transition: none;
+    }
+    .skill:hover .skill__ico {
+      transform: none;
+    }
+    .skill.es-destino {
+      animation: none;
+    }
+  }
+</style>

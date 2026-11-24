@@ -1,0 +1,70 @@
+---
+/**
+ * Caja destacada dentro del texto de un proyecto.
+ *
+ *   <Callout tipo="aviso">Ojo con esto.</Callout>
+ *
+ * Tipos: nota (azul), aviso (ámbar), seguridad (morado), ok (verde).
+ */
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  tipo?: 'nota' | 'aviso' | 'seguridad' | 'ok';
+  titulo?: string;
+}
+const { tipo = 'nota', titulo } = Astro.props;
+
+const iconos = {
+  nota: 'lucide:info',
+  aviso: 'lucide:triangle-alert',
+  seguridad: 'lucide:shield',
+  ok: 'lucide:circle-check',
+} as const;
+---
+
+<aside class={`callout callout--${tipo}`}>
+  <Icon name={iconos[tipo]} class="ico" />
+  <div class="cuerpo">
+    {titulo && <p class="titulo">{titulo}</p>}
+    <slot />
+  </div>
+</aside>
+
+<style>
+  .callout {
+    display: flex;
+    gap: 0.9rem;
+    margin: 1.75rem 0;
+    padding: 1rem 1.2rem;
+    border-left: 3px solid var(--tono);
+    border-radius: 0 10px 10px 0;
+    background: color-mix(in srgb, var(--tono) 8%, transparent);
+  }
+  .callout--nota {
+    --tono: var(--color-nebula);
+  }
+  .callout--aviso {
+    --tono: #f6ad55;
+  }
+  .callout--seguridad {
+    --tono: var(--color-magenta);
+  }
+  .callout--ok {
+    --tono: #4ade80;
+  }
+
+  .ico {
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+    font-size: 1.15rem;
+    color: var(--tono);
+  }
+  .titulo {
+    margin-bottom: 0.35rem;
+    font-weight: 600;
+    color: var(--color-stellar);
+  }
+  .cuerpo :global(> :last-child) {
+    margin-bottom: 0;
+  }
+</style>

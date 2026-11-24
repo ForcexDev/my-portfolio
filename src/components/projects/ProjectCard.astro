@@ -1,0 +1,234 @@
+---
+/**
+ * Un proyecto en la rejilla: miniatura, estado, resumen de una línea y stack.
+ *
+ * La tarjeta entera es un enlace — antes había que acertarle a un botón para
+ * abrir el modal. El borde cónico solo gira al pasar el ratón (`sys-window--hover`):
+ * siete bordes girando a la vez calentaban el portátil para nada.
+ *
+ * El `data-area` es lo que leen los filtros de ProjectGrid.
+ */
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import { useTraducciones, type Idioma } from '@/i18n';
+import { slugDe, rutaProyecto, type Proyecto } from '@/utils/proyectos';
+
+interface Props {
+  proyecto: Proyecto;
+  idioma: Idioma;
+}
+const { proyecto, idioma } = Astro.props;
+const t = useTraducciones(idioma);
+const { titulo, resumen, area, estado, anio, stack, imagen, imagenAlt } = proyecto.data;
+
+/** Cuatro chips caben sin que la tarjeta cambie de alto; el resto se resume. */
+const visibles = stack.slice(0, 4);
+const sobran = stack.length - visibles.length;
+---
+
+<a
+  href={rutaProyecto(slugDe(proyecto), idioma)}
+  class="tarjeta sys-window sys-window--hover reveal"
+  data-area={area}
+>
+  <div class="sys-body cuerpo">
+    <figure class="miniatura">
+      <Image
+        src={imagen}
+        alt={imagenAlt}
+        widths={[400, 800]}
+        sizes="(max-width: 720px) 92vw, 380px"
+        loading="lazy"
+      />
+      <span class={`estado estado--${estado}`}>{t(`estado.${estado}`)}</span>
+    </figure>
+
+    <div class="ficha">
+      <p class="meta">
+        <span>{anio}</span>
+        <span aria-hidden="true">·</span>
+        <span>{t(`area.${area}`)}</span>
+      </p>
+
+      <h3 class="titulo">{titulo}</h3>
+      <p class="resumen">{resumen}</p>
+
+      <ul class="stack">
+        {visibles.map((tecnologia) => <li>{tecnologia}</li>)}
+        {sobran > 0 && <li class="stack__mas">+{sobran}</li>}
+      </ul>
+
+      <span class="abrir">
+        {t('proyectos.abrir')}
+        <Icon name="lucide:arrow-right" class="flecha" />
+      </span>
+    </div>
+  </div>
+</a>
+
+<style>
+  .tarjeta {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    transition:
+      transform 0.35s var(--ease-space),
+      box-shadow 0.35s var(--ease-space);
+  }
+  .tarjeta:hover,
+  .tarjeta:focus-visible {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-cosmic);
+  }
+
+  .cuerpo {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border-radius: 0.45rem;
+    overflow: hidden;
+  }
+
+  .miniatura {
+    position: relative;
+    margin: 0;
+    /* Fijo a propósito: las portadas vienen de tamaños distintos y sin esto
+       la rejilla queda con las fichas desalineadas. */
+    aspect-ratio: 16 / 9;
+    background: var(--color-abyss);
+    overflow: hidden;
+  }
+  .miniatura :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s var(--ease-space);
+  }
+  .tarjeta:hover .miniatura :global(img) {
+    transform: scale(1.04);
+  }
+  /* Degradado para que el chip se lea encima de cualquier portada. */
+  .miniatura::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgb(10 10 20 / 0.9) 0%, transparent 55%);
+  }
+
+  .estado {
+    position: absolute;
+    z-index: 1;
+    top: 0.7rem;
+    right: 0.7rem;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--tono);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--tono) 14%, rgb(10 10 20 / 0.85));
+    color: var(--tono);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .estado--desplegado {
+    --tono: #27c93f;
+  }
+  .estado--en-curso {
+    --tono: #ffbd2e;
+  }
+  .estado--archivado {
+    --tono: var(--color-dim);
+  }
+
+  .ficha {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.6rem;
+    padding: 1.1rem 1.2rem 1.2rem;
+  }
+
+  .meta {
+    display: flex;
+    gap: 0.45rem;
+    margin: 0;
+    color: var(--color-nebula);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .titulo {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    line-height: 1.25;
+    color: var(--color-stellar);
+  }
+
+  .resumen {
+    margin: 0;
+    color: var(--color-dim);
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+
+  .stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0.2rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .stack li {
+    padding: 0.2rem 0.55rem;
+    border: 1px solid rgb(66 153 225 / 0.2);
+    border-radius: 5px;
+    background: rgb(255 255 255 / 0.03);
+    color: var(--color-silver);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+  }
+  .stack__mas {
+    color: var(--color-dim) !important;
+    opacity: 0.7;
+  }
+
+  .abrir {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    /* `auto` lo empuja abajo del todo: todas las tarjetas terminan igual
+       aunque los resúmenes midan distinto. */
+    margin-top: auto;
+    padding-top: 0.7rem;
+    color: var(--color-neon-cyan);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+  }
+  .flecha {
+    width: 1em;
+    height: 1em;
+    transition: transform 0.3s var(--ease-spring);
+  }
+  .tarjeta:hover .flecha,
+  .tarjeta:focus-visible .flecha {
+    transform: translateX(5px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tarjeta,
+    .miniatura :global(img),
+    .flecha {
+      transition: none;
+    }
+    .tarjeta:hover {
+      transform: none;
+    }
+    .tarjeta:hover .miniatura :global(img) {
+      transform: none;
+    }
+  }
+</style>

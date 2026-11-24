@@ -1,0 +1,194 @@
+---
+/**
+ * El terminal que se teclea solo.
+ *
+ * Dos cosas cambian respecto al original:
+ *
+ *  1. Los comandos son reales (whoami, ls | wc -l, cat, curl | jq) y su salida
+ *     es la que de verdad devolverían. El viejo hacía `echo $Passion`, que no
+ *     existe en ningún shell.
+ *  2. Para de teclear cuando no se le está mirando. `initTerminalAnimation()`
+ *     (js/main.js:546) era un `while (true)` que seguía corriendo con la
+ *     pestaña en segundo plano y con el hero fuera de pantalla.
+ *
+ * Los comandos se editan en src/data/hero.ts.
+ */
+import { comandos } from '@/data/hero';
+import type { Idioma } from '@/i18n';
+
+interface Props {
+  idioma: Idioma;
+}
+const { idioma } = Astro.props;
+
+const guion = comandos.map((c) => ({ cmd: c.cmd, salida: c.salida[idioma] }));
+---
+
+<div class="terminal" data-guion={JSON.stringify(guion)}>
+  <div class="linea-prompt">
+    <span class="p-user">ezequiel@forcexdev</span><span class="p-sep">:</span><span class="p-ruta">~</span><span
+      class="p-char">$</span
+    >
+    <span class="cmd"></span><span class="cursor" aria-hidden="true"></span>
+  </div>
+  <pre class="salida" aria-live="polite"></pre>
+</div>
+
+<script>
+  interface Paso {
+    cmd: string;
+    salida: string[];
+  }
+
+  const terminal = document.querySelector<HTMLElement>('.terminal');
+
+  if (terminal) {
+    const guion: Paso[] = JSON.parse(terminal.dataset.guion!);
+    const cmdEl = terminal.querySelector<HTMLElement>('.cmd')!;
+    const salidaEl = terminal.querySelector<HTMLElement>('.salida')!;
+    const reducido = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Quien pidió menos movimiento ve el último comando ya escrito, no una caja vacía.
+    if (reducido) {
+      const ultimo = guion[guion.length - 1]!;
+      cmdEl.textContent = ultimo.cmd;
+      salidaEl.textContent = ultimo.salida.join('\n');
+    } else {
+      let vivo = false;
+
+      const espera = (ms: number) =>
+        new Promise<void>((listo) => setTimeout(listo, ms));
+
+      // Si la pestaña está oculta o el hero fuera de pantalla, se queda aquí
+      // parado en vez de seguir tecleando contra nadie.
+      const esperarAViva = () =>
+        new Promise<void>((listo) => {
+          if (vivo && !document.hidden) return listo();
+          const revisar = () => {
+            if (vivo && !document.hidden) {
+              document.removeEventListener('visibilitychange', revisar);
+              terminal.removeEventListener('vivo', revisar);
+              listo();
+            }
+          };
+          document.addEventListener('visibilitychange', revisar);
+          terminal.addEventListener('vivo', revisar);
+        });
+
+      async function escribir(texto: string, el: HTMLElement, msPorLetra: number) {
+        for (const letra of texto) {
+          await esperarAViva();
+          el.textContent += letra;
+          await espera(msPorLetra);
+        }
+      }
+
+      async function correr() {
+        // eslint-disable-next-line no-constant-condition
+        while (true) {
+          for (const paso of guion) {
+            await esperarAViva();
+            cmdEl.textContent = '';
+            salidaEl.textContent = '';
+            await escribir(paso.cmd, cmdEl, 55);
+            await espera(420);
+            for (const linea of paso.salida) {
+              await esperarAViva();
+              salidaEl.textContent += (salidaEl.textContent ? '\n' : '') + linea;
+              await espera(90);
+            }
+            await espera(2200);
+          }
+        }
+      }
+
+      new IntersectionObserver((entradas) => {
+        vivo = entradas[0]!.isIntersecting;
+        if (vivo) terminal.dispatchEvent(new Event('vivo'));
+      }).observe(terminal);
+
+      correr();
+    }
+  }
+</script>
+
+<style>
+  /* Sin caja negra: en el sitio viejo el terminal era parte de la ventana, no
+     un recuadro dentro de otro recuadro. Solo una línea que lo separa de la
+     ficha de arriba y el prompt a tamaño de lectura. */
+  .terminal {
+    margin: 0 1.5rem 1.5rem;
+    padding: 1.1rem 0 0;
+    border-top: 1px solid rgb(66 153 225 / 0.12);
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    text-align: left;
+    /* Alto reservado para la salida más larga (4 líneas): sin esto la página
+       da un salto cada vez que cambia de comando. */
+    min-height: 9.5rem;
+  }
+
+  .linea-prompt {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.05rem;
+  }
+  .p-user {
+    color: var(--color-neon-cyan);
+  }
+  .p-sep,
+  .p-char {
+    color: var(--color-dim);
+    opacity: 0.6;
+  }
+  .p-ruta {
+    color: var(--color-magenta);
+  }
+  .p-char {
+    margin-right: 0.5rem;
+  }
+  .cmd {
+    color: var(--color-stellar);
+    white-space: pre;
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 0.55em;
+    height: 1.05em;
+    margin-left: 1px;
+    background: var(--color-neon-cyan);
+    transform: translateY(0.15em);
+    animation: parpadeo 1.1s steps(2, start) infinite;
+  }
+  @keyframes parpadeo {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .salida {
+    margin-top: 0.6rem;
+    color: var(--color-silver);
+    font-family: inherit;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    opacity: 0.9;
+  }
+
+  @media (max-width: 720px) {
+    .terminal {
+      margin: 0 1rem 1rem;
+      font-size: 0.82rem;
+      min-height: 10rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cursor {
+      animation: none;
+    }
+  }
+</style>

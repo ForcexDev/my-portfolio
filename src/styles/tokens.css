@@ -1,0 +1,70 @@
+/* Paleta del portafolio. Son los mismos hex que tenia css/variables.css,
+   traducidos a @theme para que Tailwind genere las utilidades (bg-nebula,
+   text-dim, border-cosmic...). Cambiar un color aqui lo cambia en todo el sitio. */
+@theme {
+  /* --- fondos, del mas oscuro al mas claro --- */
+  /* Negro de verdad, pero no el #000 plano: un punto de azul levanta el fondo
+     lo justo para que las estrellas tengan sobre qué posarse. */
+  --color-void: #03040e;
+  --color-space: #050718;
+  --color-abyss: #0f1419;
+  --color-horizon: #1a1f3a;
+  --color-panel: #0a0a14; /* el relleno interior de la ventana de terminal */
+
+  /* --- texto --- */
+  --color-stellar: #ffffff;
+  --color-silver: #e2e8f0;
+  --color-dim: #cbd5e1;
+
+  /* --- acentos azules --- */
+  --color-nebula: #4299e1;
+  --color-nebula-deep: #3182ce;
+
+  /* --- acentos morados --- */
+  --color-cosmic: #6b46c1;
+  --color-violet: #805ad5;
+  --color-magenta: #9f7aea;
+
+  /* --- neon del hero (antes estaban a pelo en pages.css, sin ser token) --- */
+  --color-neon-cyan: #00f3ff;
+  --color-neon-purple: #bc13fe;
+
+  /* --- tipografia (las sirve Astro autoalojadas, sin CDN) --- */
+  --font-display: var(--font-orbitron);
+  --font-body: var(--font-inter);
+  --font-mono: var(--font-fira);
+
+  /* --- curvas de animacion --- */
+  --ease-space: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-float: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  /* --- sombras --- */
+  --shadow-stellar: 0 0 30px rgb(66 153 225 / 0.4);
+  --shadow-cosmic: 0 15px 40px rgb(0 0 17 / 0.6);
+  --shadow-panel: 0 20px 50px rgb(0 0 0 / 0.7);
+
+  /* --- animaciones reutilizables --- */
+  --animate-nebula: nebula 20s ease-in-out infinite alternate;
+  --animate-dust: dust 15s linear infinite;
+  --animate-spin-slow: spin 4s linear infinite;
+  --animate-bob: bob 6s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 3s ease-in-out infinite alternate;
+
+  @keyframes nebula {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.6; }
+  }
+  @keyframes dust {
+    from { transform: translate(0, 0); opacity: 0.6; }
+    to { transform: translate(-20px, -20px); opacity: 0.8; }
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes pulse-glow {
+    from { transform: scale(0.9); opacity: 0.5; }
+    to { transform: scale(1.1); opacity: 0.8; }
+  }
+}

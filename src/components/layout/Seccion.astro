@@ -1,0 +1,77 @@
+---
+/**
+ * El envoltorio de cada sección del inicio: el ancho, el aire, y la cabecera
+ * con su ruta de terminal encima del título.
+ *
+ * Existe porque si no, las seis secciones repiten el mismo bloque de cabecera
+ * y los mismos márgenes, y cambiar el espaciado obliga a tocar seis archivos.
+ *
+ *   <Seccion id="skills" titulo={t('skills.titulo')}>…</Seccion>
+ */
+interface Props {
+  id: string;
+  titulo: string;
+  subtitulo?: string;
+  /** Sin cabecera centrada: útil si la sección se lleva su propio diseño. */
+  class?: string;
+}
+const { id, titulo, subtitulo, class: clase } = Astro.props;
+---
+
+<section {id} class:list={['seccion', clase]}>
+  <header class="encabezado reveal">
+    <h2 class="titulo">{titulo}</h2>
+    {subtitulo && <p class="subtitulo">{subtitulo}</p>}
+  </header>
+
+  <slot />
+</section>
+
+<style>
+  .seccion {
+    max-width: 76rem;
+    margin: 0 auto;
+    padding: 6rem 1.5rem;
+  }
+
+  .encabezado {
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+  /* Mayúsculas, espaciado ancho y halo azul: es el título del sitio viejo, que
+     era la mitad de su carácter. En caja baja y sin halo quedaba genérico. */
+  .titulo {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 5vw, 2.7rem);
+    font-weight: 900;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--color-stellar);
+    text-shadow: 0 0 30px rgb(66 153 225 / 0.5);
+  }
+  /* La barrita degradada de debajo del título. */
+  .titulo::after {
+    content: '';
+    display: block;
+    width: 3.5rem;
+    height: 3px;
+    margin: 1rem auto 0;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--color-nebula), var(--color-cosmic));
+    box-shadow: 0 0 12px rgb(66 153 225 / 0.6);
+  }
+  .subtitulo {
+    max-width: 42rem;
+    margin: 1.1rem auto 0;
+    color: var(--color-dim);
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  @media (max-width: 520px) {
+    .seccion {
+      padding: 4rem 1.1rem;
+    }
+  }
+</style>

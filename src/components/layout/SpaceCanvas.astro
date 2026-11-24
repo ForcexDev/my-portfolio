@@ -1,0 +1,229 @@
+---
+/**
+ * El fondo espacial, en dos pisos.
+ *
+ * Abajo, en CSS puro: el degradado de fondo, la nebulosa y tres capas de
+ * estrellas en mosaico. Se pintan antes de que llegue un solo byte de
+ * JavaScript y son lo que se ve si WebGL no está disponible o falla.
+ *
+ * Encima, un campo de estrellas en Three.js con profundidad de verdad: el
+ * campo está quieto y solo sube cuando bajas la página: el movimiento es tuyo,
+ * no suyo. Las cercanas suben mucho más que las del fondo, que es lo que el
+ * fondo de CSS no puede fingir — un mosaico plano no tiene paralaje. El ratón
+ * inclina la cámara.
+ *
+ * Three entra por `import()` dinámico y solo después de `load`: pesa, y no
+ * tiene por qué competir con el texto por el primer pintado.
+ */
+---
+
+<div class="space-canvas" aria-hidden="true">
+  <div class="star-layer star-layer--1"></div>
+  <div class="star-layer star-layer--2"></div>
+  <div class="star-layer star-layer--3"></div>
+  <div class="nebula-layer"></div>
+  <div class="dust-layer"></div>
+  <canvas id="estrellas-3d"></canvas>
+</div>
+
+<script>
+  const lienzo = document.querySelector<HTMLCanvasElement>('#estrellas-3d');
+  const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Sin canvas no hay nada que hacer; con `reduce` tampoco, porque lo único
+  // que aporta este fondo es movimiento. En los dos casos queda el de CSS.
+  if (lienzo && !quieto) {
+    const arrancar = () => import('three').then(montar).catch(() => lienzo.remove());
+    // `requestIdleCallback` donde lo haya: así Three se descarga cuando el hilo
+    // principal ya no tiene nada mejor que hacer. Safari aún no lo tiene.
+    if ('requestIdleCallback' in window) requestIdleCallback(arrancar, { timeout: 2500 });
+    else addEventListener('load', () => setTimeout(arrancar, 300));
+  }
+
+  async function montar(THREE: typeof import('three')) {
+    const N = 3200; // estrellas
+    const CERCA = 150; // nada más cerca que esto: reventaría de tamaño
+    const FONDO = 1100; // profundidad total del campo
+
+    const css = getComputedStyle(document.documentElement);
+    const color = (n: string, reserva: string) => new THREE.Color(css.getPropertyValue(n).trim() || reserva);
+    // La misma paleta del resto del sitio: si cambias un token, cambia el cielo.
+    const paleta = [
+      new THREE.Color('#ffffff'),
+      new THREE.Color('#ffffff'),
+      new THREE.Color('#ffffff'),
+      color('--color-nebula', '#4299e1'),
+      color('--color-magenta', '#9f7aea'),
+      color('--color-neon-cyan', '#00f3ff'),
+    ];
+
+    // Un punto redondo y difuminado, dibujado a mano: es una textura de 64 px
+    // en vez de un archivo que haya que descargar.
+    const punto = document.createElement('canvas');
+    punto.width = punto.height = 64;
+    const ctx = punto.getContext('2d')!;
+    const halo = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+    halo.addColorStop(0, 'rgba(255,255,255,1)');
+    halo.addColorStop(0.25, 'rgba(255,255,255,0.85)');
+    halo.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = halo;
+    ctx.fillRect(0, 0, 64, 64);
+
+    const posiciones = new Float32Array(N * 3);
+    const colores = new Float32Array(N * 3);
+    const tamanos = new Float32Array(N);
+
+    // Cuánto campo hace falta a cada profundidad para que no se vea el borde.
+    // Crece con la distancia porque el cono de visión se abre: con esto la
+    // densidad en pantalla sale pareja sola, sin repartir estrellas a mano.
+    const anchoEn = (z: number) => -z * 1.35 + 60;
+    const altoEn = (z: number) => -z * 0.95 + 60;
+
+    const sembrar = (i: number, z: number) => {
+      posiciones[i * 3] = (Math.random() * 2 - 1) * anchoEn(z);
+      posiciones[i * 3 + 1] = (Math.random() * 2 - 1) * altoEn(z);
+      posiciones[i * 3 + 2] = z;
+      const c = paleta[(Math.random() * paleta.length) | 0]!;
+      colores[i * 3] = c.r;
+      colores[i * 3 + 1] = c.g;
+      colores[i * 3 + 2] = c.b;
+      // Unas pocas gordas hacen de estrellas cercanas; el resto, polvo.
+      tamanos[i] = Math.random() < 0.06 ? 6 + Math.random() * 5 : 1.5 + Math.random() * 2.5;
+    };
+    for (let i = 0; i < N; i++) sembrar(i, -CERCA - Math.random() * (FONDO - CERCA));
+
+    const geometria = new THREE.BufferGeometry();
+    geometria.setAttribute('position', new THREE.BufferAttribute(posiciones, 3));
+    geometria.setAttribute('color', new THREE.BufferAttribute(colores, 3));
+    geometria.setAttribute('tamano', new THREE.BufferAttribute(tamanos, 1));
+
+    // Shader propio en lugar de PointsMaterial porque hace falta un tamaño por
+    // estrella, no uno para todas, y que se atenúe con la distancia.
+    const material = new THREE.ShaderMaterial({
+      uniforms: { mapa: { value: new THREE.CanvasTexture(punto) } },
+      vertexShader: `
+        attribute float tamano;
+        varying vec3 vColor;
+        varying float vCerca;
+        void main() {
+          vColor = color;
+          vec4 vista = modelViewMatrix * vec4(position, 1.0);
+          // Las del fondo se apagan: así el campo se pierde en negro en vez
+          // de terminar en un plano recortado.
+          vCerca = 1.0 - smoothstep(650.0, 1100.0, -vista.z);
+          gl_PointSize = tamano * (300.0 / -vista.z);
+          gl_Position = projectionMatrix * vista;
+        }
+      `,
+      fragmentShader: `
+        uniform sampler2D mapa;
+        varying vec3 vColor;
+        varying float vCerca;
+        void main() {
+          vec4 t = texture2D(mapa, gl_PointCoord);
+          gl_FragColor = vec4(vColor, t.a * vCerca);
+        }
+      `,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      vertexColors: true,
+    });
+
+    const escena = new THREE.Scene();
+    const campo = new THREE.Points(geometria, material);
+    escena.add(campo);
+
+    const camara = new THREE.PerspectiveCamera(70, innerWidth / innerHeight, 1, FONDO + 200);
+    const render = new THREE.WebGLRenderer({ canvas: lienzo!, alpha: true, antialias: false });
+    render.setClearColor(0x000000, 0);
+
+    const medir = () => {
+      // Tope de 2: por encima no se nota y multiplica los píxeles que pintar.
+      render.setPixelRatio(Math.min(devicePixelRatio, 2));
+      render.setSize(innerWidth, innerHeight, false);
+      camara.aspect = innerWidth / innerHeight;
+      camara.updateProjectionMatrix();
+    };
+    medir();
+    addEventListener('resize', medir);
+
+    // Hacia dónde mira: el ratón inclina, el scroll acelera.
+    const raton = { x: 0, y: 0 };
+    addEventListener(
+      'pointermove',
+      (e) => {
+        raton.x = (e.clientX / innerWidth) * 2 - 1;
+        raton.y = (e.clientY / innerHeight) * 2 - 1;
+      },
+      { passive: true },
+    );
+
+    let ultimoScroll = scrollY;
+    let empuje = 0;
+    addEventListener(
+      'scroll',
+      () => {
+        // Lo que se ha movido la página es lo único que mueve el cielo.
+        empuje += (scrollY - ultimoScroll) * 0.07;
+        ultimoScroll = scrollY;
+      },
+      { passive: true },
+    );
+
+    const pos = geometria.attributes.position!;
+    let animacion = 0;
+
+    // Todas se mueven lo mismo en el mundo; la perspectiva se encarga de que
+    // las de delante crucen la pantalla y las del fondo casi ni se enteren.
+    // Eso es el paralaje, y sale gratis.
+    const recolocar = (subida: number) => {
+      const a = pos.array as Float32Array;
+      for (let i = 0; i < N; i++) {
+        const tope = altoEn(a[i * 3 + 2]!);
+        const y = (a[i * 3 + 1]! += subida);
+        // Se sale por arriba y vuelve a entrar por abajo. A esa profundidad el
+        // borde del campo queda fuera de pantalla, así que el salto no se ve.
+        if (y > tope) a[i * 3 + 1] = y - 2 * tope;
+        else if (y < -tope) a[i * 3 + 1] = y + 2 * tope;
+      }
+      pos.needsUpdate = true;
+    };
+
+    const cuadro = () => {
+      animacion = requestAnimationFrame(cuadro);
+
+      empuje *= 0.93; // sigue un momento por inercia y se para
+
+      // Quietas mientras no te muevas. Además de ser lo que se pidió, esto se
+      // salta el bucle de 3200 estrellas en la inmensa mayoría de los cuadros.
+      if (Math.abs(empuje) > 0.002) recolocar(empuje);
+
+      camara.position.x += (raton.x * 26 - camara.position.x) * 0.03;
+      camara.position.y += (-raton.y * 26 - camara.position.y) * 0.03;
+      camara.lookAt(0, 0, -FONDO * 0.5);
+
+      render.render(escena, camara);
+    };
+    cuadro();
+
+    // rAF ya se para solo en una pestaña de fondo, pero no cuando la ventana
+    // sigue visible y el usuario se ha ido a otra cosa. Esto cubre lo primero
+    // sin depender de que el navegador lo haga.
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) cancelAnimationFrame(animacion);
+      else cuadro();
+    });
+  }
+</script>
+
+<style>
+  #estrellas-3d {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    /* Sin esto se ve un borde de canvas sin pintar mientras Three arranca. */
+    background: transparent;
+  }
+</style>

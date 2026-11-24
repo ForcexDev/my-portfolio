@@ -1,0 +1,90 @@
+---
+titulo: 'Grand Chess Auto: Reimagined'
+resumen: 'Real-time multiplayer chess with a Retrowave/GTA look. WebSocket sync, latency-compensated clocks and self-hosting behind Cloudflare Zero Trust.'
+area: 'full-stack'
+estado: 'desplegado'
+anio: 2025
+rol: 'Full Stack Architect and DevOps'
+stack:
+  - 'Node.js'
+  - 'Express'
+  - 'Socket.IO'
+  - 'MongoDB'
+  - 'Handlebars'
+  - 'Cloudflare'
+imagen: '../../../assets/img/GCA-logo.png'
+imagenAlt: 'Grand Chess Auto logo'
+enlaces:
+  repo: 'https://github.com/ForcexDev/GrandChessAuto_DesarrolloWeb'
+  demo: 'https://grandchessauto.forcex.dev/'
+orden: 5
+---
+
+import Funciones from '@/components/content/Funciones.astro';
+import HojaDeRuta from '@/components/content/HojaDeRuta.astro';
+import Callout from '@/components/content/Callout.astro';
+import Figura from '@/components/content/Figura.astro';
+
+Online multiplayer chess with a Retrowave/GTA look. It came out of hitting the walls
+of an earlier version: where the original project stopped, this one starts, rewriting
+the core from scratch.
+
+## From "Phase 3" to "Reimagined"
+
+| | Legacy (Phase 3) | Reimagined |
+|---|---|---|
+| Sync | `fetch` polling, slow | WebSockets via Socket.IO |
+| Chess engine | Basic, incomplete | Modified Chess.js |
+| Interface | Plain CSS | Glassmorphism |
+| Offline mode | Didn't work | Persistent in LocalStorage |
+| Security | Basic | Hardened sessions and WAF |
+
+## Real-time sync
+
+Every move, capture and message travels over **WebSockets**. The difference from the
+old polling isn't speed: it's that the server tells you when something happens,
+instead of the client asking every few seconds whether anything happened.
+
+The clocks carry **client-server latency compensation**, which is what stops the
+player on the worse connection from losing on time undeservedly.
+
+<Figura video="video/responsive-ui" alt="The interface adapting to several screen sizes" pie="The interface, from a 4K monitor to a phone, with the same look." />
+
+## Features
+
+<Funciones items={[
+  { icono: 'lucide:eye', titulo: 'Spectator mode', texto: 'Watch games in progress without interrupting them, updating in real time.' },
+  { icono: 'lucide:timer', titulo: 'Precision clocks', texto: 'Automatic server-client latency compensation so the clock stays fair.' },
+  { icono: 'lucide:message-square', titulo: 'Built-in chat', texto: 'A global channel and a per-room one, to talk to your opponent mid-game.' },
+  { icono: 'lucide:crown', titulo: 'Touch promotion', texto: 'Graphical piece selection when promoting a pawn, built for touchscreens.' },
+  { icono: 'lucide:volume-2', titulo: 'Sound with intent', texto: 'A distinct sound for move, capture and check: you can hear the state of the game.' },
+  { icono: 'lucide:radio', titulo: 'In-game radio', texto: 'Built-in LoFi player, so the retro-futuristic mood does not depend on another tab.' },
+]} />
+
+## Infrastructure
+
+- **Identity**: email authentication through the Resend API, signed from the
+  `forcex.dev` domain.
+- **Security**: Cloudflare WAF with custom rules and **Turnstile** against bots.
+- **Hosting**: runs on my own server (homelab), exposed through **Cloudflare Zero
+  Trust Tunnels**.
+
+<Callout tipo="seguridad" titulo="Why a tunnel instead of open ports">
+  The tunnel builds the connection from the inside out, so the router needs no port
+  open to the internet. There's no surface to scan: what isn't published doesn't get
+  attacked.
+</Callout>
+
+## Roadmap
+
+<HojaDeRuta hitos={[
+  { estado: 'hecho', titulo: 'Complete chess engine', texto: 'Legal moves, checkmate, draws, castling and strict validation.' },
+  { estado: 'hecho', titulo: 'Real-time chat', texto: 'Global channels and per-room channels.' },
+  { estado: 'curso', titulo: 'PGN game history', texto: 'Stored in MongoDB so games can be reviewed and analysed afterwards.' },
+  { estado: 'pendiente', titulo: 'ELO rating system', texto: 'Skill-based matchmaking and a global leaderboard.' },
+]} />
+
+## Credits
+
+**ForcexDev** — technical direction, infrastructure, chess engine and core rewrite.
+**BurnedGPU** — co-founder during the early design phases of the original.

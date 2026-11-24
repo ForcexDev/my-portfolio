@@ -1,0 +1,649 @@
+---
+/**
+ * La página de un proyecto.
+ *
+ * Sustituye al modal: antes el detalle vivía en una ventana que no se podía
+ * enlazar, no cerraba con ESC y no tenía sitio donde poner texto largo. Ahora
+ * cada proyecto es una URL de verdad, con su propia previsualización social.
+ *
+ * Lo que hay aquí y no en la tarjeta:
+ *   - banner con la portada de fondo y el título como ruta de terminal,
+ *   - ficha técnica pegajosa al costado (año, rol, stack completo, enlaces),
+ *   - los estilos del markdown: titulares, tablas, código, citas,
+ *   - botón de copiar en cada bloque de código y lupa en cada figura,
+ *   - navegación al proyecto anterior y al siguiente.
+ *
+ * Los dos últimos son un único listener cada uno para toda la página, no un
+ * script por bloque: con doce bloques de código eso serían doce listeners.
+ */
+import { Image, getImage } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import Base from '@/layouts/Base.astro';
+import { useTraducciones, ruta, segmentos, type Idioma } from '@/i18n';
+import { slugDe, rutaProyecto, type Proyecto } from '@/utils/proyectos';
+
+interface Props {
+  proyecto: Proyecto;
+  idioma: Idioma;
+  anterior?: Proyecto;
+  siguiente?: Proyecto;
+}
+const { proyecto, idioma, anterior, siguiente } = Astro.props;
+const t = useTraducciones(idioma);
+
+const { titulo, resumen, area, estado, anio, rol, stack, imagen, enlaces } = proyecto.data;
+const slug = slugDe(proyecto);
+const otroIdioma = idioma === 'es' ? 'en' : 'es';
+
+// La previsualización social a medida. Pasarle `imagen.src` a secas obligaba a
+// Astro a copiar el PNG original al build — 2 MB solo el de Grand Chess Auto —
+// y encima WhatsApp se bajaba eso entero para enseñar un recorte. JPEG porque
+// es lo único que leen todos los que rastrean enlaces.
+const portada = await getImage({ src: imagen, width: 1200, format: 'jpeg', quality: 80 });
+---
+
+<Base
+  titulo={`${titulo} · ForcexDev`}
+  descripcion={resumen}
+  {idioma}
+  rutaAlterna={rutaProyecto(slug, otroIdioma)}
+  imagen={portada.src}
+  imagenAncho={portada.attributes.width}
+  imagenAlto={portada.attributes.height}
+  fueraDelHome
+>
+  <article
+    class="proyecto"
+    data-copiar={t('proyectos.copiar')}
+    data-copiado={t('proyectos.copiado')}
+    data-cerrar={t('proyectos.cerrarImagen')}
+  >
+    <header class="banner sys-window">
+      <div class="sys-body banner__cuerpo">
+        <div class="banner__fondo" aria-hidden="true">
+          <Image src={imagen} alt="" widths={[720, 1280]} sizes="100vw" loading="eager" />
+        </div>
+
+        <p class="banner__ruta">
+          <span class="prompt">~/{segmentos.proyectos[idioma]}/</span>{slug}
+        </p>
+        <h1 class="banner__titulo">{titulo}</h1>
+        <p class="banner__resumen">{resumen}</p>
+
+        <div class="banner__acciones">
+          {
+            enlaces.demo && (
+              <a href={enlaces.demo} class="btn btn--primario" target="_blank" rel="noopener noreferrer">
+                <Icon name="lucide:external-link" />
+                {t('proyectos.verDemo')}
+              </a>
+            )
+          }
+          {
+            enlaces.repo && (
+              <a href={enlaces.repo} class="btn btn--fantasma" target="_blank" rel="noopener noreferrer">
+                <Icon name="simple-icons:github" />
+                {t('proyectos.verRepo')}
+              </a>
+            )
+          }
+        </div>
+      </div>
+    </header>
+
+    <div class="columnas">
+      <aside class="ficha">
+        <div class="ficha__caja panel panel--quieto">
+          <p class="ficha__titulo">{t('proyectos.briefing')}</p>
+          <dl>
+            <dt>{t('proyectos.anio')}</dt>
+            <dd>{anio}</dd>
+
+            <dt>{t('proyectos.rol')}</dt>
+            <dd>{rol}</dd>
+
+            <dt>{t('proyectos.estado')}</dt>
+            <dd><span class={`estado estado--${estado}`}>{t(`estado.${estado}`)}</span></dd>
+
+            <dt>{t('proyectos.area')}</dt>
+            <dd>{t(`area.${area}`)}</dd>
+          </dl>
+
+          <p class="ficha__titulo ficha__titulo--sep">{t('proyectos.stack')}</p>
+          <ul class="ficha__stack">
+            {stack.map((tecnologia) => <li>{tecnologia}</li>)}
+          </ul>
+
+          <a href={`${ruta('', idioma)}#proyectos`} class="ficha__volver">
+            <Icon name="lucide:arrow-left" />
+            {t('proyectos.volver')}
+          </a>
+        </div>
+      </aside>
+
+      <div class="prosa">
+        <slot />
+      </div>
+    </div>
+
+    <nav class="saltos" aria-label={t('proyectos.titulo')}>
+      {
+        anterior ? (
+          <a href={rutaProyecto(slugDe(anterior), idioma)} class="salto salto--izq panel">
+            <span class="salto__etiqueta">
+              <Icon name="lucide:arrow-left" />
+              {t('proyectos.anterior')}
+            </span>
+            <span class="salto__titulo">{anterior.data.titulo}</span>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        siguiente && (
+          <a href={rutaProyecto(slugDe(siguiente), idioma)} class="salto salto--der panel">
+            <span class="salto__etiqueta">
+              {t('proyectos.siguiente')}
+              <Icon name="lucide:arrow-right" />
+            </span>
+            <span class="salto__titulo">{siguiente.data.titulo}</span>
+          </a>
+        )
+      }
+    </nav>
+  </article>
+</Base>
+
+<script>
+  const articulo = document.querySelector<HTMLElement>('.proyecto');
+
+  if (articulo) {
+    // --- copiar código ---------------------------------------------------
+    // El botón se añade desde JS a propósito: sin JS no habría portapapeles
+    // que usar, así que tampoco tiene sentido pintar el botón.
+    const etiquetaCopiar = articulo.dataset.copiar ?? 'Copiar';
+    const etiquetaCopiado = articulo.dataset.copiado ?? 'Copiado';
+
+    articulo.querySelectorAll('pre').forEach((bloque) => {
+      const boton = document.createElement('button');
+      boton.type = 'button';
+      boton.className = 'copiar';
+      boton.textContent = etiquetaCopiar;
+      boton.addEventListener('click', async () => {
+        await navigator.clipboard.writeText(bloque.innerText);
+        boton.textContent = etiquetaCopiado;
+        boton.classList.add('copiar--ok');
+        setTimeout(() => {
+          boton.textContent = etiquetaCopiar;
+          boton.classList.remove('copiar--ok');
+        }, 1800);
+      });
+      bloque.append(boton);
+    });
+
+    // --- lupa de las figuras ---------------------------------------------
+    // <dialog> ya trae ESC, foco atrapado y fondo inerte. La versión vieja
+    // reimplementaba las tres cosas a mano en 45 líneas.
+    const lupa = document.createElement('dialog');
+    lupa.className = 'lupa';
+    lupa.innerHTML = '<img alt="" /><button type="button" class="lupa__cerrar">✕</button>';
+    lupa.querySelector('.lupa__cerrar')?.setAttribute('aria-label', articulo.dataset.cerrar ?? 'Cerrar');
+    document.body.append(lupa);
+    const grande = lupa.querySelector('img')!;
+
+    articulo.addEventListener('click', (evento) => {
+      const imagen = (evento.target as HTMLElement).closest<HTMLImageElement>('.figura img');
+      if (!imagen) return;
+      grande.src = imagen.currentSrc || imagen.src;
+      grande.alt = imagen.alt;
+      lupa.showModal();
+    });
+
+    // Clic en cualquier sitio que no sea la imagen: cerrar.
+    lupa.addEventListener('click', (evento) => {
+      if (evento.target !== grande) lupa.close();
+    });
+  }
+</script>
+
+<style is:global>
+  /* Botón de copiar: global porque lo crea el script, y los estilos con
+     ámbito de Astro solo alcanzan al HTML que existe en el build. */
+  .proyecto pre {
+    position: relative;
+  }
+  .proyecto .copiar {
+    position: absolute;
+    top: 0.55rem;
+    right: 0.55rem;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid rgb(66 153 225 / 0.25);
+    border-radius: 6px;
+    background: rgb(10 10 20 / 0.9);
+    color: var(--color-dim);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s var(--ease-space);
+  }
+  .proyecto pre:hover .copiar,
+  .proyecto .copiar:focus-visible {
+    opacity: 1;
+  }
+  .proyecto .copiar--ok {
+    border-color: #27c93f;
+    color: #27c93f;
+    opacity: 1;
+  }
+
+  .lupa {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    /* el dialog ocupa todo, así que un clic fuera de la imagen cae aquí */
+    display: none;
+    place-items: center;
+  }
+  .lupa[open] {
+    display: grid;
+  }
+  .lupa::backdrop {
+    background: rgb(0 0 17 / 0.92);
+    backdrop-filter: blur(6px);
+  }
+  .lupa img {
+    max-width: 92vw;
+    max-height: 88dvh;
+    border-radius: 10px;
+    box-shadow: var(--shadow-cosmic);
+    cursor: zoom-out;
+  }
+  .lupa__cerrar {
+    position: fixed;
+    top: 1.2rem;
+    right: 1.4rem;
+    width: 2.4rem;
+    height: 2.4rem;
+    border: 1px solid rgb(66 153 225 / 0.3);
+    border-radius: 50%;
+    background: rgb(10 10 20 / 0.8);
+    color: var(--color-silver);
+    font-size: 1rem;
+    cursor: pointer;
+  }
+</style>
+
+<style>
+  .proyecto {
+    max-width: 76rem;
+    margin: 0 auto;
+    padding: 7rem 1.5rem 5rem;
+  }
+
+  /* --- banner --- */
+  .banner {
+    margin-bottom: 3rem;
+  }
+  .banner__cuerpo {
+    position: relative;
+    padding: 3rem 2.5rem;
+    border-radius: 0.45rem;
+    overflow: hidden;
+  }
+  .banner__fondo {
+    position: absolute;
+    inset: 0;
+    opacity: 0.16;
+  }
+  .banner__fondo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  /* Sin esto el texto compite con la portada y no gana ninguno. */
+  .banner__fondo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      100deg,
+      var(--color-panel) 15%,
+      rgb(10 10 20 / 0.55) 60%,
+      transparent 100%
+    );
+  }
+
+  .banner__ruta,
+  .banner__titulo,
+  .banner__resumen,
+  .banner__acciones {
+    position: relative;
+    z-index: 1;
+  }
+  .banner__ruta {
+    margin: 0 0 0.8rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-silver);
+  }
+  .prompt {
+    color: var(--color-neon-cyan);
+  }
+  .banner__titulo {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 6vw, 3.2rem);
+    line-height: 1.1;
+    color: var(--color-stellar);
+  }
+  .banner__resumen {
+    max-width: 46rem;
+    margin: 1rem 0 0;
+    color: var(--color-dim);
+    font-size: 1.02rem;
+    line-height: 1.65;
+  }
+  .banner__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 1.8rem;
+  }
+  /* --- columnas --- */
+  .columnas {
+    display: grid;
+    grid-template-columns: 17rem 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .ficha__caja {
+    position: sticky;
+    /* 6rem = alto de la barra + aire, para que no quede pegada al menú */
+    top: 6rem;
+    padding: 1.3rem 1.4rem;
+    border-radius: 12px;
+  }
+  .ficha__titulo {
+    margin: 0 0 0.9rem;
+    color: var(--color-nebula);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .ficha__titulo--sep {
+    margin-top: 1.4rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid rgb(66 153 225 / 0.12);
+  }
+
+  .ficha dl {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.55rem 1rem;
+    margin: 0;
+    font-size: 0.84rem;
+  }
+  .ficha dt {
+    color: var(--color-dim);
+    opacity: 0.75;
+  }
+  .ficha dd {
+    margin: 0;
+    color: var(--color-silver);
+  }
+
+  .estado {
+    display: inline-block;
+    padding: 0.1rem 0.5rem;
+    border: 1px solid var(--tono);
+    border-radius: 999px;
+    color: var(--tono);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    text-transform: uppercase;
+  }
+  .estado--desplegado {
+    --tono: #27c93f;
+  }
+  .estado--en-curso {
+    --tono: #ffbd2e;
+  }
+  .estado--archivado {
+    --tono: var(--color-dim);
+  }
+
+  .ficha__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .ficha__stack li {
+    padding: 0.2rem 0.55rem;
+    border: 1px solid rgb(66 153 225 / 0.2);
+    border-radius: 5px;
+    background: rgb(255 255 255 / 0.03);
+    color: var(--color-silver);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+  }
+
+  .ficha__volver {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 1.4rem;
+    color: var(--color-neon-cyan);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-decoration: none;
+  }
+  .ficha__volver:hover {
+    text-decoration: underline;
+  }
+
+  /* --- el markdown --- */
+  /* `:global` porque esto vive en el <slot>: son los .md y .mdx de
+     src/content/proyectos, que Astro no marca con el hash de este archivo. */
+  .prosa {
+    min-width: 0; /* si no, un <pre> ancho estira la rejilla entera */
+    max-width: 48rem;
+    color: var(--color-dim);
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+  .prosa :global(h2) {
+    margin: 2.8rem 0 1rem;
+    font-family: var(--font-display);
+    font-size: 1.55rem;
+    color: var(--color-stellar);
+  }
+  .prosa :global(h2::before) {
+    content: '## ';
+    color: var(--color-nebula);
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    opacity: 0.5;
+  }
+  .prosa :global(h3) {
+    margin: 2rem 0 0.8rem;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: var(--color-silver);
+  }
+  .prosa :global(p) {
+    margin: 1.1rem 0;
+  }
+  .prosa :global(strong) {
+    color: var(--color-silver);
+    font-weight: 600;
+  }
+  .prosa :global(a) {
+    color: var(--color-neon-cyan);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  /* El preflight de Tailwind deja las listas sin viñeta. En la interfaz eso
+     está bien; dentro de un texto largo, no.
+     El `:not([class])` distingue las listas que escribe markdown (nunca llevan
+     clase) de las que son componentes — <Funciones> y <HojaDeRuta> son un <ul>
+     y un <ol>, y sin esto les salían viñetas al lado de cada tarjeta. */
+  .prosa :global(ul:not([class])) {
+    margin: 1.1rem 0;
+    padding-left: 1.3rem;
+    list-style: disc;
+  }
+  .prosa :global(ol:not([class])) {
+    margin: 1.1rem 0;
+    padding-left: 1.3rem;
+    list-style: decimal;
+  }
+  .prosa :global(li:not([class])) {
+    margin: 0.45rem 0;
+  }
+  .prosa :global(li::marker) {
+    color: var(--color-nebula);
+  }
+  .prosa :global(blockquote) {
+    margin: 1.6rem 0;
+    padding-left: 1.1rem;
+    border-left: 3px solid var(--color-cosmic);
+    color: var(--color-silver);
+    font-style: italic;
+  }
+  .prosa :global(hr) {
+    margin: 2.5rem 0;
+    border: 0;
+    border-top: 1px solid rgb(66 153 225 / 0.15);
+  }
+
+  .prosa :global(code) {
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    background: rgb(66 153 225 / 0.1);
+    color: var(--color-neon-cyan);
+    font-family: var(--font-mono);
+    font-size: 0.86em;
+  }
+  .prosa :global(pre) {
+    margin: 1.6rem 0;
+    padding: 1.1rem 1.2rem;
+    border: 1px solid rgb(66 153 225 / 0.18);
+    border-radius: 10px;
+    overflow-x: auto;
+    font-size: 0.86rem;
+    line-height: 1.6;
+  }
+  .prosa :global(pre code) {
+    padding: 0;
+    background: none;
+    color: inherit;
+    font-size: 1em;
+  }
+
+  .prosa :global(table) {
+    width: 100%;
+    margin: 1.8rem 0;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  .prosa :global(th),
+  .prosa :global(td) {
+    padding: 0.6rem 0.8rem;
+    border-bottom: 1px solid rgb(66 153 225 / 0.12);
+    text-align: left;
+    vertical-align: top;
+  }
+  .prosa :global(th) {
+    color: var(--color-nebula);
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .prosa :global(tbody tr:hover) {
+    background: rgb(255 255 255 / 0.02);
+  }
+
+  /* --- anterior / siguiente --- */
+  .saltos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 4rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid rgb(66 153 225 / 0.12);
+  }
+  .salto {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 1rem 1.2rem;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: transform 0.25s var(--ease-space);
+  }
+  .salto--der {
+    align-items: flex-end;
+    text-align: right;
+    /* si no hay anterior, este sigue pegado a la derecha */
+    grid-column: 2;
+  }
+  .salto:hover {
+    transform: translateY(-3px);
+  }
+  .salto__etiqueta {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--color-nebula);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+  }
+  .salto__titulo {
+    color: var(--color-silver);
+    font-family: var(--font-display);
+    font-size: 1rem;
+  }
+
+  @media (max-width: 900px) {
+    .columnas {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .ficha__caja {
+      position: static;
+    }
+    .banner__cuerpo {
+      padding: 2.2rem 1.4rem;
+    }
+    .proyecto {
+      padding: 6rem 1.1rem 4rem;
+    }
+  }
+  @media (max-width: 620px) {
+    .saltos {
+      grid-template-columns: 1fr;
+    }
+    .salto--der {
+      grid-column: 1;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .salto:hover {
+      transform: none;
+    }
+  }
+</style>

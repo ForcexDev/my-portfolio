@@ -1,0 +1,69 @@
+---
+titulo: 'IAimageBetter'
+resumen: 'Self-hosted image upscaling with Real-ESRGAN: detects whether you have a GPU, processes locally, and never uploads your image to anyone else.'
+area: 'full-stack'
+estado: 'desplegado'
+anio: 2025
+rol: 'Personal project'
+stack:
+  - 'React 18'
+  - 'FastAPI'
+  - 'PyTorch'
+  - 'Redis'
+  - 'Docker'
+  - 'Nginx'
+imagen: '../../../assets/img/IAimagebetter.png'
+imagenAlt: 'IAimageBetter screenshot'
+enlaces:
+  repo: 'https://github.com/ForcexDev/IAimageBetter'
+  demo: 'https://iaimagebetter.forcex.dev/'
+orden: 6
+---
+
+import Funciones from '@/components/content/Funciones.astro';
+import Callout from '@/components/content/Callout.astro';
+
+A web app that upscales and restores images with **Real-ESRGAN**, built to run on
+your own machine instead of someone else's server.
+
+## Why self-hosted
+
+Upscaling services ask you to upload the image. For a holiday photo that's fine; for
+a scanned document, an invoice, or a photo of another person, it isn't.
+
+Here the model runs locally:
+
+- **Unlimited processing**, because there's no quota to pay and no request to count.
+- **Works offline**, once the model is downloaded.
+- The image **never leaves the machine**. Not to be processed, not for anything.
+
+<Callout tipo="nota" titulo="Hardware detection">
+  On startup it checks whether CUDA is available and picks GPU or CPU-only by itself.
+  Nothing to configure: on a laptop without a dedicated GPU it still works, just
+  slower.
+</Callout>
+
+## Architecture
+
+The backend is **FastAPI**, with **Redis** as the broker and dedicated workers to
+spread the load. That way one heavy request doesn't block the rest: it enters the
+queue, a worker picks it up, and the UI reports progress.
+
+Everything ships in **Docker** behind **Nginx**, so bringing it up is a
+`docker compose up` rather than an afternoon of Python dependencies.
+
+## Features
+
+<Funciones items={[
+  { icono: 'lucide:columns-2', titulo: 'Before/after comparison', texto: 'A draggable divider over the same image, which is the only honest way to see what changed.' },
+  { icono: 'lucide:cpu', titulo: 'CUDA or CPU', texto: 'Detects the hardware at startup and decides on its own. No configuration.' },
+  { icono: 'lucide:images', titulo: 'Multiple models', texto: 'x2 and x4, with separate weights for photography and anime: they do not upscale the same way.' },
+  { icono: 'lucide:wifi-off', titulo: 'Works offline', texto: 'Once the model is downloaded it needs no network at all.' },
+]} />
+
+## Photos and anime don't upscale the same
+
+They're two different models on purpose. A photo has grain, sensor noise and soft
+transitions; a drawing has clean lines and flat colour areas. The photography model
+smooths a drawing's linework, and the anime model turns photo grain into blotches.
+Picking the right model matters more than turning up the scale factor.

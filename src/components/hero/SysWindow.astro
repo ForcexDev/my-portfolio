@@ -1,0 +1,62 @@
+---
+/**
+ * La ventana de terminal con el borde RGB girando. Es la firma visual del
+ * sitio, así que ahora es un componente reutilizable en vez de estar pegada
+ * solo en el hero.
+ *
+ * El borde y su truco están en src/styles/cosmic.css (`.sys-window`).
+ *
+ *  - `titulo`: lo que se lee en la barra, tipo `~/proyectos/memsim`.
+ *  - `hover`: el borde solo gira al pasar el ratón. Para las tarjetas de
+ *    proyecto, donde siete bordes girando a la vez serían un calefactor.
+ */
+interface Props {
+  titulo?: string;
+  hover?: boolean;
+  class?: string;
+}
+const { titulo, hover = false, class: clase } = Astro.props;
+---
+
+<div class:list={['sys-window', hover && 'sys-window--hover', clase]}>
+  <div class="sys-header">
+    <span class="sys-dot" style="--dot: #ff5f56"></span>
+    <span class="sys-dot" style="--dot: #ffbd2e"></span>
+    <span class="sys-dot" style="--dot: #27c93f"></span>
+    {titulo && <span class="sys-titulo">{titulo}</span>}
+  </div>
+
+  <div class="sys-body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .sys-header {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid rgb(66 153 225 / 0.12);
+    background: rgb(255 255 255 / 0.02);
+  }
+  .sys-dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--dot);
+  }
+  .sys-titulo {
+    margin-left: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--color-dim);
+    opacity: 0.7;
+  }
+  .sys-body {
+    position: relative;
+    z-index: 1;
+  }
+</style>

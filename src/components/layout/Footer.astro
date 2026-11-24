@@ -1,0 +1,59 @@
+---
+/**
+ * Pie. El año sale de `new Date()` — antes estaba escrito a mano y había que
+ * cambiarlo en 4 archivos cada enero.
+ */
+import { Icon } from 'astro-icon/components';
+import { site, redes } from '@/data/site';
+import { useTraducciones, type Idioma } from '@/i18n';
+
+interface Props {
+  idioma: Idioma;
+}
+const { idioma } = Astro.props;
+const t = useTraducciones(idioma);
+---
+
+<footer class="footer">
+  <div class="mx-auto flex max-w-6xl flex-col items-center gap-4 px-6 py-8 sm:flex-row sm:justify-between">
+    <p class="text-sm text-dim">© {new Date().getFullYear()} {site.nombreCompleto}</p>
+
+    <ul class="flex gap-3">
+      {
+        redes.map((red) => (
+          <li>
+            <a href={red.url} target="_blank" rel="noopener noreferrer" aria-label={red.nombre} class="red">
+              <Icon name={red.icono} />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="font-mono text-xs text-dim/60">{t('footer.hecho')}</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    border-top: 1px solid rgb(66 153 225 / 0.12);
+    background: rgb(0 0 17 / 0.4);
+    backdrop-filter: blur(10px);
+  }
+  .red {
+    display: grid;
+    place-items: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 8px;
+    font-size: 1.05rem;
+    color: var(--color-dim);
+    transition: color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+  }
+  .red:hover {
+    color: var(--color-neon-cyan);
+    background: rgb(66 153 225 / 0.1);
+    transform: translateY(-2px);
+  }
+</style>

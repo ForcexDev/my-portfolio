@@ -1,0 +1,76 @@
+---
+titulo: 'Bandit (OverTheWire)'
+resumen: 'A LaTeX write-up of the methodology and solutions for the Bandit wargame: Linux commands, permissions and basic exploitation, level by level.'
+area: 'seguridad'
+estado: 'en-curso'
+anio: 2026
+rol: 'Personal documentation'
+stack:
+  - 'Linux'
+  - 'Bash'
+  - 'SSH'
+  - 'LaTeX'
+imagen: '../../../assets/img/bandit.png'
+imagenAlt: 'Bandit write-up cover'
+enlaces:
+  repo: 'https://github.com/ForcexDev/Bandit-WriteUp'
+orden: 7
+---
+
+import Callout from '@/components/content/Callout.astro';
+
+Bandit is the wargame almost everyone starts with on OverTheWire. Each level hides
+the next one's password somewhere in the system, and getting it out means learning
+one new thing about Linux.
+
+This isn't a list of answers: it's the **why** behind each command, written while
+solving it.
+
+<Callout tipo="aviso" titulo="If you're playing it right now">
+  Reading the solution before trying saves you half an hour and costs you the whole
+  level. Bandit's value is in wrestling with it; this is for afterwards, or for when
+  you've genuinely been stuck for a while.
+</Callout>
+
+## Level 0 → 1: getting in
+
+The credentials are public and always the same:
+
+```bash
+ssh bandit0@bandit.labs.overthewire.org -p 2220
+# password: bandit0
+```
+
+That `-p 2220` is the first thing it teaches: SSH isn't always on 22. Once inside,
+the level 1 password sits in a `readme` file in the home directory.
+
+```bash
+ls
+cat readme
+```
+
+## Level 1 → 2: a file named `-`
+
+The password lives in a file whose name is a single dash. And `cat -` won't read it:
+it just hangs, because to `cat` a lone dash means *read from standard input*, not
+*open the file called dash*.
+
+The way out is handing it a path it can't mistake for an option:
+
+```bash
+cat ./-
+```
+
+That `./` is the entire lesson of the level: **a filename starting with `-` has to be
+disambiguated**, and the same goes for files with spaces, newlines, or names that
+look like flags.
+
+## What it teaches
+
+- Remote connections over **SSH** and non-standard ports.
+- Navigating the Linux filesystem.
+- Files with hostile names, and how to disambiguate them.
+- Relative versus absolute paths, and why the difference matters.
+
+The full LaTeX write-up is at
+[github.com/ForcexDev/Bandit-WriteUp](https://github.com/ForcexDev/Bandit-WriteUp).

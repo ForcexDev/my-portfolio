@@ -1,0 +1,179 @@
+---
+/**
+ * Sobre mí. El texto sale entero de src/i18n/{es,en}.json (`about.p1`…`p3` y
+ * `about.foco*`), así que para reescribirlo no hay que tocar este archivo.
+ *
+ * Ya no va dentro de una ventana de terminal: la consola es la portada, y
+ * repetirla aquí para tres párrafos de texto corrido era ruido. Ahora es la
+ * misma tarjeta de cristal que el resto del sitio, con la biografía a un lado
+ * y las tres áreas en las que ando al otro.
+ */
+import { Icon } from 'astro-icon/components';
+import Seccion from '@/components/layout/Seccion.astro';
+import { useTraducciones, type Idioma } from '@/i18n';
+import { site } from '@/data/site';
+
+interface Props {
+  idioma: Idioma;
+}
+const { idioma } = Astro.props;
+const t = useTraducciones(idioma);
+
+const cv = `${import.meta.env.BASE_URL}/${site.cv}`.replace(/\/+/g, '/');
+
+const focos = [
+  { icono: 'lucide:shield-check', titulo: t('about.foco1Titulo'), texto: t('about.foco1Texto') },
+  { icono: 'lucide:network', titulo: t('about.foco2Titulo'), texto: t('about.foco2Texto') },
+  { icono: 'lucide:server', titulo: t('about.foco3Titulo'), texto: t('about.foco3Texto') },
+];
+---
+
+<Seccion id="sobre-mi" titulo={t('about.titulo')}>
+  <div class="reparto">
+    <article class="bio panel reveal">
+      <p class="bio__firma">
+        <span class="bio__nombre">{site.nombre}</span>
+        <span class="bio__alias">@{site.alias.toLowerCase()}</span>
+      </p>
+
+      <p>{t('about.p1')}</p>
+      <p>{t('about.p2')}</p>
+      <p>{t('about.p3')}</p>
+
+      <div class="acciones">
+        <a href={cv} class="btn btn--primario" target="_blank" rel="noopener noreferrer">
+          <Icon name="lucide:file-text" />
+          {t('about.verCV')}
+        </a>
+        <a href={cv} class="btn btn--fantasma" download>
+          <Icon name="lucide:download" />
+          {t('about.descargarPDF')}
+        </a>
+      </div>
+    </article>
+
+    <div class="focos reveal">
+      <h3 class="focos__titulo">{t('about.focoTitulo')}</h3>
+
+      {
+        focos.map((foco) => (
+          <article class="foco panel panel--quieto">
+            <Icon name={foco.icono} class="foco__ico" />
+            <div>
+              <h4 class="foco__titulo">{foco.titulo}</h4>
+              <p class="foco__texto">{foco.texto}</p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</Seccion>
+
+<style>
+  /* La biografía manda y las tres áreas la acompañan; por debajo de 62rem se
+     apilan, que es donde el texto empezaba a quedarse en columnas de tres
+     palabras. */
+  .reparto {
+    display: grid;
+    grid-template-columns: 1.45fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+  @media (max-width: 62rem) {
+    .reparto {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* El cristal, el barrido y la linterna los pone `.panel` en cosmic.css. */
+  .bio {
+    padding: 2rem 2.2rem;
+    color: var(--color-dim);
+    font-size: 1.02rem;
+    line-height: 1.8;
+  }
+  .bio p {
+    margin: 0 0 1.1rem;
+  }
+
+  .bio__firma {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin-bottom: 1.4rem !important;
+    padding-bottom: 1.1rem;
+    border-bottom: 1px solid rgb(66 153 225 / 0.15);
+  }
+  .bio__nombre {
+    color: var(--color-stellar);
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    text-shadow: 0 0 15px rgb(66 153 225 / 0.35);
+  }
+  .bio__alias {
+    color: var(--color-nebula);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    opacity: 0.8;
+  }
+
+  .acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1.8rem;
+  }
+
+  .focos {
+    display: grid;
+    gap: 1rem;
+  }
+  .focos__titulo {
+    margin: 0 0 0.2rem;
+    color: var(--color-silver);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .foco {
+    display: flex;
+    gap: 1rem;
+    padding: 1.2rem 1.3rem;
+  }
+  .foco__ico {
+    flex-shrink: 0;
+    width: 1.7rem;
+    height: 1.7rem;
+    color: var(--color-nebula);
+    transition:
+      color 0.3s var(--ease-space),
+      filter 0.3s var(--ease-space);
+  }
+  .foco:hover .foco__ico {
+    color: var(--color-neon-cyan);
+    filter: drop-shadow(0 0 10px rgb(0 243 255 / 0.7));
+  }
+  .foco__titulo {
+    margin: 0 0 0.25rem;
+    color: var(--color-stellar);
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .foco__texto {
+    margin: 0;
+    color: var(--color-dim);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .foco__ico {
+      transition: none;
+    }
+  }
+</style>

@@ -1,0 +1,28 @@
+---
+/**
+ * Una página por proyecto y por idioma. Los archivos salen de
+ * src/content/proyectos/en/: añadir uno ahí crea su página sola, sin
+ * tocar nada de aquí.
+ *
+ * `anterior` y `siguiente` van por el campo `orden` del frontmatter, que es el
+ * mismo orden en que se ven en la rejilla del inicio.
+ */
+import { render } from 'astro:content';
+import ProjectLayout from '@/layouts/ProjectLayout.astro';
+import { proyectosDe, slugDe } from '@/utils/proyectos';
+
+export async function getStaticPaths() {
+  const proyectos = await proyectosDe('en');
+  return proyectos.map((proyecto, i) => ({
+    params: { slug: slugDe(proyecto) },
+    props: { proyecto, anterior: proyectos[i - 1], siguiente: proyectos[i + 1] },
+  }));
+}
+
+const { proyecto, anterior, siguiente } = Astro.props;
+const { Content } = await render(proyecto);
+---
+
+<ProjectLayout {proyecto} idioma="en" {anterior} {siguiente}>
+  <Content />
+</ProjectLayout>

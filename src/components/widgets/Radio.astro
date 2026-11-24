@@ -1,0 +1,454 @@
+---
+/**
+ * La radio. Se conserva tal cual estaba — cristal estilo macOS, abajo a la
+ * derecha — con dos cambios:
+ *
+ *  1. Es un componente, así que por fin funciona también en las páginas de
+ *     proyecto. Antes el HTML estaba copiado en las subpáginas pero js/radio.js
+ *     no se cargaba allí, así que los botones no hacían nada.
+ *  2. Al cerrarla se encoge a un disco pequeño en vez de desaparecer para
+ *     siempre. Antes, cerrarla obligaba a recargar la página para recuperarla.
+ *
+ * Las emisoras se editan en src/data/radio.ts.
+ */
+import { Icon } from 'astro-icon/components';
+import { emisoras, volumenInicial } from '@/data/radio';
+import { useTraducciones, type Idioma } from '@/i18n';
+
+interface Props {
+  idioma: Idioma;
+}
+const { idioma } = Astro.props;
+const t = useTraducciones(idioma);
+const primera = emisoras[0]!;
+---
+
+<div
+  id="radio-widget"
+  class="radio-widget"
+  data-emisoras={JSON.stringify(emisoras)}
+  data-volumen={volumenInicial}
+>
+  <button id="radio-close" class="radio-close-btn" aria-label={t('radio.cerrar')}>
+    <Icon name="lucide:x" />
+  </button>
+
+  <div class="radio-content-wrapper">
+    <div class="radio-art">
+      <img src={primera.caratula} alt="" class="radio-cover" loading="lazy" />
+      <div class="radio-status-badge">
+        <span class="status-dot"></span>
+        <span class="status-texto">LIVE</span>
+      </div>
+    </div>
+
+    <div class="radio-details">
+      <div class="radio-title-scroll">
+        <span class="radio-title-text">{primera.nombre} — {primera.genero}</span>
+      </div>
+
+      <div class="radio-controls-main">
+        <button id="radio-prev" class="radio-btn nav-btn" aria-label={t('radio.anterior')}>
+          <Icon name="lucide:skip-back" />
+        </button>
+        <button id="radio-toggle" class="radio-btn play-btn" aria-label={t('radio.reproducir')}>
+          <Icon name="lucide:play" class="icono-play" />
+          <Icon name="lucide:pause" class="icono-pause" />
+        </button>
+        <button id="radio-next" class="radio-btn nav-btn" aria-label={t('radio.siguiente')}>
+          <Icon name="lucide:skip-forward" />
+        </button>
+      </div>
+
+      <div class="volume-container">
+        <Icon name="lucide:volume-1" class="volume-icon" />
+        <input
+          type="range"
+          id="radio-volume"
+          class="volume-slider"
+          min="0"
+          max="100"
+          value={volumenInicial}
+          aria-label={t('radio.volumen')}
+        />
+      </div>
+    </div>
+  </div>
+
+  <div id="radio-player-container"></div>
+</div>
+
+<button id="radio-reopen" class="radio-reopen" aria-label={t('radio.reproducir')} hidden>
+  <Icon name="lucide:radio" />
+</button>
+
+<script>
+  interface Emisora {
+    id: string;
+    nombre: string;
+    genero: string;
+    caratula: string;
+  }
+
+  const widget = document.getElementById('radio-widget');
+
+  if (widget) {
+    const emisoras: Emisora[] = JSON.parse(widget.dataset.emisoras!);
+    const porId = (id: string) => document.getElementById(id)!;
+    const reopen = porId('radio-reopen') as HTMLButtonElement;
+
+    let volumen = Number(widget.dataset.volumen);
+    let actual = 0;
+    let sonando = false;
+    let player: any = null;
+
+    // --- API de YouTube ---
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+
+    function alCambiarEstado(e: any) {
+      sonando = e.data === (window as any).YT.PlayerState.PLAYING;
+      widget!.classList.toggle('playing', sonando);
+      const badge = widget!.querySelector('.status-texto');
+      if (badge) badge.textContent = sonando ? 'LIVE' : 'PAUSED';
+    }
+
+    (window as any).onYouTubeIframeAPIReady = () => {
+      player = new (window as any).YT.Player('radio-player-container', {
+        height: '0',
+        width: '0',
+        videoId: emisoras[0]!.id,
+        // Mismo reproductor, sin las cookies de seguimiento de YouTube: es lo
+        // único que Lighthouse le reprochaba al sitio.
+        host: 'https://www.youtube-nocookie.com',
+        playerVars: { autoplay: 0, controls: 0, disablekb: 1, playsinline: 1 },
+        events: {
+          onReady: () => player.setVolume(volumen),
+          onStateChange: alCambiarEstado,
+        },
+      });
+    };
+
+    // --- controles ---
+    porId('radio-toggle').addEventListener('click', () => {
+      if (!player) return;
+      if (sonando) player.pauseVideo();
+      else player.playVideo();
+    });
+
+    const cambiarEmisora = (paso: number) => {
+      actual = (actual + paso + emisoras.length) % emisoras.length;
+      const e = emisoras[actual]!;
+      widget.querySelector('.radio-title-text')!.textContent = e.nombre + ' — ' + e.genero;
+      (widget.querySelector('.radio-cover') as HTMLImageElement).src = e.caratula;
+      if (player) player.loadVideoById({ videoId: e.id, startSeconds: 0 });
+    };
+    porId('radio-prev').addEventListener('click', () => cambiarEmisora(-1));
+    porId('radio-next').addEventListener('click', () => cambiarEmisora(1));
+
+    const slider = porId('radio-volume') as HTMLInputElement;
+    slider.addEventListener('input', () => {
+      volumen = Number(slider.value);
+      if (player) player.setVolume(volumen);
+      widget.dataset.vol = volumen === 0 ? 'mudo' : volumen < 50 ? 'bajo' : 'alto';
+    });
+
+    // --- cerrar / reabrir ---
+    porId('radio-close').addEventListener('click', () => {
+      if (player) player.pauseVideo();
+      widget.classList.add('oculta');
+      reopen.hidden = false;
+    });
+    reopen.addEventListener('click', () => {
+      widget.classList.remove('oculta');
+      reopen.hidden = true;
+    });
+
+    // --- el juego silencia la radio mientras dura la partida ---
+    // Los nombres siguen en inglés a propósito: es el contrato que ya usa
+    // space-battle.js, y renombrarlo solo serviría para romperlo en silencio.
+    let sonabaAntes = false;
+    (window as any).pauseRadio = () => {
+      if (!sonando) return;
+      sonabaAntes = true;
+      if (player) player.pauseVideo();
+    };
+    (window as any).resumeRadio = () => {
+      if (!sonabaAntes) return;
+      sonabaAntes = false;
+      if (player) player.playVideo();
+    };
+  }
+</script>
+
+<style>
+  .radio-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 340px;
+    max-width: 90vw;
+    height: 115px;
+    z-index: 9999;
+    overflow: hidden;
+    border: 1px solid rgb(255 255 255 / 0.15);
+    border-radius: 18px;
+    background: rgb(40 40 55 / 0.4);
+    backdrop-filter: blur(25px) saturate(180%);
+    box-shadow: 0 8px 32px rgb(0 0 0 / 0.2);
+    transition:
+      opacity 0.3s var(--ease-space),
+      transform 0.3s var(--ease-space);
+  }
+  .radio-widget.oculta {
+    opacity: 0;
+    transform: translateY(12px) scale(0.9);
+    pointer-events: none;
+  }
+
+  .radio-content-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 100%;
+    padding: 10px 14px;
+  }
+
+  .radio-art {
+    position: relative;
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 0.2);
+  }
+  .radio-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .radio-status-badge {
+    position: absolute;
+    bottom: -1px;
+    left: -1%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 102%;
+    padding: 3px 0;
+    background: rgb(0 0 0 / 0.8);
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 700;
+  }
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ff3b30;
+    animation: blinkRed 1.5s infinite;
+  }
+  /* En pausa el punto deja de latir y se apaga */
+  .radio-widget:not(.playing) .status-dot {
+    animation: none;
+    opacity: 0.5;
+    background: grey;
+  }
+  @keyframes blinkRed {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.3;
+    }
+  }
+
+  .radio-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    overflow: hidden;
+    text-align: center;
+  }
+  .radio-title-scroll {
+    width: 100%;
+    margin-bottom: 2px;
+    overflow: hidden;
+    white-space: nowrap;
+    mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  }
+  .radio-title-text {
+    display: inline-block;
+    padding-left: 100%;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-stellar);
+    animation: scrollText 12s linear infinite;
+  }
+  @keyframes scrollText {
+    to {
+      transform: translateX(-100%);
+    }
+  }
+
+  .radio-controls-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+  }
+  .radio-btn {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid rgb(255 255 255 / 0.1);
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.05);
+    color: rgb(255 255 255 / 0.9);
+    font-size: 0.85rem;
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease,
+      border-color 0.2s ease;
+  }
+  .play-btn {
+    background: rgb(255 255 255 / 0.15);
+    border-color: rgb(255 255 255 / 0.2);
+    color: #fff;
+  }
+  .radio-btn:hover {
+    background: rgb(255 255 255 / 0.25);
+    border-color: rgb(255 255 255 / 0.3);
+    transform: scale(1.05);
+  }
+  /* Un solo boton, dos iconos: el que se ve depende de si suena o no */
+  .icono-pause,
+  .radio-widget.playing .icono-play {
+    display: none;
+  }
+  .radio-widget.playing .icono-pause {
+    display: block;
+  }
+
+  .volume-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+  }
+  .volume-icon {
+    flex-shrink: 0;
+    font-size: 0.9rem;
+    color: var(--color-dim);
+  }
+  .radio-widget[data-vol='mudo'] .volume-icon {
+    opacity: 0.4;
+  }
+  .volume-slider {
+    appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background: rgb(255 255 255 / 0.2);
+    outline: none;
+    cursor: pointer;
+  }
+  .volume-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--color-stellar);
+    transition: transform 0.1s;
+  }
+  .volume-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    background: var(--color-nebula);
+  }
+  .volume-slider::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+    border: none;
+    border-radius: 50%;
+    background: var(--color-stellar);
+  }
+
+  .radio-close-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    z-index: 10;
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.1);
+    color: rgb(255 255 255 / 0.6);
+    font-size: 12px;
+    transition:
+      background 0.2s ease,
+      color 0.2s ease;
+  }
+  .radio-close-btn:hover {
+    background: rgb(255 59 48 / 0.8);
+    color: #fff;
+  }
+
+  /* El disco al que se encoge la radio cerrada */
+  .radio-reopen {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgb(255 255 255 / 0.15);
+    border-radius: 50%;
+    background: rgb(40 40 55 / 0.6);
+    backdrop-filter: blur(20px) saturate(180%);
+    color: var(--color-silver);
+    font-size: 1.1rem;
+    box-shadow: 0 8px 32px rgb(0 0 0 / 0.25);
+    transition:
+      color 0.25s ease,
+      border-color 0.25s ease;
+  }
+  .radio-reopen:hover {
+    color: var(--color-neon-cyan);
+    border-color: rgb(0 243 255 / 0.4);
+  }
+  .radio-reopen[hidden] {
+    display: none;
+  }
+
+  /* Oculta en movil, tal como estaba: no cabe sin taparlo todo */
+  @media (max-width: 480px) {
+    .radio-widget,
+    .radio-reopen {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .radio-title-text,
+    .status-dot {
+      animation: none;
+    }
+    .radio-title-text {
+      padding-left: 0;
+    }
+  }
+</style>

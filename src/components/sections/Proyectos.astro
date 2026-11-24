@@ -1,0 +1,120 @@
+---
+/**
+ * La sección de proyectos del inicio: título, filtros por área y la rejilla.
+ *
+ * Los filtros salen de las áreas que existen de verdad en `src/content/proyectos`,
+ * no de una lista escrita a mano: si algún día no queda ningún proyecto de IoT,
+ * el botón desaparece solo.
+ *
+ * Antes había un botón "View More" con un límite de 6 que escondía exactamente
+ * una tarjeta. Con filtros no hace falta: se ven las siete.
+ */
+import Seccion from '@/components/layout/Seccion.astro';
+import ProjectCard from '@/components/projects/ProjectCard.astro';
+import { useTraducciones, type Idioma } from '@/i18n';
+import { proyectosDe } from '@/utils/proyectos';
+
+interface Props {
+  idioma: Idioma;
+}
+const { idioma } = Astro.props;
+const t = useTraducciones(idioma);
+
+const proyectos = await proyectosDe(idioma);
+const areas = [...new Set(proyectos.map((p) => p.data.area))];
+---
+
+<Seccion
+  id="proyectos"
+  titulo={t('proyectos.titulo')}
+  subtitulo={t('proyectos.subtitulo')}
+>
+  <div class="filtros reveal" role="group" aria-label={t('proyectos.titulo')}>
+    <button type="button" class="filtro" data-area="todos" aria-pressed="true">
+      {t('proyectos.todos')}
+      <span class="cuenta">{proyectos.length}</span>
+    </button>
+    {
+      areas.map((area) => (
+        <button type="button" class="filtro" data-area={area} aria-pressed="false">
+          {t(`area.${area}`)}
+          <span class="cuenta">{proyectos.filter((p) => p.data.area === area).length}</span>
+        </button>
+      ))
+    }
+  </div>
+
+  <div class="rejilla">
+    {proyectos.map((proyecto) => <ProjectCard {proyecto} {idioma} />)}
+  </div>
+</Seccion>
+
+<script>
+  // Filtrado en el cliente: son siete tarjetas ya pintadas, así que esconderlas
+  // es más rápido y más accesible que volver a pedir la página.
+  const zona = document.querySelector<HTMLElement>('#proyectos');
+  const botones = zona?.querySelectorAll<HTMLButtonElement>('.filtro') ?? [];
+  const tarjetas = zona?.querySelectorAll<HTMLElement>('.tarjeta') ?? [];
+
+  zona?.addEventListener('click', (evento) => {
+    const boton = (evento.target as HTMLElement).closest<HTMLButtonElement>('.filtro');
+    if (!boton) return;
+
+    const area = boton.dataset.area;
+    botones.forEach((b) => b.setAttribute('aria-pressed', String(b === boton)));
+    tarjetas.forEach((tarjeta) => {
+      tarjeta.classList.toggle('oculta', area !== 'todos' && tarjeta.dataset.area !== area);
+    });
+  });
+</script>
+
+<style>
+  .filtros {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .filtro {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.95rem;
+    border: 1px solid rgb(66 153 225 / 0.2);
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.03);
+    backdrop-filter: blur(12px);
+    color: var(--color-dim);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition:
+      color 0.25s var(--ease-space),
+      border-color 0.25s var(--ease-space),
+      background 0.25s var(--ease-space);
+  }
+  .filtro:hover {
+    color: var(--color-silver);
+    border-color: rgb(66 153 225 / 0.45);
+  }
+  .filtro[aria-pressed='true'] {
+    border-color: var(--color-neon-cyan);
+    background: color-mix(in srgb, var(--color-neon-cyan) 12%, transparent);
+    color: var(--color-neon-cyan);
+  }
+  .cuenta {
+    opacity: 0.55;
+    font-size: 0.7rem;
+  }
+
+  .rejilla {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+    gap: 1.5rem;
+    align-items: stretch;
+  }
+  .rejilla :global(.oculta) {
+    display: none;
+  }
+</style>

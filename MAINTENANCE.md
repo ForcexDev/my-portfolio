@@ -1,132 +1,98 @@
-# Guía de Mantenimiento y Escalabilidad
+# Mantenimiento
 
-Este documento detalla la estructura del código y cómo agregar nuevos proyectos o walkthroughs manteniendo el estilo visual y la funcionalidad.
+Dónde tocar cada cosa. La regla general: **el contenido vive en `src/data/` y
+`src/content/`, y nada de eso es HTML.** Si te encuentras editando un `.astro`
+para cambiar un texto, casi seguro te has pasado de carpeta.
 
-## 1. Estructura de Archivos
-El sistema de plantillas consta de 4 partes principales:
-- **HTML (Contenido):** `pages/nombre-proyecto.html`
-- **CSS Base:** `css/page-template.css` (Estilos modulares para subpáginas) y `css/components.css` (Estilos globales compartidos como el botón Back-to-Top).
-- **CSS Responsivo:** `css/responsive.css` (Base móvil) y **`css/responsive-enhancements.css`** (Ajustes finos para Mobile/2K traídos por el usuario).
-- **JS (Funcionalidad):** `js/page-template.js` (Lógica específica de subpáginas).
+    npm install
+    npm run dev        # http://localhost:4321/my-portfolio
 
-## 2. Decisiones de Diseño Explicadas
-### Cursores y Navegación
-- **Home:** Usa el "Cursor Cósmico" personalizado.
-- **Subpáginas (Project/Walkthrough):** Se fuerza el **cursor por defecto** del sistema para evitar conflictos de UX en lecturas largas o interacciones complejas. Esto se controla en `page-template.css`.
+## Dónde está cada cosa
 
-### Marcos y Contenido Multimedia
-- **Imágenes y Videos:** Usan un sistema de "marco adaptativo" (`width: fit-content` en contenedores o bordes directos en `img`) para que el borde siempre abrace el contenido sin dejar espacios vacíos, sin importar la relación de aspecto.
+| Quiero cambiar… | Archivo |
+|---|---|
+| Nombre, correo, redes, ruta del CV, claves de EmailJS | `src/data/site.ts` |
+| El bloque neofetch y los comandos del terminal del hero | `src/data/hero.ts` |
+| Habilidades técnicas (los 5 grupos) | `src/data/skills.ts` |
+| Trayectoria (ayudantías, práctica, laboral) | `src/data/experience.ts` |
+| Logros (CTF, IEEE Xtreme) | `src/data/achievements.ts` |
+| Certificaciones e idiomas | `src/data/certifications.ts` |
+| Las emisoras de la radio | `src/data/radio.ts` |
+| Textos de interfaz (botones, títulos de sección) | `src/i18n/es.json` + `en.json` |
+| Colores, tipografías, sombras | `src/styles/tokens.css` |
+| Starfield, glass, borde cónico, keyframes | `src/styles/cosmic.css` |
+| Un proyecto | `src/content/proyectos/{es,en}/<slug>.md` |
 
-### Botón "Volver Arriba"
-- Sincronizado con el Home para mantener el estilo Glassmorphism premium. Se hereda directamente de `components.css`.
+Los archivos de `src/data/` son TypeScript plano: arrays de objetos con un
+comentario encima explicando cada campo. Editas el array y ya.
 
-## 3. Cómo Agregar un Nuevo Proyecto
-Para crear una nueva página de proyecto (Showcase) o guía (Walkthrough), sigue estos pasos:
+## Añadir un proyecto
 
-### Paso 1: Duplicar la Plantilla Correcta
-- Si es un **Proyecto** (con imágenes grandes, demo, galería):
-  Duplicate `pages/ia-project-showcase.html` y renómbralo (ej: `mi-nuevo-proyecto.html`).
-- Si es un **Walkthrough** (con pasos, código, terminal):
-  Duplicate `pages/bandit-walkthrough.html` y renómbralo (ej: `nueva-guia.html`).
+Un proyecto = **dos archivos**, uno por idioma, con el mismo nombre:
 
-### Paso 2: Editar Metadatos (Head)
-Abre el nuevo archivo y modifica:
-```html
-<title>Nombre del Proyecto | ForcexDev</title>
-<!-- Asegúrate de MANTENER los links a responsive-enhancements.css y components.css -->
+    src/content/proyectos/es/mi-proyecto.md
+    src/content/proyectos/en/mi-proyecto.md
+
+El nombre del archivo es la URL: `/my-portfolio/proyectos/mi-proyecto`.
+Copia el frontmatter de `memsim.md`, que es el más corto. Los campos y lo que
+admite cada uno están documentados en `src/content.config.ts`; si te falta uno o
+pones un `area` que no existe, **el build falla y te dice en qué archivo**.
+
+La portada va en `src/assets/img/portadas/` y se referencia con ruta relativa.
+Si todavía no tienes captura, `node scripts/portadas.mjs` genera una de relleno.
+Astro se encarga del WebP y del `srcset`; no optimices nada a mano.
+
+Si falta la versión en inglés, el build avisa. Para dejar uno a medias sin
+publicarlo: `borrador: true` en el frontmatter.
+
+## Componentes dentro de un proyecto
+
+Renombra el archivo a `.mdx` e impórtalos arriba del todo. Los que hay:
+
+```mdx
+import Callout from '@/components/content/Callout.astro';
+import Figura from '@/components/content/Figura.astro';
+import Funciones from '@/components/content/Funciones.astro';
+import HojaDeRuta from '@/components/content/HojaDeRuta.astro';
 ```
 
-### Paso 3: Modificar el Contenido
-El contenido está dentro de `.page-content`. Las secciones clave son:
+`grand-chess-auto.mdx` los usa todos — cópialo de ahí en vez de leer el código.
+Los bloques de código con ``` ya salen con resaltado y botón de copiar, sin
+hacer nada.
 
-- **Encabezado (`header.page-header`):**
-  - `.page-title`: Título principal.
-  - `.page-subtitle`: Descripción breve.
-  - `.page-tags`: Etiquetas de tecnologías (ej: `<span class="tag">React</span>`).
+Para un vídeo: `node scripts/gif-a-video.mjs entrada.gif video/salida` y luego
+`<Figura video="video/salida" …>`. Nunca metas un GIF; el del sitio viejo pesaba
+19 MB él solo.
 
-- **Bloques de Texto (`article.text-block`):**
-  - Usa `<section>` para separar temas.
-  - Usa `<h2>` con iconos para subtítulos (ej: `<h2><i class="fas fa-star"></i> Características</h2>`).
-  - **Código:** Usa la estructura `.code-block` para snippets con botón de copiar. El scroll horizontal se previene automáticamente con `pre-wrap`.
-  - **Alertas:** Usa `.callout.info` para notas importantes.
+## Añadir un idioma
 
-### Paso 4: Configurar Navegación
-La navbar simplificada ya está configurada. Solo asegúrate de que el logo apunte correctamente al inicio:
-```html
-<a href="../index.html#home" class="logo">ForcexDev</a>
+Está preparado para dos. Un tercero serían: una entrada en `i18n/`, un
+`src/pages/<lang>/`, una carpeta en `src/content/proyectos/` y tocar
+`astro.config.mjs`. No es gratis, pero tampoco hay nada hardcodeado en contra.
+
+## Antes de subir
+
+```
+npm run check     # TypeScript + el esquema de los proyectos
+npm run build     # 16 páginas, sin warnings
+npm run preview   # respeta el base; aquí se ven las rutas rotas
+npm run humo      # con el preview levantado en otra terminal
 ```
 
-### Paso 5: Agregar el Link en el Portfolio Principal
-Edita `index.html` y busca la sección `#projects`. Agrega una nueva `project-card` que enlace a tu nueva página:
-```html
-<a href="pages/mi-nuevo-proyecto.html" class="project-link-btn">Ver Detalles</a>
-```
+`humo` comprueba lo que el build no puede: los filtros de la rejilla, el botón
+de copiar, el lightbox, el cambio de idioma y que el juego arranque con música.
+Si toca algo de eso, que falle ahí y no en producción.
 
-## 4. Personalización de Estilos
-Todo el diseño se controla centralmente desde `css/page-template.css` y `css/responsive-enhancements.css`.
+## Deploy
 
-### Gestión de Botones
-El sistema utiliza diferentes clases de botones según su función:
-1.  **Botones de Llamada a la Acción (`.cta-button`, `.submit-btn`):**
-    - **Estilos Base:** Definidos globalmente en `css/base.css` o `css/components.css`.
-    - **Ajustes Responsivos:** Sus tamaños y paddings para tablet/móvil se ajustan en `css/responsive-enhancements.css`.
-2.  **Botón Volver Arriba (`.back-to-top`):**
-    - **Estilo Premium:** Heredado directamente de `css/components.css` para mantener la identidad visual del Home (Glassmorphism, flotación). No debe haber estilos duplicados en `page-template.css`.
-3.  **Botones de Copia (`.copy-btn`):**
-    - **Específicos:** Definidos exclusivamente en `css/page-template.css` ya que solo aparecen en bloques de código.
+`git push` a `main` y `.github/workflows/deploy.yml` construye y publica solo.
 
-### Gestión de Botones (Acciones Finales)
-Al final de cada proyecto o walkthrough, encontrarás una sección de acciones (`<footer>`). Aquí puedes agregar o quitar botones según necesites:
+**Una vez, a mano:** GitHub → Settings → Pages → Source → **GitHub Actions**.
+Mientras siga en "Deploy from a branch", el workflow construye pero no publica.
 
-#### 1. Estructura HTML Base
-```html
-<footer class="text-block" style="text-align: center; margin-top: 4rem;">
-    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-        <!-- TUS BOTONES VAN AQUÍ -->
-    </div>
-</footer>
-```
+## Lo que ya no existe
 
-#### 2. Código para Botones Comunes
-Copia y pega estos bloques dentro del `div` anterior:
-
-**A. Ver Repositorio (GitHub):**
-```html
-<a href="URL_DEL_REPO" target="_blank" class="cta-button">
-    <i class="fab fa-github"></i> <span>View Repository</span>
-</a>
-```
-
-**B. Ver Demo en Vivo:**
-```html
-<a href="URL_DEL_DEMO" target="_blank" class="cta-button">
-    <i class="fas fa-external-link-alt"></i> <span>Live Demo</span>
-</a>
-```
-
-**C. Volver al Portafolio (Secundario):**
-```html
-<a href="../index.html#projects" class="cta-button secondary-btn">
-    <span>Back to Portfolio</span>
-</a>
-```
-
-#### 3. Cómo Agregar/Quitar
-- **Agregar:** Simplemente pega el código del botón que quieras dentro del `div` contenedor.
-- **Quitar:** Borra la etiqueta `<a>` completa del botón que no desees.
-- **Personalizar:** Cambia el `href` por tu link y el texto del `span`.
-
-- **Colores Generales:** Se usan variables CSS (`var(--nebula-blue)`, etc.) definidas en `variables.css`.
-- **Media Queries:** Si necesitas ajustar algo para móvil, hazlo preferiblemente en `responsive-enhancements.css` para mantener el orden.
-
-## 5. Escalabilidad
-El código está diseñado para ser modular.
-- **Navbar:** Si decides cambiar la navbar en el futuro, solo necesitas editar el bloque `<nav>` en tus archivos HTML. El CSS se adaptará automáticamente.
-- **Scripts:** `page-template.js` detecta automáticamente todos los bloques de código y les añade la funcionalidad de copiar, sin necesidad de configuración extra.
-
-## 6. Checklist para GitHub
-Antes de subir cambios (commit/push):
-1.  [ ] Verifica que todos los links (`href`) funcionen.
-2.  [ ] Abre la página en modo incógnito para asegurar que no hay cache de estilos viejos.
-3.  [ ] Prueba la versión móvil (usa las DevTools de Chrome con F12 -> Icono de celular).
-4.  [ ] Confirma que el Contact Hub se vea idéntico en Home y Subpáginas.
+El flujo viejo era duplicar un HTML de 400 líneas por proyecto y mantener la
+navbar, el hub de contacto y el footer copiados en cuatro archivos. Eso se acabó:
+`src/layouts/Base.astro` los tiene una vez. Si ves que estás copiando y pegando
+marcado, párate — hay un componente para eso o hace falta uno.

@@ -1,0 +1,215 @@
+---
+/**
+ * Barra de navegación. Existe UNA vez: antes estaba copiada en index.html y en
+ * las 3 subpáginas, así que cambiar un enlace eran 4 ediciones.
+ *
+ * Para añadir o quitar una sección, toca solo el array `secciones` de abajo.
+ */
+import { Icon } from 'astro-icon/components';
+import { site } from '@/data/site';
+import { useTraducciones, ruta, type ClaveTexto, type Idioma } from '@/i18n';
+import LangToggle from './LangToggle.astro';
+
+interface Props {
+  idioma: Idioma;
+  rutaAlterna: string;
+  /** true en las páginas de proyecto: los anclajes tienen que volver al home */
+  fueraDelHome?: boolean;
+}
+const { idioma, rutaAlterna, fueraDelHome = false } = Astro.props;
+const t = useTraducciones(idioma);
+
+const secciones: { ancla: string; clave: ClaveTexto }[] = [
+  { ancla: 'sobre-mi', clave: 'nav.sobreMi' },
+  { ancla: 'proyectos', clave: 'nav.proyectos' },
+  { ancla: 'trayectoria', clave: 'nav.trayectoria' },
+  { ancla: 'skills', clave: 'nav.skills' },
+  { ancla: 'contacto', clave: 'nav.contacto' },
+];
+
+const home = ruta('', idioma);
+const prefijo = fueraDelHome ? home : '';
+---
+
+<nav class="navbar" id="navbar">
+  <div class="mx-auto flex max-w-6xl items-center justify-between px-6">
+    <a href={home} class="logo">{site.alias}</a>
+
+    <ul class="nav-links" id="nav-links">
+      {
+        secciones.map((s) => (
+          <li>
+            <a href={`${prefijo}#${s.ancla}`} data-seccion={s.ancla}>
+              {t(s.clave)}
+            </a>
+          </li>
+        ))
+      }
+      <li><LangToggle {idioma} {rutaAlterna} /></li>
+    </ul>
+
+    <button class="mobile-toggle" id="mobile-toggle" aria-label={t('a11y.menu')} aria-expanded="false">
+      <Icon name="lucide:menu" />
+    </button>
+  </div>
+</nav>
+
+<script>
+  const navbar = document.getElementById('navbar')!;
+  const enlaces = document.getElementById('nav-links')!;
+
+  // El menú de móvil
+  document.getElementById('mobile-toggle')?.addEventListener('click', (e) => {
+    const btn = e.currentTarget as HTMLButtonElement;
+    const abierto = enlaces.classList.toggle('abierto');
+    btn.setAttribute('aria-expanded', String(abierto));
+  });
+  enlaces.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).tagName === 'A') enlaces.classList.remove('abierto');
+  });
+
+  // Barra de progreso + sombra al bajar.
+  // El sitio viejo leía offsetTop de 7 secciones en CADA evento de scroll
+  // (js/main.js:530). Aquí el scroll solo escribe una variable CSS, y de saber
+  // qué sección está a la vista se encarga un IntersectionObserver.
+  const alScroll = () => {
+    const alto = document.documentElement.scrollHeight - window.innerHeight;
+    navbar.style.setProperty('--scroll-progress', `${alto > 0 ? (window.scrollY / alto) * 100 : 0}%`);
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+  };
+  addEventListener('scroll', alScroll, { passive: true });
+  alScroll();
+
+  const secciones = document.querySelectorAll<HTMLElement>('section[id]');
+  if (secciones.length) {
+    const observer = new IntersectionObserver(
+      (entradas) => {
+        for (const entrada of entradas) {
+          if (!entrada.isIntersecting) continue;
+          enlaces.querySelectorAll('a[data-seccion]').forEach((a) => {
+            a.classList.toggle('active', a.getAttribute('data-seccion') === entrada.target.id);
+          });
+        }
+      },
+      { rootMargin: '-45% 0px -45% 0px' },
+    );
+    secciones.forEach((s) => observer.observe(s));
+  }
+</script>
+
+<style>
+  .navbar {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 1000;
+    padding: 0.6rem 0;
+    background: rgb(0 0 17 / 0.6);
+    backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgb(66 153 225 / 0.1);
+    transition: background 0.4s var(--ease-space), box-shadow 0.4s var(--ease-space);
+  }
+  .navbar.scrolled {
+    background: rgb(0 0 17 / 0.85);
+    border-bottom-color: rgb(66 153 225 / 0.2);
+    box-shadow: 0 4px 30px rgb(0 0 0 / 0.3), 0 0 20px rgb(66 153 225 / 0.1);
+  }
+  /* La línea de progreso de lectura */
+  .navbar::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: var(--scroll-progress, 0%);
+    background: linear-gradient(90deg, var(--color-nebula), var(--color-cosmic), var(--color-magenta));
+    box-shadow: 0 0 10px var(--color-nebula);
+  }
+
+  .logo {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--color-stellar);
+    text-shadow: 0 0 10px rgb(66 153 225 / 0.4);
+    transition: text-shadow 0.3s ease;
+  }
+  .logo:hover {
+    text-shadow: 0 0 25px rgb(66 153 225 / 0.8), 0 0 40px rgb(66 153 225 / 0.4);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .nav-links a {
+    display: block;
+    position: relative;
+    padding: 0.55rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--color-dim);
+    transition: color 0.3s ease, background 0.3s ease;
+  }
+  .nav-links a:hover {
+    color: var(--color-stellar);
+    background: rgb(66 153 225 / 0.08);
+  }
+  .nav-links a.active {
+    color: var(--color-stellar);
+    background: rgb(66 153 225 / 0.12);
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    border-radius: 2px;
+    transform: translateX(-50%);
+    background: linear-gradient(90deg, var(--color-nebula), var(--color-cosmic));
+    box-shadow: 0 0 8px rgb(66 153 225 / 0.5);
+    transition: width 0.3s var(--ease-space);
+  }
+  .nav-links a:hover::after,
+  .nav-links a.active::after {
+    width: 60%;
+  }
+
+  .mobile-toggle {
+    display: none;
+    color: var(--color-silver);
+    font-size: 1.4rem;
+    padding: 0.4rem;
+  }
+
+  @media (max-width: 860px) {
+    .mobile-toggle {
+      display: block;
+    }
+    .nav-links {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding: 0.5rem 1rem 1rem;
+      background: rgb(0 0 17 / 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgb(66 153 225 / 0.15);
+      /* cerrado por defecto; `hidden` no sirve porque queremos la transición */
+      display: none;
+    }
+    .nav-links.abierto {
+      display: flex;
+    }
+    .nav-links a {
+      padding: 0.8rem 1rem;
+    }
+  }
+</style>

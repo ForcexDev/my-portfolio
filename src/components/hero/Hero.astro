@@ -1,0 +1,267 @@
+---
+/**
+ * La portada: el sistema orbital corriendo detrás y el nombre delante.
+ *
+ * Fuera la ventana de terminal. Una consola es lo que sale en todos los
+ * portafolios de seguridad; esto no. Y además la consola contaba lo que hago
+ * con texto, mientras que aquí lo dice la escena: una estrella que no está
+ * quieta y unos cuerpos persiguiéndola, cada uno dejando su hélice.
+ *
+ * El texto va encima del lienzo, no al lado, y el velo de la izquierda es lo
+ * único que lo hace legible. Es un degradado y no un fondo opaco a propósito:
+ * un panel sólido cortaría la escena en dos.
+ */
+import { Icon } from 'astro-icon/components';
+import { site } from '@/data/site';
+import { cuerposDelHero } from '@/data/orbital';
+import { useTraducciones, ruta, type Idioma } from '@/i18n';
+
+interface Props {
+  idioma: Idioma;
+}
+const { idioma } = Astro.props;
+const t = useTraducciones(idioma);
+const cv = `${import.meta.env.BASE_URL}/${site.cv}`.replace(/\/+/g, '/');
+---
+
+<section id="inicio" class="hero">
+  <div class="cielo" aria-hidden="true">
+    <canvas class="lienzo" data-cuerpos={JSON.stringify(cuerposDelHero)}></canvas>
+  </div>
+  <div class="velo" aria-hidden="true"></div>
+
+  <div class="texto">
+    <p class="alias">@{site.alias.toLowerCase()}</p>
+    <h1 class="nombre">{site.nombre}</h1>
+    <p class="titular">{t('hero.titular')}</p>
+
+    <div class="acciones">
+      <a href={`${ruta('', idioma)}#proyectos`} class="btn btn--primario">
+        <Icon name="lucide:rocket" />
+        {t('hero.verProyectos')}
+      </a>
+      <a href={cv} download class="btn btn--fantasma">
+        <Icon name="lucide:download" />
+        {t('hero.descargarCV')}
+      </a>
+    </div>
+  </div>
+
+  <a href="#sobre-mi" class="scroll-pista">
+    <span>{t('hero.explorar')}</span>
+    <Icon name="lucide:chevron-down" />
+  </a>
+</section>
+
+<script>
+  import { montarOrbital } from '@/scripts/orbital';
+  import type { Cuerpo } from '@/scripts/orbital';
+
+  const lienzo = document.querySelector<HTMLCanvasElement>('#inicio .lienzo');
+  if (lienzo?.dataset.cuerpos) {
+    montarOrbital(lienzo, {
+      cuerpos: JSON.parse(lienzo.dataset.cuerpos) as Cuerpo[],
+      // La estrella a la derecha y un poco arriba: el hueco de la izquierda es
+      // donde va el nombre.
+      foco: [0.68, 0.44],
+      radioVista: 3.2,
+      segundosPorAno: 18,
+    });
+  }
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 100svh;
+    padding: 7rem 0 6rem;
+    overflow: hidden;
+  }
+
+  /* A sangre, más ancho que el contenido: el sistema no tiene por qué
+     respetar el ancho de lectura del resto del sitio. */
+  .cielo {
+    position: absolute;
+    inset: 0;
+  }
+  .lienzo {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .velo {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    /* Fuerte a la izquierda y fuera a los dos tercios. Una rampa recta
+       agrisaría el cuadro entero y lo aplanaría. */
+    background: linear-gradient(
+      90deg,
+      rgb(3 4 14 / 0.92) 0%,
+      rgb(3 4 14 / 0.75) 26%,
+      rgb(3 4 14 / 0.35) 50%,
+      transparent 72%
+    );
+  }
+
+  .texto {
+    position: relative;
+    width: 100%;
+    max-width: 76rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .alias {
+    margin: 0 0 0.9rem;
+    color: var(--color-neon-cyan);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    opacity: 0.75;
+    animation: entra 0.9s var(--ease-float) 0.3s backwards;
+  }
+
+  .nombre {
+    max-width: 12ch;
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 7vw, 5rem);
+    font-weight: 900;
+    line-height: 1.02;
+    letter-spacing: 0.01em;
+    color: var(--color-stellar);
+    text-shadow: 0 0 40px rgb(66 153 225 / 0.45);
+    animation: entra 0.9s var(--ease-float) 0.45s backwards;
+  }
+
+  .titular {
+    max-width: 34ch;
+    margin: 1.4rem 0 0;
+    color: var(--color-dim);
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    line-height: 1.65;
+    animation: entra 0.9s var(--ease-float) 0.6s backwards;
+  }
+
+  .acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    margin-top: 2.4rem;
+    animation: entra 0.9s var(--ease-float) 0.75s backwards;
+  }
+
+  @keyframes entra {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+  }
+
+  /* Tal cual estaba en el sitio viejo (css/components.css:156-190): tamaño de
+     texto normal, el resplandor azul detrás y la flecha rebotando. */
+  .scroll-pista {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: block;
+    width: max-content;
+    text-align: center;
+    color: var(--color-dim);
+    text-shadow: 0 0 10px rgb(66 153 225 / 0.3);
+    opacity: 0;
+    animation: apareceScroll 0.8s ease-out 1.6s forwards;
+    transition:
+      color 0.3s ease,
+      text-shadow 0.3s ease,
+      transform 0.3s ease;
+  }
+  .scroll-pista:hover,
+  .scroll-pista:focus-visible {
+    color: var(--color-nebula);
+    text-shadow: 0 0 15px rgb(66 153 225 / 0.8);
+    transform: translateX(-50%) translateY(-5px);
+  }
+  .scroll-pista svg {
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: 0.5rem auto 0;
+    animation: rebota 2s ease-in-out infinite;
+  }
+
+  @keyframes apareceScroll {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(20px) scale(0.9);
+      filter: blur(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0) scale(1);
+      filter: blur(0);
+    }
+  }
+  @keyframes rebota {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-10px);
+    }
+    60% {
+      transform: translateY(-5px);
+    }
+  }
+
+  /* En vertical el hueco de la izquierda no existe: el velo pasa a cubrir de
+     abajo arriba y el texto se centra. */
+  @media (max-width: 860px) {
+    .velo {
+      background: linear-gradient(
+        180deg,
+        rgb(3 4 14 / 0.55) 0%,
+        rgb(3 4 14 / 0.3) 35%,
+        rgb(3 4 14 / 0.85) 78%,
+        rgb(3 4 14 / 0.95) 100%
+      );
+    }
+    .hero {
+      align-items: flex-end;
+      padding-bottom: 7rem;
+    }
+    .nombre,
+    .titular {
+      max-width: none;
+    }
+  }
+  @media (max-width: 720px) {
+    .scroll-pista {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .alias,
+    .nombre,
+    .titular,
+    .acciones,
+    .scroll-pista,
+    .scroll-pista svg {
+      animation: none;
+    }
+    .scroll-pista {
+      opacity: 0.8;
+    }
+  }
+</style>

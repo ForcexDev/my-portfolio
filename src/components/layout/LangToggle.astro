@@ -1,0 +1,183 @@
+---
+/**
+ * Cambio de idioma: bandera del idioma actual y, al pulsar, una ventanita con
+ * los dos para elegir.
+ *
+ * Es `<details>` y no un botón con JS de apertura: abrir y cerrar ya lo hace el
+ * navegador, con su teclado y su accesibilidad puestos. El script de abajo solo
+ * añade lo que `<details>` no trae — cerrar con Escape y al pulsar fuera.
+ *
+ * Cada idioma es un enlace de verdad, no un botón que reescribe el DOM: la URL
+ * se puede compartir y Google la indexa. `rutaAlterna` la pasa cada página,
+ * porque el slug cambia (`/proyectos/memsim` ↔ `/en/projects/memsim`).
+ */
+import { Icon } from 'astro-icon/components';
+import { useTraducciones, type Idioma } from '@/i18n';
+
+interface Props {
+  idioma: Idioma;
+  rutaAlterna: string;
+}
+const { idioma, rutaAlterna } = Astro.props;
+const t = useTraducciones(idioma);
+
+// La bandera de Chile para el español, la del Reino Unido para el inglés.
+const opciones = [
+  { codigo: 'es' as const, bandera: 'circle-flags:cl', nombre: 'Español', corto: 'ES' },
+  { codigo: 'en' as const, bandera: 'circle-flags:gb', nombre: 'English', corto: 'EN' },
+];
+const actual = opciones.find((o) => o.codigo === idioma)!;
+---
+
+<details class="lang">
+  <summary aria-label={t('a11y.cambiarIdioma')}>
+    <Icon name={actual.bandera} class="bandera" />
+    <span class="corto">{actual.corto}</span>
+    <Icon name="lucide:chevron-down" class="flecha" />
+  </summary>
+
+  <ul class="menu">
+    {
+      opciones.map((o) =>
+        o.codigo === idioma ? (
+          <li>
+            <span class="opcion opcion--activa" aria-current="true">
+              <Icon name={o.bandera} class="bandera" />
+              {o.nombre}
+              <Icon name="lucide:check" class="tic" />
+            </span>
+          </li>
+        ) : (
+          <li>
+            <a href={rutaAlterna} class="opcion" hreflang={o.codigo} lang={o.codigo}>
+              <Icon name={o.bandera} class="bandera" />
+              {o.nombre}
+            </a>
+          </li>
+        ),
+      )
+    }
+  </ul>
+</details>
+
+<script>
+  document.querySelectorAll<HTMLDetailsElement>('details.lang').forEach((menu) => {
+    // Pulsar fuera lo cierra. `composedPath` en vez de `target` para que
+    // pulsar el propio SVG de la bandera no cuente como "fuera".
+    document.addEventListener('click', (e) => {
+      if (menu.open && !e.composedPath().includes(menu)) menu.open = false;
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && menu.open) {
+        menu.open = false;
+        menu.querySelector('summary')?.focus();
+      }
+    });
+  });
+</script>
+
+<style>
+  .lang {
+    position: relative;
+    margin-left: 0.4rem;
+  }
+
+  summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.35rem 0.6rem 0.35rem 0.45rem;
+    border: 1px solid rgb(66 153 225 / 0.3);
+    border-radius: 999px;
+    color: var(--color-silver);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    list-style: none; /* fuera el triangulito de serie */
+    transition:
+      border-color 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary:hover,
+  .lang[open] summary {
+    border-color: var(--color-nebula);
+    box-shadow: 0 0 12px rgb(66 153 225 / 0.3);
+  }
+
+  .bandera {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    /* Un aro tenue para que el blanco de la bandera no se funda con el fondo. */
+    box-shadow: 0 0 0 1px rgb(255 255 255 / 0.25);
+  }
+
+  .flecha {
+    width: 0.85rem;
+    height: 0.85rem;
+    opacity: 0.6;
+    transition: transform 0.25s var(--ease-space);
+  }
+  .lang[open] .flecha {
+    transform: rotate(180deg);
+  }
+
+  .menu {
+    position: absolute;
+    top: calc(100% + 0.55rem);
+    right: 0;
+    min-width: 11rem;
+    margin: 0;
+    padding: 0.35rem;
+    border: 1px solid rgb(66 153 225 / 0.25);
+    border-radius: 12px;
+    background: rgb(10 10 20 / 0.92);
+    backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: var(--shadow-cosmic);
+    list-style: none;
+    animation: abrir 0.18s var(--ease-space);
+  }
+  @keyframes abrir {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+
+  .opcion {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 0.7rem;
+    border-radius: 8px;
+    color: var(--color-dim);
+    font-size: 0.86rem;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .opcion:hover {
+    background: rgb(66 153 225 / 0.12);
+    color: var(--color-stellar);
+  }
+  .opcion--activa {
+    color: var(--color-neon-cyan);
+  }
+  .tic {
+    margin-left: auto;
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu {
+      animation: none;
+    }
+    .flecha {
+      transition: none;
+    }
+  }
+</style>

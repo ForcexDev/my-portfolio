@@ -1,0 +1,69 @@
+---
+titulo: 'IAimageBetter'
+resumen: 'Escalado de imágenes con Real-ESRGAN, self-hosted: detecta si hay GPU, procesa en local y nunca sube la imagen a ningún servidor ajeno.'
+area: 'full-stack'
+estado: 'desplegado'
+anio: 2025
+rol: 'Proyecto personal'
+stack:
+  - 'React 18'
+  - 'FastAPI'
+  - 'PyTorch'
+  - 'Redis'
+  - 'Docker'
+  - 'Nginx'
+imagen: '../../../assets/img/IAimagebetter.png'
+imagenAlt: 'Captura de IAimageBetter'
+enlaces:
+  repo: 'https://github.com/ForcexDev/IAimageBetter'
+  demo: 'https://iaimagebetter.forcex.dev/'
+orden: 6
+---
+
+import Funciones from '@/components/content/Funciones.astro';
+import Callout from '@/components/content/Callout.astro';
+
+Una aplicación web para escalar y restaurar imágenes con **Real-ESRGAN**, pensada
+para correr en tu propia máquina en vez de en el servidor de otro.
+
+## Por qué self-hosted
+
+Los servicios de escalado piden que subas la imagen. Para una foto de vacaciones da
+igual; para un documento escaneado, una factura o una foto de otra persona, no.
+
+Aquí el modelo corre en local:
+
+- **Procesamiento ilimitado**, porque no hay cuota que pagar ni petición que contar.
+- **Sin conexión**, una vez descargado el modelo.
+- La imagen **no sale de la máquina**. Ni para procesarse ni para nada.
+
+<Callout tipo="nota" titulo="Detección de hardware">
+  Al arrancar comprueba si hay CUDA disponible y elige GPU o CPU solo. No hay que
+  configurar nada: en un portátil sin gráfica dedicada funciona igual, más despacio.
+</Callout>
+
+## Arquitectura
+
+El backend es **FastAPI**, con **Redis** de broker y trabajadores dedicados para
+repartir la carga. Así una petición pesada no bloquea a las demás: entra en la cola,
+un trabajador la coge, y la interfaz va mostrando el progreso.
+
+Todo va empaquetado en **Docker** detrás de **Nginx**, así que levantarlo es un
+`docker compose up` y no una tarde de dependencias de Python.
+
+## Funcionalidades
+
+<Funciones items={[
+  { icono: 'lucide:columns-2', titulo: 'Comparativa antes/después', texto: 'Un divisor arrastrable sobre la misma imagen, que es la única forma honesta de ver qué cambió.' },
+  { icono: 'lucide:cpu', titulo: 'CUDA o CPU', texto: 'Detecta el hardware al arrancar y elige solo. Sin configuración.' },
+  { icono: 'lucide:images', titulo: 'Varios modelos', texto: 'x2 y x4, con pesos distintos para fotografía y para anime: no se escalan igual.' },
+  { icono: 'lucide:wifi-off', titulo: 'Funciona sin internet', texto: 'Una vez descargado el modelo, no necesita red para nada.' },
+]} />
+
+## Fotografía y anime no se escalan igual
+
+Son dos modelos distintos a propósito. Una foto tiene grano, ruido de sensor y
+transiciones suaves; un dibujo tiene líneas limpias y zonas de color plano. El modelo
+entrenado para fotografía suaviza las líneas del dibujo, y el de anime convierte el
+grano de la foto en manchas. Elegir el modelo correcto importa más que subir el
+factor de escala.

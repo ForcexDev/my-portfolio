@@ -1,0 +1,399 @@
+---
+/**
+ * Space Battle, portado de js/games/space-battle.js casi tal cual.
+ *
+ * Lo que cambia respecto del original:
+ *   - la música se pedía a '../../assets/audio/Derezzed.mp3', que desde la raíz
+ *     del sitio se sale del dominio: 404 silencioso y juego mudo. Ahora sale de
+ *     public/ con el `base` puesto, y en mono a 96 kbps (4,1 MB → 1,2 MB),
+ *   - lee los tokens nuevos (--color-nebula y compañía; los viejos
+ *     --nebula-blue ya no existen, así que el juego salía en los colores de
+ *     reserva),
+ *   - fuera los tres botones táctiles: dependían de una clase `touch-device`
+ *     que no ponía nadie, así que no se veían nunca. El lienzo ya escucha
+ *     touchstart/move/end, que es lo que de verdad se usaba en el teléfono,
+ *   - fuera las llamadas a pauseBackgroundMusicForGame: esa música de fondo se
+ *     quitó del sitio. Queda el contrato con la radio, que sí sigue vivo,
+ *   - se añaden flechas y espacio, porque con solo ratón no se puede jugar sin
+ *     un ratón.
+ */
+import Seccion from '@/components/layout/Seccion.astro';
+import { useTraducciones, type Idioma } from '@/i18n';
+
+interface Props {
+  idioma: Idioma;
+}
+const { idioma } = Astro.props;
+const t = useTraducciones(idioma);
+
+const musica = `${import.meta.env.BASE_URL}/audio/Derezzed.mp3`.replace(/\/+/g, '/');
+---
+
+<Seccion
+  id="juego"
+  titulo={t('juego.titulo')}
+  subtitulo={t('juego.subtitulo')}
+>
+  <div
+    class="juego reveal"
+    data-musica={musica}
+    data-fin={t('juego.fin')}
+    data-reintentar={t('juego.reintentar')}
+  >
+    <canvas width="800" height="600" aria-label={t('juego.titulo')} role="img"></canvas>
+
+    <p class="marcador" hidden>{t('juego.puntaje')}: <span>0</span></p>
+
+    <div class="capa">
+      <p class="mensaje">{t('juego.intro')}</p>
+      <button type="button" class="btn empezar">{t('juego.empezar')}</button>
+    </div>
+  </div>
+</Seccion>
+
+<script>
+  const zona = document.querySelector<HTMLElement>('.juego');
+  const lienzo = zona?.querySelector('canvas');
+  const ctx = lienzo?.getContext('2d');
+
+  if (zona && lienzo && ctx) {
+    const capa = zona.querySelector<HTMLElement>('.capa')!;
+    const mensaje = zona.querySelector<HTMLElement>('.mensaje')!;
+    const marcador = zona.querySelector<HTMLElement>('.marcador')!;
+    const puntos = marcador.querySelector('span')!;
+    const empezar = zona.querySelector<HTMLButtonElement>('.empezar')!;
+
+    const musica = new Audio(zona.dataset.musica);
+    musica.loop = true;
+    musica.volume = 0.25;
+    // Sin esto el navegador se baja 1,2 MB aunque nadie llegue a jugar.
+    musica.preload = 'none';
+
+    const tokens = getComputedStyle(document.documentElement);
+    const color = {
+      nave: tokens.getPropertyValue('--color-nebula').trim() || '#4299e1',
+      enemigo: tokens.getPropertyValue('--color-cosmic').trim() || '#6b46c1',
+      chispa: tokens.getPropertyValue('--color-magenta').trim() || '#9f7aea',
+    };
+
+    const ANCHO = lienzo.width;
+    const ALTO = lienzo.height;
+
+    /** Dónde quiere estar la nave. El ratón lo fija, las flechas lo empujan. */
+    const apuntado = { x: ANCHO / 2, disparando: false };
+    const flechas = { izq: false, der: false };
+    let dedo = false;
+
+    type Caja = { x: number; y: number; ancho: number; alto: number };
+    const chocan = (a: Caja, b: Caja) =>
+      a.x < b.x + b.ancho && a.x + a.ancho > b.x && a.y < b.y + b.alto && a.y + a.alto > b.y;
+
+    class Nave {
+      ancho = 40;
+      alto = 40;
+      x = ANCHO / 2 - 20;
+      y = ALTO - 60;
+      espera = 0;
+
+      dibujar() {
+        ctx!.fillStyle = color.nave;
+        ctx!.beginPath();
+        ctx!.moveTo(this.x + this.ancho / 2, this.y);
+        ctx!.lineTo(this.x, this.y + this.alto);
+        ctx!.lineTo(this.x + this.ancho, this.y + this.alto);
+        ctx!.closePath();
+        ctx!.fill();
+        ctx!.shadowColor = color.nave;
+        ctx!.shadowBlur = 10;
+      }
+
+      actualizar() {
+        ctx!.shadowBlur = 0;
+        if (flechas.izq) apuntado.x -= 9;
+        if (flechas.der) apuntado.x += 9;
+        this.x = Math.min(Math.max(apuntado.x - this.ancho / 2, 0), ANCHO - this.ancho);
+        if (apuntado.disparando && this.espera <= 0) {
+          balas.push(new Bala(this.x + this.ancho / 2, this.y));
+          this.espera = 15;
+        }
+        if (this.espera > 0) this.espera--;
+        this.dibujar();
+      }
+    }
+
+    class Bala {
+      ancho = 5;
+      alto = 15;
+      constructor(
+        public x: number,
+        public y: number,
+      ) {
+        this.x = x - 2.5;
+      }
+      actualizar() {
+        this.y -= 5;
+        ctx!.fillStyle = '#fff';
+        ctx!.fillRect(this.x, this.y, this.ancho, this.alto);
+        ctx!.shadowColor = '#fff';
+        ctx!.shadowBlur = 3;
+      }
+    }
+
+    class Enemigo {
+      ancho = 30;
+      alto = 30;
+      x = Math.random() * (ANCHO - 30);
+      y = -30;
+      velocidad = Math.random() * 2 + 2;
+
+      actualizar() {
+        this.y += this.velocidad;
+        ctx!.fillStyle = color.enemigo;
+        ctx!.fillRect(this.x, this.y, this.ancho, this.alto);
+        ctx!.shadowColor = color.enemigo;
+        ctx!.shadowBlur = 10;
+      }
+    }
+
+    class Chispa {
+      tamano = Math.random() * 5 + 2;
+      dx = Math.random() * 6 - 3;
+      dy = Math.random() * 6 - 3;
+      vida = 30;
+      constructor(
+        public x: number,
+        public y: number,
+      ) {}
+      actualizar() {
+        this.x += this.dx;
+        this.y += this.dy;
+        this.vida--;
+        ctx!.fillStyle = color.chispa;
+        ctx!.globalAlpha = this.vida / 30;
+        ctx!.beginPath();
+        ctx!.arc(this.x, this.y, this.tamano, 0, Math.PI * 2);
+        ctx!.fill();
+      }
+    }
+
+    let nave = new Nave();
+    let balas: Bala[] = [];
+    let enemigos: Enemigo[] = [];
+    let chispas: Chispa[] = [];
+    let puntaje = 0;
+    let jugando = false;
+    let bucle = 0;
+
+    const reventar = (x: number, y: number, cuantas: number) => {
+      for (let i = 0; i < cuantas; i++) chispas.push(new Chispa(x, y));
+    };
+
+    function animar() {
+      ctx!.clearRect(0, 0, ANCHO, ALTO);
+      nave.actualizar();
+
+      if (Math.random() < 0.03) enemigos.push(new Enemigo());
+
+      for (let i = balas.length - 1; i >= 0; i--) {
+        balas[i].actualizar();
+        if (balas[i].y < 0) balas.splice(i, 1);
+      }
+
+      ctx!.globalAlpha = 1;
+      for (let i = chispas.length - 1; i >= 0; i--) {
+        chispas[i].actualizar();
+        if (chispas[i].vida <= 0) chispas.splice(i, 1);
+      }
+      ctx!.globalAlpha = 1;
+
+      for (let i = enemigos.length - 1; i >= 0; i--) {
+        const enemigo = enemigos[i];
+        enemigo.actualizar();
+
+        if (enemigo.y > ALTO) {
+          enemigos.splice(i, 1);
+          continue;
+        }
+
+        if (chocan(nave, enemigo)) {
+          reventar(nave.x + nave.ancho / 2, nave.y + nave.alto / 2, 20);
+          terminar();
+          return;
+        }
+
+        // Hacia atrás en los dos bucles: así borrar no descoloca el índice.
+        for (let j = balas.length - 1; j >= 0; j--) {
+          if (!chocan(balas[j], enemigo)) continue;
+          balas.splice(j, 1);
+          enemigos.splice(i, 1);
+          puntaje += 10;
+          puntos.textContent = String(puntaje);
+          reventar(enemigo.x + enemigo.ancho / 2, enemigo.y + enemigo.alto / 2, 10);
+          break;
+        }
+      }
+
+      bucle = requestAnimationFrame(animar);
+    }
+
+    function arrancar() {
+      nave = new Nave();
+      balas = [];
+      enemigos = [];
+      chispas = [];
+      puntaje = 0;
+      jugando = true;
+      puntos.textContent = '0';
+      mensaje.hidden = true;
+      marcador.hidden = false;
+      capa.classList.add('capa--fuera');
+      apuntado.x = ANCHO / 2;
+      apuntado.disparando = false;
+
+      (window as any).pauseRadio?.();
+      musica.currentTime = 0;
+      musica.play().catch(() => {});
+
+      cancelAnimationFrame(bucle);
+      animar();
+    }
+
+    function terminar() {
+      jugando = false;
+      cancelAnimationFrame(bucle);
+      musica.pause();
+      (window as any).resumeRadio?.();
+
+      capa.classList.remove('capa--fuera');
+      mensaje.textContent = zona!.dataset.fin!;
+      mensaje.hidden = false;
+      empezar.textContent = zona!.dataset.reintentar!;
+      empezar.focus();
+    }
+
+    empezar.addEventListener('click', arrancar);
+
+    // --- ratón ---
+    const desdeEvento = (clientX: number) => {
+      const caja = lienzo!.getBoundingClientRect();
+      apuntado.x = (clientX - caja.left) * (ANCHO / caja.width);
+    };
+    lienzo.addEventListener('mousemove', (e) => !dedo && desdeEvento(e.clientX));
+    lienzo.addEventListener('mousedown', () => {
+      if (jugando && !dedo) apuntado.disparando = true;
+    });
+    window.addEventListener('mouseup', () => (apuntado.disparando = false));
+    lienzo.addEventListener('contextmenu', (e) => e.preventDefault());
+
+    // --- dedo ---
+    const tocar = (e: TouchEvent) => {
+      if (!jugando) return;
+      e.preventDefault();
+      dedo = true;
+      apuntado.disparando = true;
+      desdeEvento(e.touches[0].clientX);
+    };
+    lienzo.addEventListener('touchstart', tocar, { passive: false });
+    lienzo.addEventListener('touchmove', tocar, { passive: false });
+    lienzo.addEventListener(
+      'touchend',
+      (e) => {
+        if (!jugando) return;
+        e.preventDefault();
+        dedo = false;
+        apuntado.disparando = false;
+      },
+      { passive: false },
+    );
+
+    // --- teclado: sin esto el juego solo existe si tienes ratón ---
+    window.addEventListener('keydown', (e) => {
+      if (!jugando) return;
+      if (e.key === 'ArrowLeft') flechas.izq = true;
+      else if (e.key === 'ArrowRight') flechas.der = true;
+      else if (e.key === ' ') apuntado.disparando = true;
+      else if (e.key === 'Escape') terminar();
+      else return;
+      e.preventDefault();
+    });
+    window.addEventListener('keyup', (e) => {
+      if (e.key === 'ArrowLeft') flechas.izq = false;
+      else if (e.key === 'ArrowRight') flechas.der = false;
+      else if (e.key === ' ') apuntado.disparando = false;
+    });
+
+    // rAF ya se para solo en una pestaña de fondo; el audio no.
+    document.addEventListener('visibilitychange', () => {
+      if (!jugando) return;
+      if (document.hidden) musica.pause();
+      else musica.play().catch(() => {});
+    });
+  }
+</script>
+
+<style>
+  .juego {
+    position: relative;
+    max-width: 50rem;
+    margin: 0 auto;
+    border: 1px solid rgb(66 153 225 / 0.35);
+    border-radius: 16px;
+    overflow: hidden;
+    background: rgb(0 0 17 / 0.6);
+    box-shadow: var(--shadow-stellar);
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    /* La nave va donde va el puntero: el puntero sobra. */
+    cursor: none;
+    touch-action: none;
+  }
+
+  .capa {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.4rem;
+    padding: 1.5rem;
+    text-align: center;
+    background: rgb(0 0 17 / 0.82);
+    backdrop-filter: blur(10px);
+    transition: opacity 0.4s var(--ease-space);
+  }
+  .capa--fuera {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .mensaje {
+    margin: 0;
+    color: var(--color-silver);
+    font-size: 1.05rem;
+  }
+
+  /* Fuera de `.capa` a propósito: ahí dentro se lo llevaría por delante el
+     `opacity: 0` con el que se aparta la pantalla de inicio. */
+  .marcador {
+    position: absolute;
+    top: 0.9rem;
+    right: 1.2rem;
+    z-index: 3;
+    margin: 0;
+    color: var(--color-nebula);
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    text-shadow: 0 0 12px var(--color-nebula);
+  }
+
+
+</style>
