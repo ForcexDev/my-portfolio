@@ -1,0 +1,56 @@
+---
+import type { Language } from "../i18n";
+interface Props {
+  lang: Language;
+}
+const es = Astro.props.lang === "es";
+---
+
+<button
+  type="button"
+  class="ctrl-btn"
+  data-radio-prev
+  aria-label={es ? "Anterior" : "Previous"}
+>
+  <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+    <rect x="4" y="4" width="3" height="16" rx="1.5" />
+    <path d="M19 5.4a1.4 1.4 0 0 0-2.16-1.18l-9.2 6.6a1.45 1.45 0 0 0 0 2.36l9.2 6.6A1.4 1.4 0 0 0 19 18.6z" />
+  </svg>
+</button>
+<button
+  type="button"
+  class="play-orb"
+  data-radio-play
+  aria-label={es ? "Reproducir" : "Play"}
+>
+  <svg
+    class="play-icon"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    fill="currentColor"
+  >
+    <path d="M6.5 4.7a1.65 1.65 0 0 1 2.52-1.4l11.1 7.28a1.7 1.7 0 0 1 0 2.84L9.02 20.7a1.65 1.65 0 0 1-2.52-1.4z" />
+  </svg>
+  <svg
+    class="pause-icon"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    fill="currentColor"
+  >
+    <rect x="5" y="4" width="5" height="16" rx="1.5" />
+    <rect x="14" y="4" width="5" height="16" rx="1.5" />
+  </svg>
+</button>
+<button
+  type="button"
+  class="ctrl-btn"
+  data-radio-next
+  aria-label={es ? "Siguiente" : "Next"}
+>
+  <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+    <g transform="translate(24 0) scale(-1 1)">
+      <rect x="4" y="4" width="3" height="16" rx="1.5" />
+      <path d="M19 5.4a1.4 1.4 0 0 0-2.16-1.18l-9.2 6.6a1.45 1.45 0 0 0 0 2.36l9.2 6.6A1.4 1.4 0 0 0 19 18.6z" />
+    </g>
+  </svg>
+</button>

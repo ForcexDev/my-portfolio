@@ -1,0 +1,153 @@
+---
+import { Icon } from "astro-icon/components";
+import { base, type Language } from "../i18n";
+interface Props {
+  lang: Language;
+}
+const es = Astro.props.lang === "es",
+  file = base + "documents/Ezequiel-Morales-CV.pdf";
+---
+
+<dialog
+  class="resume-reader"
+  id="resume-reader"
+  aria-labelledby="resume-title"
+  data-file={file}
+>
+  <header>
+    <div>
+      <strong id="resume-title">{es ? "Currículum" : "Résumé"}</strong>
+      <span>Ezequiel Morales</span>
+    </div>
+    <a href={file} download>
+      <Icon name="lucide:download" />
+      <span>PDF</span>
+    </a>
+    <form method="dialog">
+      <button aria-label={es ? "Cerrar visor" : "Close viewer"} autofocus>
+        <Icon name="lucide:x" />
+      </button>
+    </form>
+  </header>
+  <div class="reading-pane" tabindex="0">
+    <div class="paper"></div>
+  </div>
+  <div class="reader-status" role="status"></div>
+  <footer>
+    <button
+      data-prev-page
+      aria-label={es ? "Página anterior" : "Previous page"}
+    >
+      <Icon name="lucide:chevron-left" />
+    </button>
+    <output data-page></output>
+    <button data-next-page aria-label={es ? "Página siguiente" : "Next page"}>
+      <Icon name="lucide:chevron-right" />
+    </button>
+    <span class="reader-divider"></span>
+    <button data-zoom-out aria-label={es ? "Reducir zoom" : "Zoom out"}>
+      <Icon name="lucide:minus" />
+    </button>
+    <output data-zoom>100%</output>
+    <button data-zoom-in aria-label={es ? "Aumentar zoom" : "Zoom in"}>
+      <Icon name="lucide:plus" />
+    </button>
+  </footer>
+</dialog>
+<script src="../scripts/resume-viewer.ts"></script>
+<style>
+  .resume-reader {
+    width: min(920px, 96vw);
+    height: min(920px, 94dvh);
+    max-height: 94dvh;
+    margin: auto;
+    border: 1px solid #637d9777;
+    border-radius: 14px;
+    padding: 0;
+    color: #eefdff;
+    background: #0b1728;
+    overflow: hidden;
+  }
+  .resume-reader[open] {
+    display: flex;
+    flex-direction: column;
+  }
+  .resume-reader::backdrop {
+    background: #020711d9;
+    backdrop-filter: blur(9px);
+  }
+  .resume-reader header,
+  .resume-reader footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    background: #101e30;
+    flex: none;
+  }
+  .resume-reader header div {
+    margin-right: auto;
+    display: grid;
+  }
+  .resume-reader header div span {
+    font-size: 12px;
+    color: #a9c1d8;
+  }
+  .resume-reader button,
+  .resume-reader header a {
+    min-height: 40px;
+    min-width: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border-radius: 5px;
+  }
+  .resume-reader button:hover,
+  .resume-reader a:hover {
+    background: #243851;
+  }
+  .resume-reader button:disabled {
+    opacity: 0.35;
+  }
+  .resume-reader svg {
+    width: 18px;
+  }
+  .reading-pane {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    padding: 14px;
+    background: #060e1c;
+  }
+  .paper {
+    position: relative;
+    width: max-content;
+    margin-inline: auto;
+  }
+  .paper :global(canvas) {
+    display: block;
+    max-width: none;
+    background: white;
+  }
+  .paper :global(a) {
+    position: absolute;
+  }
+  .resume-reader footer {
+    justify-content: center;
+  }
+  .reader-divider {
+    height: 20px;
+    border-left: 1px solid #43576f;
+  }
+  .reader-status:not(:empty) {
+    padding: 6px 16px;
+  }
+  .reader-status a {
+    text-decoration: underline;
+  }
+  .resume-reader output {
+    font-variant-numeric: tabular-nums;
+    font-size: 14px;
+  }
+</style>

@@ -1,0 +1,312 @@
+---
+import Experience from "./Experience.astro";
+import { Icon } from "astro-icon/components";
+import skills from "../data/skills.json";
+import { base, translate, type Language } from "../i18n";
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const es = lang === "es";
+const t = translate(lang);
+
+const creds = [
+  "https://www.credly.com/badges/05aff769-7021-4bf6-9e5e-15b542112284/public_url",
+  "https://www.credly.com/badges/21eb7975-97d2-469e-b608-c23b6dab214e/public_url",
+];
+
+const catKeys = ["cyber", "backend", "frontend"] as const;
+const flatSkills = skills.flatMap((group, i) =>
+  group.map((item) => ({ ...item, cat: catKeys[i] })),
+);
+
+const skillTabs = [
+  {
+    key: "cyber",
+    label: es ? "Seguridad y nube" : "Security & cloud",
+    count: skills[0].length,
+    fx: "pop",
+  },
+  {
+    key: "backend",
+    label: es ? "Backend y datos" : "Backend & data",
+    count: skills[1].length,
+    fx: "pop",
+  },
+  {
+    key: "frontend",
+    label: "Frontend",
+    count: skills[2].length,
+    fx: "pop",
+  },
+  {
+    key: "all",
+    label: es ? "Todas" : "All",
+    count: flatSkills.length,
+    fx: "spin",
+  },
+];
+
+const manifesto = t("aboutP1");
+const manifestoWords = manifesto.split(/\s+/).filter(Boolean);
+const manifestoTotalChars = manifesto.replace(/\s+/g, "").length;
+let charCursor = 0;
+const manifestoTokens = manifestoWords.map((word) => ({
+  chars: word.split("").map((ch) => ({ ch, idx: charCursor++ })),
+}));
+
+const initialSkillDigits = String(skillTabs[0].count).padStart(2, "0").split("");
+
+const profileSpecs = [
+  {
+    label: es ? "Universidad" : "University",
+    value: t("heroUniv"),
+    wide: true,
+  },
+  { label: "Stack", value: "Java, Python, TypeScript, C, SQL" },
+  { label: "OS", value: "Kali Linux / Arch" },
+  { label: es?"Idiomas":"Languages", value: es?"Español C2 · Inglés B2":"Spanish C2 · English B2" },
+  { label: es ? "Enfoque" : "Focus", value: "Offensive Security & CTFs" },
+];
+---
+
+<section id="about" class="section wrap about-section" data-orbital-arcs>
+  <h2 data-reveal>{t("aboutTitle")}</h2>
+
+  <p
+    class="about-manifesto"
+    data-reading
+    style={`--n:${manifestoTotalChars};--q:1`}
+    aria-label={manifesto}
+  >
+    {
+      manifestoTokens.map((token) => (
+        <>
+          <span class="read-wd" aria-hidden="true">
+            {token.chars.map((item) => (
+              <span class="read-ch" style={`--i:${item.idx}`}>
+                {item.ch}
+              </span>
+            ))}
+          </span>{" "}
+        </>
+      ))
+    }
+  </p>
+
+  <div class="about-details" data-reveal style="--rd:130ms">
+    <div class="bio">
+      <p>{t("aboutP2")}</p>
+      <p>{t("aboutP3")}</p>
+      <div class="about-actions">
+        <a
+          class="primary glass-action about-cv-btn"
+          href={base + "documents/Ezequiel-Morales-CV.pdf"}
+          download
+        >
+          {t("aboutCV")} <Icon name="lucide:download" />
+        </a>
+        <a
+          class="text-link hover-ul"
+          href={base + "documents/Ezequiel-Morales-CV.pdf"}
+          data-open-resume
+          rel="noopener noreferrer"
+        >
+          {t("aboutViewCV")} <Icon name="lucide:arrow-up-right" />
+        </a>
+      </div>
+    </div>
+
+    <dl class="about-specs">
+      {
+        profileSpecs.map((spec) => (
+          <div class={spec.wide ? "spec-wide" : undefined}>
+            <dt>{spec.label}</dt>
+            <dd>{spec.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+
+  <Experience lang={lang} />
+</section>
+
+<section id="skills" class="section wrap">
+  <div class="skills-head" data-reveal>
+    <div class="skills-title-group">
+      <h2>{t("skillsTitle")}</h2>
+      <span
+        id="skill-odometer"
+        class="skill-odo"
+        aria-live="polite"
+        aria-label={String(skillTabs[0].count)}
+      >
+        {
+          initialSkillDigits.map((d) => (
+            <span class="odo-col" aria-hidden="true">
+              <span
+                class="odo-strip"
+                style={`transform:translateY(-${Number(d) * 10}%)`}
+              >
+                {["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].map((n) => (
+                  <span>{n}</span>
+                ))}
+              </span>
+            </span>
+          ))
+        }
+      </span>
+    </div>
+
+    <div class="skills-tabs-scroll">
+      <div
+        id="skills-tabs"
+        class="nimbus-nav skills-tabs"
+        role="tablist"
+        data-tone="dark"
+        data-gl="on"
+        data-compact="false"
+        aria-label={es ? "Categorías de habilidades" : "Skill categories"}
+      >
+        <span class="nimbus-glass" aria-hidden="true"></span>
+        <canvas class="nimbus-water" aria-hidden="true"></canvas>
+        <span class="nimbus-drop" aria-hidden="true"></span>
+        {
+          skillTabs.map((tab, idx) => (
+            <button
+              type="button"
+              role="tab"
+              class="nimbus-item"
+              data-cat={tab.key}
+              data-fx={tab.fx}
+              aria-selected={idx === 0 ? "true" : "false"}
+            >
+              <span class="nv-ico" aria-hidden="true">
+                {tab.key === "cyber" && <Icon name="lucide:shield" />}
+                {tab.key === "backend" && <Icon name="lucide:database" />}
+                {tab.key === "frontend" && <Icon name="lucide:panels-top-left" />}
+                {tab.key === "all" && <Icon name="lucide:layout-grid" />}
+              </span>
+              <span class="nimbus-label">{tab.label}</span>
+              <span class="tab-count">{tab.count}</span>
+            </button>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="skill-grid" id="skill-grid" role="tabpanel">
+    {
+      flatSkills.map((s) => (
+        <article
+          class="skill-card"
+          data-cat={s.cat}
+          data-mark={s.name}
+          style={`--brand-rgb:${s.accent}`}
+          hidden={s.cat !== "cyber"}
+        >
+          <span class="skill-icon" aria-hidden="true">
+            <Icon name={s.icon} />
+          </span>
+          <div class="skill-meta">
+            <h3>{s.name}</h3>
+            <p>{t(s.descKey)}</p>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<section id="certifications" class="section wrap">
+  <h2>{t("certificationsTitle")}</h2>
+  <div class="credentials">
+    {
+      [1, 2, 3].map((n) => (
+        <article class="cert-row">
+          <span class="cert-mark" aria-hidden="true">
+            <img
+              src={
+                base + "icons/" + (n === 3 ? "freecodecamp" : "cisco") + ".svg"
+              }
+              alt=""
+              width="44"
+              height="38"
+            />
+          </span>
+          <div class="cert-body">
+            <small>{t("cert" + n + "Org")}</small>
+            <h3>{t("cert" + n + "Title")}</h3>
+          </div>
+          {creds[n - 1] ? (
+            <a
+              href={creds[n - 1]}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="cert-pill"
+            >
+              {t("certLinkView")} <Icon name="lucide:arrow-up-right" />
+            </a>
+          ) : (
+            <span class="cert-status">{t("certLinkProgress")}</span>
+          )}
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  import { mountLiquidPill } from "../scripts/liquid-nav";
+
+  const tabsEl = document.getElementById("skills-tabs");
+  const gridEl = document.getElementById("skill-grid");
+  const odoEl = document.getElementById("skill-odometer");
+
+  if (tabsEl && gridEl) {
+    const cards = Array.from(gridEl.querySelectorAll<HTMLElement>(".skill-card"));
+    const odoStrips = odoEl
+      ? Array.from(odoEl.querySelectorAll<HTMLElement>(".odo-strip"))
+      : [];
+    const reduce = !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+    function updateOdometer(count: number) {
+      if (!odoEl || odoStrips.length < 2) return;
+      odoEl.setAttribute("aria-label", String(count));
+      const digits = String(count).padStart(2, "0").split("");
+      digits.forEach((d, idx) => {
+        odoStrips[idx].style.transform = `translateY(-${Number(d) * 10}%)`;
+      });
+    }
+
+    function filterCategory(cat: string) {
+      let visibleIndex = 0;
+      cards.forEach((card) => {
+        const match = cat === "all" || card.dataset.cat === cat;
+        card.hidden = !match;
+        if (match && !reduce) {
+          card.style.setProperty("--stagger", `${Math.min(visibleIndex, 10) * 22}ms`);
+          card.classList.remove("skill-enter");
+          void card.offsetWidth;
+          card.classList.add("skill-enter");
+          visibleIndex++;
+        } else if (match) {
+          visibleIndex++;
+        }
+      });
+      updateOdometer(visibleIndex);
+    }
+
+    mountLiquidPill(tabsEl, {
+      initialActive: 0,
+      activeAttr: "aria-selected",
+      activeValue: "true",
+      onChange: (_idx, item) => {
+        const cat = item.dataset.cat || "cyber";
+        filterCategory(cat);
+      },
+    });
+  }
+</script>

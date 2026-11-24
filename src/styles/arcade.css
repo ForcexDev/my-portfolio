@@ -1,0 +1,251 @@
+/* The environment is shared by the landing page and its project articles.
+   Only scenery is color-graded. Photography, covers and brand marks keep their colors. */
+html[data-arcade="doom"] {
+  --sky-ink: #11070a;
+  --sky-light: #e65325;
+  --sky-edge: #ffbd89;
+  --sky-secondary: #7b1924;
+  --sky-grade: grayscale(1) sepia(1) hue-rotate(329deg) saturate(3.8);
+}
+html[data-arcade="sonic"] {
+  --sky-ink: #031128;
+  --sky-light: #178bff;
+  --sky-edge: #ffe17f;
+  --sky-secondary: #08bcca;
+  --sky-grade: grayscale(1) sepia(.95) hue-rotate(158deg) saturate(3.4);
+}
+html[data-arcade="invaders"] {
+  --sky-ink: #031108;
+  --sky-light: #38ce64;
+  --sky-edge: #b9ff98;
+  --sky-secondary: #11694d;
+  --sky-grade: grayscale(1) sepia(1) hue-rotate(72deg) saturate(2.5);
+}
+html[data-arcade="tetris"] {
+  --sky-ink: #0a0818;
+  --sky-light: #7c5cff;
+  --sky-edge: #6ef2ff;
+  --sky-secondary: #1b6fe0;
+  --sky-grade: grayscale(1) sepia(1) hue-rotate(205deg) saturate(3.2);
+}
+html[data-arcade="pacman"] {
+  --sky-ink: #06091f;
+  --sky-light: #2448ff;
+  --sky-edge: #ffe548;
+  --sky-secondary: #1727a6;
+  --sky-grade: grayscale(1) sepia(1) hue-rotate(192deg) saturate(3.4);
+}
+html[data-arcade="asteroids"] {
+  --sky-ink: #070a12;
+  --sky-light: #6e87b2;
+  --sky-edge: #e2eeff;
+  --sky-secondary: #2e4064;
+  --sky-grade: grayscale(1) contrast(1.18) brightness(0.95);
+}
+html[data-arcade="pong"] {
+  --sky-ink: #08090c;
+  --sky-light: #9ca7b8;
+  --sky-edge: #f3f7fc;
+  --sky-secondary: #39414f;
+  --sky-grade: grayscale(1) contrast(1.25);
+}
+html[data-arcade="cs16"] {
+  --sky-ink: #110e05;
+  --sky-light: #d7a328;
+  --sky-edge: #f7e48b;
+  --sky-secondary: #685116;
+  --sky-grade: grayscale(1) sepia(1) hue-rotate(12deg) saturate(2.9);
+}
+html[data-arcade="quake"] {
+  --sky-ink: #120b07;
+  --sky-light: #9e5c34;
+  --sky-edge: #e5b88f;
+  --sky-secondary: #4e2b18;
+  --sky-grade: grayscale(1) sepia(1) hue-rotate(348deg) saturate(2.4);
+}
+html[data-arcade="halflife"] {
+  --sky-ink: #130903;
+  --sky-light: #f06e1d;
+  --sky-edge: #ffbe66;
+  --sky-secondary: #7c330d;
+  --sky-grade: grayscale(1) sepia(1) hue-rotate(344deg) saturate(4.1);
+}
+html[data-arcade="mk"] {
+  --sky-ink: #140507;
+  --sky-light: #dc2626;
+  --sky-edge: #fbbf24;
+  --sky-secondary: #7f1d1d;
+  --sky-grade: grayscale(1) sepia(1) hue-rotate(318deg) saturate(4.2);
+}
+html[data-arcade="sf2"] {
+  --sky-ink: #100816;
+  --sky-light: #e11d48;
+  --sky-edge: #fde047;
+  --sky-secondary: #2563eb;
+  --sky-grade: grayscale(1) sepia(1) hue-rotate(306deg) saturate(3.5);
+}
+html[data-arcade="metalslug"] {
+  --sky-ink: #08100a;
+  --sky-light: #eab308;
+  --sky-edge: #bef264;
+  --sky-secondary: #4d7c0f;
+  --sky-grade: grayscale(1) sepia(1) hue-rotate(42deg) saturate(3.1);
+}
+html[data-arcade="gtasa"] {
+  --sky-ink: #120905;
+  --sky-light: #f97316;
+  --sky-edge: #fde68a;
+  --sky-secondary: #92400e;
+  --sky-grade: grayscale(1) sepia(1) hue-rotate(355deg) saturate(3.7);
+}
+html[data-arcade="portal"] {
+  --sky-ink: #040d18;
+  --sky-light: #0ea5e9;
+  --sky-edge: #fb923c;
+  --sky-secondary: #f97316;
+  --sky-grade: grayscale(1) sepia(1) hue-rotate(168deg) saturate(3.4);
+}
+html[data-arcade="halo"] {
+  --sky-ink: #040b18;
+  --sky-light: #3b82f6;
+  --sky-edge: #93c5fd;
+  --sky-secondary: #0f766e;
+  --sky-grade: grayscale(1) sepia(1) hue-rotate(182deg) saturate(3.2);
+}
+html[data-arcade] {
+  --ink: var(--sky-ink);
+  --ice: var(--sky-edge);
+  --panel: color-mix(in srgb, var(--sky-light) 9%, var(--sky-ink));
+  --line: color-mix(in srgb, var(--sky-edge) 26%, transparent);
+  scrollbar-color: var(--sky-light) var(--sky-ink);
+}
+[data-arcade] .starfield-wrap {
+  background-color: var(--ink);
+}
+[data-arcade] main {
+  background:
+    radial-gradient(
+      ellipse at 4% 28%,
+      color-mix(in srgb, var(--sky-light) 21%, transparent),
+      transparent 39%
+    ),
+    radial-gradient(
+      ellipse at 100% 66%,
+      color-mix(in srgb, var(--sky-secondary) 23%, transparent),
+      transparent 47%
+    );
+}
+[data-arcade] :is(.earth-scene, .black-hole-scene, .contact-globe) {
+  filter: var(--sky-grade);
+}
+[data-arcade] :is(.observatory, .orbital-footer) {
+  background-color: var(--ink);
+}
+[data-arcade] .observatory::after {
+  background: linear-gradient(0deg, var(--ink), transparent 28%);
+}
+[data-arcade]
+  :is(
+    .hero-title em,
+    .footer-wordmark,
+    .competition article strong,
+    .bento-primary,
+    .cert-status
+  ) {
+  color: var(--ice);
+}
+[data-arcade] .footer-wordmark {
+  opacity: 0.35;
+}
+[data-arcade]
+  :is(
+    .bento-card,
+    .cert-row,
+    .form-shell,
+    .radio-bar,
+    .radio-dock,
+    .mast-pill-bg,
+    .skill-card
+  ) {
+  border-color: var(--line);
+  background-color: var(--panel);
+}
+[data-arcade] .radio-dock {
+  background: linear-gradient(165deg, var(--sky-ink) 8%, var(--panel) 92%);
+}
+[data-arcade] .dock-vol .vol-fill {
+  background: linear-gradient(90deg, var(--sky-secondary) 0%, var(--sky-edge) 100%);
+}
+[data-arcade] .dock-controls :is(.ctrl-btn, .play-orb),
+[data-arcade] .dock-collapse {
+  border-color: var(--line);
+  background: color-mix(in srgb, var(--sky-light) 16%, var(--sky-ink));
+}
+[data-arcade] :is(.glass-action, .cert-row:hover) {
+  background: color-mix(in srgb, var(--sky-light) 14%, var(--sky-ink));
+  border-color: color-mix(in srgb, var(--sky-light) 72%, transparent);
+}
+[data-arcade] .contact {
+  background: radial-gradient(
+    ellipse at 20% 65%,
+    color-mix(in srgb, var(--sky-light) 15%, transparent),
+    transparent 66%
+  );
+}
+[data-arcade] .game-room {
+  background: linear-gradient(
+    108deg,
+    color-mix(in srgb, var(--sky-light) 17%, transparent),
+    transparent 80%
+  );
+}
+[data-arcade] .starfield-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+[data-arcade="doom"] .starfield-wrap::after {
+  background: radial-gradient(ellipse at 0% 105%, #b7431c38, transparent 62%);
+}
+[data-arcade="sonic"] .starfield-wrap::after {
+  background: radial-gradient(ellipse at 100% 90%, #04b9e52e, transparent 65%);
+}
+[data-arcade="invaders"] .starfield-wrap::after {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0 4px,
+    #6bff7d08 4px 5px
+  );
+}
+[data-arcade="halflife"] .starfield-wrap::after {
+  background: radial-gradient(ellipse at 92% 95%, #f06e1d2e, transparent 62%);
+}
+[data-arcade="mk"] .starfield-wrap::after {
+  background: radial-gradient(ellipse at 12% 100%, #dc262632, transparent 60%);
+}
+[data-arcade="pacman"] .starfield-wrap::after {
+  background: radial-gradient(ellipse at 50% 100%, #2448ff2a, transparent 65%);
+}
+[data-arcade="pong"] .starfield-wrap::after {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0 3px,
+    #ffffff06 3px 4px
+  );
+}
+[data-arcade="portal"] .starfield-wrap::after {
+  background:
+    radial-gradient(ellipse at 12% 85%, #0ea5e92a, transparent 54%),
+    radial-gradient(ellipse at 88% 85%, #f9731628, transparent 54%);
+}
+[data-arcade="gtasa"] .starfield-wrap::after {
+  background: radial-gradient(ellipse at 50% 100%, #f973162a, transparent 66%);
+}
+[data-arcade="halo"] .starfield-wrap::after {
+  background: radial-gradient(ellipse at 80% 95%, #3b82f62e, transparent 62%);
+}
+[data-arcade] ::selection {
+  color: var(--sky-ink);
+  background: var(--sky-edge);
+}

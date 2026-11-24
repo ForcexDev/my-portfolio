@@ -1,0 +1,129 @@
+---
+import { Icon } from "astro-icon/components";
+import { base, type Language } from "../i18n";
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const languages = [
+  { code: "es", label: "Español", flag: "flag-cl.svg", url: base },
+  {
+    code: "en",
+    label: "English",
+    flag: "flag-gb.svg",
+    url: base + "en.html",
+  },
+];
+const active = languages.find((item) => item.code === lang)!;
+---
+
+<details class="language-picker">
+  <summary
+    aria-label={
+      lang === "es"
+        ? "Idioma actual: Español. Cambiar idioma"
+        : "Current language: English. Change language"
+    }
+  >
+    <img src={base + "icons/" + active.flag} alt="" width="24" height="16" />
+    <span>{active.code.toUpperCase()}</span>
+    <Icon name="lucide:chevron-down" />
+  </summary>
+  <div class="languages">
+    {languages.map((item) => (
+      <a
+        lang={item.code}
+        hreflang={item.code}
+        href={item.code === lang ? Astro.url.pathname : item.url}
+        aria-current={item.code === lang ? "true" : undefined}
+      >
+        <img src={base + "icons/" + item.flag} alt="" width="24" height="16" />
+        {item.label}
+        {item.code === lang && <Icon name="lucide:check" />}
+      </a>
+    ))}
+  </div>
+</details>
+<script>
+  import { initSeamlessLanguageSwitch } from "../scripts/i18n-swap";
+  initSeamlessLanguageSwitch();
+
+  const picker =
+    document.querySelector<HTMLDetailsElement>(".language-picker")!;
+  const trigger = picker.querySelector("summary")!;
+  function updateLinks() {
+    picker.querySelectorAll("a").forEach((link) => {
+      link.hash = location.hash;
+    });
+  }
+  picker.addEventListener("toggle", updateLinks);
+  window.addEventListener("hashchange", updateLinks);
+  document.addEventListener("pointerdown", (e) => {
+    if (!picker.contains(e.target as Node)) picker.open = false;
+  });
+  picker.addEventListener("focusout", (e) => {
+    if (!picker.contains(e.relatedTarget as Node)) picker.open = false;
+  });
+  picker.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      picker.open = false;
+      trigger.focus();
+    }
+  });
+</script>
+<style>
+  .language-picker {
+    position: relative;
+    font: 500 13px var(--sans);
+  }
+  .language-picker summary,
+  .languages a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+  }
+  .language-picker summary {
+    cursor: pointer;
+    list-style: none;
+  }
+  .language-picker summary::-webkit-details-marker {
+    display: none;
+  }
+  .language-picker img {
+    border-radius: 2px;
+  }
+  .language-picker svg {
+    width: 13px;
+    height: 13px;
+  }
+  .language-picker[open] summary svg {
+    transform: rotate(180deg);
+  }
+  .languages {
+    position: absolute;
+    z-index: 5;
+    right: 0;
+    top: calc(100% + 5px);
+    min-width: 148px;
+    padding: 5px;
+    border-radius: 10px;
+    background: rgba(5, 11, 24, 0.94);
+    backdrop-filter: blur(22px) saturate(165%);
+    -webkit-backdrop-filter: blur(22px) saturate(165%);
+    border: 1px solid rgba(114, 188, 255, 0.26);
+    box-shadow: 0 14px 32px rgba(1, 5, 16, 0.78);
+  }
+  .languages a {
+    padding: 0 9px;
+    border-radius: 6px;
+  }
+  .languages a:hover,
+  .languages a:focus-visible {
+    background: #1c3450;
+  }
+  .languages a svg {
+    margin-left: auto;
+    color: #a4d9ff;
+  }
+</style>

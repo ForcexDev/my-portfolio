@@ -1,0 +1,137 @@
+---
+import ContactGlobe from "./ContactGlobe.astro";
+import { Icon } from "astro-icon/components";
+import { base, translate, type Language } from "../i18n";
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props,
+  t = translate(lang);
+const profiles = [
+  ["GitHub", "https://github.com/ForcexDev", "simple-icons:github"],
+  ["LinkedIn", "https://www.linkedin.com/in/ezequielleandromorales/", "in"],
+  ["TryHackMe", "https://tryhackme.com/p/ForcexDev", "tryhackme"],
+  [
+    "HackTheBox",
+    "https://profile.hackthebox.com/profile/019c38be-e58b-70e7-8414-6252a08e0953",
+    "hackthebox",
+  ],
+  ["LeetCode", "https://leetcode.com/u/ForcexDev/", "leetcode"],
+  [
+    "HackerRank",
+    "https://www.hackerrank.com/profile/ezequiel_morales",
+    "hackerrank",
+  ],
+];
+const fields = [
+  ["from_name", "Name", "text"],
+  ["from_email", "Email", "email"],
+  ["subject", "Subject", "text"],
+  ["message", "Message", "textarea"],
+] as const;
+---
+
+<section id="contact" class="section contact">
+  <div class="wrap">
+    <h2>{t("contactTitle")}</h2>
+    <p>{t("contactText")}</p>
+    <div class="contact-columns">
+      <div class="contact-channels">
+        <h3>{lang === "es" ? "Mis perfiles" : "My profiles"}</h3>
+        <div class="profile-dock">
+          {profiles.map(([name, href, icon]) => (
+            <a href={href} target="_blank" aria-label={name} title={name}>
+              {icon.includes(":") ? (
+                <Icon name={icon} />
+              ) : icon === "in" ? (
+                <strong>in</strong>
+              ) : (
+                <img src={base + "icons/" + icon + ".svg"} alt="" />
+              )}
+              <span>{name}</span>
+            </a>
+          ))}
+        </div>
+        <ContactGlobe />
+      </div>
+      <div class="form-shell">
+        <h3>{t("contactFormTitle")}</h3>
+        <form
+          id="contact-form"
+          data-success={t("formSuccess")}
+          data-failure={
+            lang === "es"
+              ? "No se pudo enviar. Inténtalo de nuevo o contáctame por LinkedIn."
+              : "Could not send. Try again or reach me on LinkedIn."
+          }
+          data-sending={t("formSending")}
+        >
+          {fields.map(([name, key, type]) => (
+            <label>
+              {t("form" + key)}
+              {type === "textarea" ? (
+                <textarea
+                  name={name}
+                  rows="4"
+                  placeholder={t("formPlaceholder" + key)}
+                  required
+                ></textarea>
+              ) : (
+                <input
+                  name={name}
+                  type={type}
+                  autocomplete={
+                    name === "from_name"
+                      ? "name"
+                      : name === "from_email"
+                        ? "email"
+                        : undefined
+                  }
+                  required
+                  placeholder={t("formPlaceholder" + key)}
+                />
+              )}
+            </label>
+          ))}
+          <button class="primary" type="submit">
+            {t("formSend")} <Icon name="lucide:send" />
+          </button>
+          <output aria-live="polite"></output>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  const form = document.querySelector<HTMLFormElement>("#contact-form")!;
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = form.querySelector("button")!,
+      output = form.querySelector("output")!;
+    if (btn.disabled) return;
+    btn.disabled = true;
+    output.textContent = form.dataset.sending!;
+    try {
+      const res = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          service_id: "service_xv6tnfg",
+          template_id: "template_204nyfj",
+          user_id: "E8H5tFoLO5TEgufG-",
+          template_params: {
+            ...Object.fromEntries(new FormData(form)),
+            to_name: "Ezequiel",
+          },
+        }),
+      });
+      if (!res.ok) throw new Error();
+      form.reset();
+      output.textContent = form.dataset.success!;
+    } catch {
+      output.textContent = form.dataset.failure!;
+    } finally {
+      btn.disabled = false;
+    }
+  });
+</script>

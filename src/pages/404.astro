@@ -1,0 +1,122 @@
+---
+import Site from "../layouts/Site.astro";
+import BlackHoleScene from "../components/BlackHoleScene.astro";
+import { Icon } from "astro-icon/components";
+import { base } from "../i18n";
+---
+
+<Site lang="es" articleTitle="404" hideLoader={true} hideFooter={true}>
+  <section
+    class="horizon-404"
+    aria-labelledby="error-heading"
+    data-es-home={base}
+    data-en-home={base + "en.html"}
+  >
+    <BlackHoleScene />
+
+    <div class="horizon-minimal wrap">
+      <p class="horizon-numeral" aria-hidden="true">404</p>
+      <h1 id="error-heading">Signal lost</h1>
+      <p class="horizon-copy" data-i18n="desc">
+        La página que buscas no existe.
+      </p>
+      <a class="primary glass-action horizon-btn" href={base} data-i18n="home">
+        <span>Volver al inicio</span>
+        <Icon name="lucide:arrow-up-right" />
+      </a>
+    </div>
+  </section>
+</Site>
+
+<script is:inline>
+  (() => {
+    const section = document.querySelector(".horizon-404");
+    const descEl = document.querySelector('[data-i18n="desc"]');
+    const homeEl = document.querySelector('[data-i18n="home"]');
+    const homeSpan = homeEl?.querySelector("span");
+    const preferEn =
+      /\/en(?:\/|\.html|$)/i.test(location.pathname) ||
+      (!location.pathname.includes("/es") && navigator.language?.toLowerCase().startsWith("en"));
+
+    if (preferEn && section) {
+      document.documentElement.lang = "en";
+      if (descEl) descEl.textContent = "The page you're looking for doesn't exist.";
+      if (homeSpan) homeSpan.textContent = "Back to portfolio";
+      const enHref = section.getAttribute("data-en-home");
+      if (homeEl && enHref) homeEl.setAttribute("href", enHref);
+    }
+  })();
+</script>
+
+<style>
+  :global(html),
+  :global(body) {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .horizon-404 {
+    position: relative;
+    isolation: isolate;
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    padding-top: 64px;
+    background: #030713;
+  }
+
+  .horizon-404 :global(.black-hole-scene) {
+    opacity: 0.94;
+  }
+
+  .horizon-minimal {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    padding-inline: 20px;
+  }
+
+  .horizon-numeral {
+    font: 700 clamp(128px, 24vw, 280px)/0.86 var(--title);
+    letter-spacing: -0.05em;
+    color: #f4f9ff;
+    text-shadow: 0 16px 64px rgba(3, 10, 28, 0.88);
+  }
+
+  .horizon-minimal h1 {
+    margin-top: 12px;
+    font: 550 clamp(24px, 3.2vw, 38px)/1.12 var(--title);
+    letter-spacing: -0.028em;
+    color: #e6f2ff;
+    text-shadow: 0 4px 24px rgba(3, 10, 28, 0.85);
+  }
+
+  .horizon-copy {
+    margin-top: 8px;
+    max-width: 42ch;
+    color: #b7cae0;
+    font-size: clamp(14.5px, 1.4vw, 16.5px);
+    line-height: 1.5;
+    text-shadow: 0 2px 16px rgba(3, 10, 28, 0.9);
+  }
+
+  .horizon-btn {
+    margin-top: 26px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 22px;
+    border-radius: 999px;
+    font-size: 14.5px;
+    font-weight: 500;
+  }
+
+  .horizon-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+</style>

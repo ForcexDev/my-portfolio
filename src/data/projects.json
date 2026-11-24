@@ -1,0 +1,177 @@
+[
+  {
+    "id": 8,
+    "featured": true,
+    "titleKey": "pharmalogicTitle",
+    "descKey": "pharmalogicDesc",
+    "detailedDescKey": "pharmalogicDesc",
+    "image": "media/pharmalogic.webp",
+    "tags": [
+      "Java 17",
+      "Spring Boot",
+      "PostgreSQL",
+      "React",
+      "OpenAPI"
+    ],
+    "github": "",
+    "liveUrl": "https://pharmalogic.cl"
+  },
+  {
+    "id": 12,
+    "featured": true,
+    "titleKey": "udpMapTitle",
+    "descKey": "udpMapDesc",
+    "detailedDescKey": "udpMapDesc",
+    "image": "media/udp-map.webp",
+    "tags": [
+      "Interactive Map",
+      "Mobile Web",
+      "Vercel",
+      "UDP Campus"
+    ],
+    "github": "",
+    "liveUrl": "https://udp-map.vercel.app/"
+  },
+  {
+    "id": 9,
+    "featured": true,
+    "titleKey": "compendium-notesTitle",
+    "descKey": "compendium-notesDesc",
+    "detailedDescKey": "compendium-notesDesc",
+    "image": "media/compendium-notes.webp",
+    "tags": [
+      "Astro",
+      "TypeScript",
+      "WebAssembly",
+      "FFmpeg"
+    ],
+    "github": "",
+    "liveUrl": "https://compendium-notes.vercel.app/"
+  },
+  {
+    "id": 1,
+    "featured": true,
+    "titleKey": "project1Title",
+    "descKey": "project1Desc",
+    "image": "media/GCA-logo.webp",
+    "tags": [
+      "Node.js",
+      "Socket.IO",
+      "MongoDB",
+      "Express",
+      "Cloudflare",
+      "Real-time"
+    ],
+    "github": "https://github.com/ForcexDev/GrandChessAuto_DesarrolloWeb",
+    "liveUrl": "https://grandchessauto.forcex.dev/",
+    "detailedDescKey": "project1DetailedDesc",
+    "portfolioUrl": "pages/grand-chess-auto-showcase.html"
+  },
+  {
+    "id": 7,
+    "featured": true,
+    "titleKey": "projectIaTitle",
+    "descKey": "projectIaDesc",
+    "image": "media/IAimagebetter.webp",
+    "tags": [
+      "React",
+      "FastAPI",
+      "PyTorch",
+      "Docker",
+      "Redis"
+    ],
+    "github": "https://github.com/ForcexDev/IAimageBetter",
+    "liveUrl": "https://iaimagebetter.forcex.dev/",
+    "detailedDescKey": "projectIaDetailedDesc",
+    "portfolioUrl": "pages/ia-project-showcase.html"
+  },
+  {
+    "id": 10,
+    "featured": false,
+    "titleKey": "memsimTitle",
+    "descKey": "memsimDesc",
+    "detailedDescKey": "memsimDesc",
+    "image": "media/memsim.webp",
+    "tags": [
+      "C",
+      "Memory management"
+    ],
+    "github": "https://github.com/ForcexDev/memsim",
+    "liveUrl": "#"
+  },
+  {
+    "id": 11,
+    "featured": false,
+    "titleKey": "cercascoTitle",
+    "descKey": "cercascoDesc",
+    "detailedDescKey": "cercascoDesc",
+    "image": "media/cercasco.webp",
+    "tags": [
+      "ESP32",
+      "Flutter",
+      "Firebase"
+    ],
+    "github": "",
+    "liveUrl": "https://cercasco.vercel.app/"
+  },
+  {
+    "id": 2,
+    "featured": false,
+    "titleKey": "project2Title",
+    "descKey": "project2Desc",
+    "image": "media/java.webp",
+    "tags": [
+      "Java",
+      "Data Structures",
+      "Algorithms"
+    ],
+    "github": "https://github.com/ForcexDev/Java-EDA",
+    "liveUrl": "#",
+    "detailedDescKey": "project2Desc"
+  },
+  {
+    "id": 3,
+    "featured": false,
+    "titleKey": "project3Title",
+    "descKey": "project3Desc",
+    "image": "media/redes.webp",
+    "tags": [
+      "Networking",
+      "TCP/IP",
+      "Routing"
+    ],
+    "github": "https://github.com/ForcexDev/RedesDeDatos",
+    "liveUrl": "#",
+    "detailedDescKey": "project3Desc"
+  },
+  {
+    "id": 4,
+    "featured": false,
+    "titleKey": "project4Title",
+    "descKey": "project4Desc",
+    "image": "media/python2.webp",
+    "tags": [
+      "Python",
+      "Jupyter",
+      "Programming"
+    ],
+    "github": "https://github.com/ForcexDev/Python",
+    "liveUrl": "#",
+    "detailedDescKey": "project4Desc"
+  },
+  {
+    "id": 6,
+    "featured": false,
+    "titleKey": "project6Title",
+    "descKey": "project6Desc",
+    "image": "media/sql.webp",
+    "tags": [
+      "SQL",
+      "PostgreSQL",
+      "Database"
+    ],
+    "github": "https://github.com/ForcexDev/Python/tree/main/Proyect-DataBase",
+    "liveUrl": "#",
+    "detailedDescKey": "project6Desc"
+  }
+]

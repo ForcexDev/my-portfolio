@@ -1,0 +1,193 @@
+---
+/* 60fps Canvas globe locked cleanly to its horizontal spin axis with smooth inertia. */
+import atlasUrl from "world-atlas/countries-110m.json?url";
+---
+
+<canvas
+  class="contact-globe"
+  width="440"
+  height="325"
+  data-atlas={atlasUrl}
+  aria-hidden="true"
+></canvas>
+
+<script>
+  import { geoOrthographic, geoPath, geoGraticule10 } from "d3-geo";
+  import { mesh } from "topojson-client";
+  import type { Topology, GeometryCollection } from "topojson-specification";
+
+  const canvas = document.querySelector<HTMLCanvasElement>(".contact-globe")!;
+  const ctx = canvas.getContext("2d")!;
+  const still = matchMedia("(prefers-reduced-motion: reduce)");
+
+  const LOGICAL_W = 440;
+  const LOGICAL_H = 325;
+  const CENTER_X = 220;
+  const CENTER_Y = 200;
+  const RADIUS = 188;
+  const FIXED_LAT = -10; // Upright orientation, North at top
+
+  const projection = geoOrthographic()
+    .scale(RADIUS)
+    .translate([CENTER_X, CENTER_Y])
+    .clipAngle(90);
+
+  const path = geoPath(projection, ctx);
+  const grid = geoGraticule10();
+
+  let dpr = 1;
+  let longitude = 70; // Starts focused cleanly on the Americas
+  let velocity = 0;
+  let visible = false;
+  let dragging = false;
+  let loaded = false;
+  let borders: ReturnType<typeof mesh> | null = null;
+  let frame = 0;
+  let last = 0;
+  let lastX = 0;
+
+  function setupCanvas() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(LOGICAL_W * dpr);
+    canvas.height = Math.round(LOGICAL_H * dpr);
+    paint();
+  }
+
+  function paint() {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, LOGICAL_W, LOGICAL_H);
+    projection.rotate([longitude, FIXED_LAT, 0]);
+
+    // Subtle ocean sphere shading
+    const grad = ctx.createRadialGradient(
+      CENTER_X - 55,
+      CENTER_Y - 60,
+      20,
+      CENTER_X,
+      CENTER_Y,
+      RADIUS,
+    );
+    grad.addColorStop(0, "rgba(28, 74, 128, 0.36)");
+    grad.addColorStop(0.7, "rgba(12, 34, 62, 0.28)");
+    grad.addColorStop(1, "rgba(8, 22, 46, 0.48)");
+
+    ctx.beginPath();
+    ctx.arc(CENTER_X, CENTER_Y, RADIUS, 0, Math.PI * 2);
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Graticule lines
+    ctx.beginPath();
+    path(grid);
+    ctx.strokeStyle = "rgba(117, 158, 196, 0.24)";
+    ctx.lineWidth = 0.6;
+    ctx.stroke();
+
+    // Coastlines & country borders
+    if (borders) {
+      ctx.beginPath();
+      path(borders);
+      ctx.strokeStyle = "#b4dcff";
+      ctx.lineWidth = 0.85;
+      ctx.lineJoin = "round";
+      ctx.stroke();
+    }
+
+    // Crisp atmospheric outline
+    ctx.beginPath();
+    ctx.arc(CENTER_X, CENTER_Y, RADIUS, 0, Math.PI * 2);
+    ctx.strokeStyle = "rgba(142, 199, 255, 0.72)";
+    ctx.lineWidth = 0.9;
+    ctx.stroke();
+  }
+
+  function tick(now: number) {
+    frame = 0;
+    if (!visible || document.hidden) return;
+    const dt = last ? Math.min(0.05, (now - last) / 1000) : 0.016;
+    last = now;
+
+    if (!dragging) {
+      if (Math.abs(velocity) > 0.01) {
+        longitude += velocity * dt * 60;
+        velocity *= Math.pow(0.92, dt * 60);
+      } else {
+        velocity = 0;
+        if (!still.matches) {
+          // Smooth left-to-right rotation strictly on the horizontal axis
+          longitude += dt * 7.5;
+        }
+      }
+      if (longitude > 360 || longitude < -360) longitude %= 360;
+      paint();
+    }
+
+    if (dragging || !still.matches || Math.abs(velocity) > 0.01) {
+      frame = requestAnimationFrame(tick);
+    }
+  }
+
+  function wake() {
+    cancelAnimationFrame(frame);
+    last = performance.now();
+    frame = requestAnimationFrame(tick);
+  }
+
+  canvas.addEventListener("pointerdown", (e) => {
+    if (e.button !== 0 && e.pointerType === "mouse") return;
+    if (e.pointerType === "mouse") e.preventDefault();
+    dragging = true;
+    velocity = 0;
+    lastX = e.clientX;
+    canvas.classList.add("dragging");
+    wake();
+  });
+
+  window.addEventListener(
+    "pointermove",
+    (e) => {
+      if (!dragging) return;
+      const dx = e.clientX - lastX;
+      lastX = e.clientX;
+      const step = dx * 0.45;
+      longitude += step;
+      velocity = velocity * 0.55 + step * 0.45;
+      paint();
+    },
+    { passive: true },
+  );
+
+  function endDrag() {
+    if (!dragging) return;
+    dragging = false;
+    canvas.classList.remove("dragging");
+    wake();
+  }
+
+  window.addEventListener("pointerup", endDrag);
+  window.addEventListener("pointercancel", endDrag);
+
+  new IntersectionObserver(async ([entry]) => {
+    visible = entry.isIntersecting;
+    if (visible && !loaded) {
+      loaded = true;
+      try {
+        const world: Topology<{ countries: GeometryCollection }> = await fetch(
+          canvas.dataset.atlas!,
+        ).then((r) => r.json());
+        borders = mesh(world, world.objects.countries);
+        paint();
+      } catch {
+        loaded = false;
+      }
+    }
+    if (visible) wake();
+    else cancelAnimationFrame(frame);
+  }).observe(canvas);
+
+  window.addEventListener("resize", setupCanvas, { passive: true });
+  still.addEventListener("change", wake);
+  document.addEventListener("visibilitychange", wake);
+
+  setupCanvas();
+</script>

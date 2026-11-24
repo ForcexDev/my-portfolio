@@ -1,0 +1,72 @@
+---
+import { Icon } from "astro-icon/components";
+import BlackHoleScene from "./BlackHoleScene.astro";
+import { base, type Language } from "../i18n";
+interface Props {
+  lang: Language;
+  home: string;
+}
+const { lang, home } = Astro.props,
+  es = lang === "es";
+---
+
+<footer class="orbital-footer">
+  <BlackHoleScene />
+  <div class="footer-content wrap">
+    <div class="signature">
+      <a class="brand footer-brand" href={home + "#home"}>
+        <img src={base + "orbit.svg"} width="28" height="28" alt="" />
+        <span class="brand-text">Forcex<span>Dev</span></span>
+      </a>
+      <p class="footer-author">Ezequiel Morales</p>
+      <p>
+        {es
+          ? "Ciberseguridad e ingeniería de redes"
+          : "Cybersecurity & network engineering"}
+      </p>
+    </div>
+    <div class="footer-links">
+      <h3>{es ? "Portafolio" : "Portfolio"}</h3>
+      <a class="hover-ul" href={home + "#projects"}>
+        {es ? "Proyectos" : "Projects"}
+      </a>
+      <a class="hover-ul" href={home + "#skills"}>
+        {es ? "Habilidades" : "Skills"}
+      </a>
+      <a class="hover-ul" href={home + "#certifications"}>
+        {es ? "Certificaciones" : "Certifications"}
+      </a>
+    </div>
+    <div class="footer-links">
+      <h3>{es ? "Contacto" : "Contact"}</h3>
+      <a
+        class="hover-ul"
+        href="https://github.com/ForcexDev"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        GitHub <Icon name="lucide:arrow-up-right" />
+      </a>
+      <a
+        class="hover-ul"
+        href="https://www.linkedin.com/in/ezequielleandromorales/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        LinkedIn <Icon name="lucide:arrow-up-right" />
+      </a>
+      <a class="hover-ul" href={home + "#contact"}>
+        {es ? "Mensaje directo" : "Direct message"}
+      </a>
+    </div>
+  </div>
+  <div class="footer-line wrap">
+    <small>© 2026 Ezequiel Morales · ForcexDev</small>
+    <a class="hover-ul" href={home + "#home"}>
+      {es ? "Volver al inicio" : "Back to top"} <Icon name="lucide:arrow-up" />
+    </a>
+  </div>
+  <div class="footer-monument wrap">
+    <span class="footer-wordmark" aria-hidden="true">FORCEXDEV</span>
+  </div>
+</footer>

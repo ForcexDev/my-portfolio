@@ -1,0 +1,76 @@
+---
+import Site from "../../layouts/Site.astro";
+import Radio from "../../components/Radio.astro";
+import Contact from "../../components/Contact.astro";
+import "../../styles/article.css";
+
+export function getStaticPaths() {
+  const entries = import.meta.glob<string>("../../content/projects/*.html", {
+    eager: true,
+    query: "?raw",
+    import: "default",
+  });
+  return Object.entries(entries).map(([path, html]) => ({
+    params: { slug: path.split("/").pop()!.replace(".html", "") },
+    props: {
+      html,
+      title: html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1] ?? "Proyecto",
+    },
+  }));
+}
+const { html, title } = Astro.props;
+---
+
+<Site lang="es" articleTitle={title}>
+  <article class="article wrap" set:html={html} />
+  <dialog class="lightbox">
+    <button aria-label="Cerrar">×</button>
+    <img alt="" />
+  </dialog>
+  <Radio lang="es" />
+  <Contact lang="es" />
+</Site>
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>(".lightbox")!;
+  document.querySelectorAll<HTMLImageElement>(".article img").forEach((img) => {
+    const trigger = document.createElement("button");
+    trigger.className = "zoom";
+    trigger.setAttribute("aria-label", "Ampliar " + img.alt);
+    img.replaceWith(trigger);
+    trigger.append(img);
+    trigger.onclick = () => {
+      const large = dialog.querySelector("img")!;
+      large.src = img.src;
+      large.alt = img.alt;
+      dialog.showModal();
+    };
+  });
+  dialog.addEventListener("click", () => dialog.close());
+  document.querySelectorAll<HTMLButtonElement>(".copy-btn").forEach((btn) => {
+    btn.onclick = async () => {
+      const code = btn
+        .closest(".code-block")
+        ?.querySelector("code")?.textContent;
+      if (!code) return;
+      try {
+        await navigator.clipboard.writeText(code);
+        btn.textContent = "Copiado";
+      } catch {
+        btn.textContent = "Selecciona el código para copiarlo";
+      }
+    };
+  });
+  document.querySelectorAll<HTMLElement>(".carousel-track").forEach((track) => {
+    const parent = track.parentElement!;
+    parent
+      .querySelector(".prev")
+      ?.addEventListener("click", () =>
+        track.scrollBy({ left: -track.clientWidth }),
+      );
+    parent
+      .querySelector(".next")
+      ?.addEventListener("click", () =>
+        track.scrollBy({ left: track.clientWidth }),
+      );
+  });
+</script>

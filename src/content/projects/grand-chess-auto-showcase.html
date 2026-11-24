@@ -1,0 +1,222 @@
+<div class="page-content">
+<header class="page-header">
+<h1 class="page-title">Grand Chess Auto: Reimagined</h1>
+<p class="page-subtitle">Ajedrez online multijugador con estética Retrowave/GTA. Domina las calles y el
+                tablero.</p>
+<div class="badge-container">
+<span class="status-badge active"> Status: Beta Active</span>
+<span class="status-badge tech"> Tech: Node.js | Socket.IO |
+                    MongoDB</span>
+<span class="status-badge security"> Security: Cloudflare Zero
+                    Trust</span>
+<a href="https://grandchessauto.forcex.dev" target="_blank">
+<span class="status-badge active">
+ Website: Online
+                    </span>
+</a>
+</div>
+<div class="page-tags">
+<span class="tag"> Node.js</span>
+<span class="tag"> Express</span>
+<span class="tag"> MongoDB</span>
+<span class="tag"> Socket.IO</span>
+<span class="tag"> Handlebars</span>
+</div>
+</header>
+
+<section class="hero-banner">
+<img alt="Grand Chess Auto Banner" loading="lazy" src="../img/GCA-logo.png"/>
+<div class="hero-banner-overlay">
+<h2>The ultimate chess experience</h2>
+</div>
+</section>
+
+<article class="text-block">
+
+<section>
+<h2> Showcase: Sincronización en Tiempo Real</h2>
+<p>Cada movimiento, captura y mensaje se transmite instantáneamente mediante
+                    <strong>WebSockets</strong>. La latencia ya no es un problema gracias a nuestro sistema de
+                    sincronización optimizado.
+                </p>
+<div class="video-block">
+<img alt="Real-time Gameplay Demo" loading="lazy" src="../img/gameplay_realtime.gif"/>
+</div>
+<p>
+                    Demostración de movimientos en tiempo real con Socket.IO.
+                </p>
+</section>
+
+<section>
+<h2> Interfaz Premium con Glassmorphism</h2>
+<p>Diseño responsivo que se adapta desde monitores 4K hasta dispositivos móviles, manteniendo una
+                    estética coherente inspirada en el synthwave y GTA.</p>
+<div class="video-block">
+<img alt="Responsive UI Showcase" loading="lazy" src="../img/responsive_ui.gif"/>
+</div>
+<p>
+                    Adaptabilidad de la interfaz en múltiples dispositivos.
+                </p>
+</section>
+
+<section>
+<h2> De "Fase 3" a "Reimagined"</h2>
+<p>Este proyecto nace de la necesidad de superar las limitaciones de la versión anterior. Donde el
+                    proyecto original se detuvo, <strong>Grand Chess Auto: Reimagined</strong> comienza, reescribiendo
+                    el núcleo desde cero para ofrecer una experiencia profesional.</p>
+<div class="comparison-table-wrapper">
+<table class="comparison-table">
+<thead>
+<tr>
+<th>Característica</th>
+<th>Legado (Fase 3)</th>
+<th>Reimagined (Actual)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sincronización</td>
+<td class="legacy-col">Polling / Fetch (Lento)</td>
+<td class="reimagined-col">WebSockets (Socket.IO)</td>
+</tr>
+<tr>
+<td>Motor Lógico</td>
+<td class="legacy-col">Básico / Incompleto</td>
+<td class="reimagined-col">Chess.js Modificado</td>
+</tr>
+<tr>
+<td>Interfaz</td>
+<td class="legacy-col">CSS Estándar</td>
+<td class="reimagined-col">Glassmorphism Premium</td>
+</tr>
+<tr>
+<td>Modo Offline</td>
+<td class="legacy-col">No funcional</td>
+<td class="reimagined-col">Persistente (LocalStorage)</td>
+</tr>
+<tr>
+<td>Seguridad</td>
+<td class="legacy-col">Básica</td>
+<td class="reimagined-col">Sesiones Robustas + WAF</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section>
+<h2> Funcionalidades Principales</h2>
+<h3> Sistema Multijugador Global</h3>
+<div class="feature-grid">
+<div class="feature-card">
+
+<h4>Modo Espectador</h4>
+<p>Observa partidas en curso sin interrumpir el juego, con actualización en tiempo real.</p>
+</div>
+<div class="feature-card">
+
+<h4>Relojes de Precisión</h4>
+<p>Compensación automática de latencia servidor-cliente para un juego justo.</p>
+</div>
+<div class="feature-card">
+
+<h4>Chat Integrado</h4>
+<p>Comunicación instantánea global y por sala para interactuar con tus oponentes.</p>
+</div>
+</div>
+<h3> Experiencia de Usuario</h3>
+<div class="feature-grid">
+<div class="feature-card">
+
+<h4>Coronación Táctil</h4>
+<p>Interfaz gráfica intuitiva para la selección de piezas al coronar un peón.</p>
+</div>
+<div class="feature-card">
+
+<h4>Feedback Auditivo</h4>
+<p>Sonidos inmersivos en cada movimiento, captura y estado crítico.</p>
+</div>
+<div class="feature-card">
+
+<h4>Radio In-Game</h4>
+<p>Reproductor LoFi integrado para mantener el ambiente retro-futurista.</p>
+</div>
+</div>
+</section>
+
+<section>
+<h2> Infraestructura &amp; DevOps</h2>
+<div class="callout info">
+
+<div class="callout-content">
+<p><strong>Identidad:</strong> Autenticación mediante Resend API con correos firmados desde el
+                            dominio forcex.dev.</p>
+</div>
+</div>
+<div class="callout info">
+
+<div class="callout-content">
+<p><strong>Seguridad:</strong> Cloudflare WAF con reglas personalizadas y Turnstile para
+                            protección avanzada contra bots.</p>
+</div>
+</div>
+<p>El proyecto se encuentra <strong>self-hosted</strong> en un servidor privado (Homelab), expuesto de
+                    forma segura mediante Cloudflare Zero Trust Tunnels, eliminando la necesidad de abrir puertos
+                    públicamente.</p>
+</section>
+
+<section>
+<h2> Roadmap</h2>
+<div class="roadmap-list">
+<div class="roadmap-item completed">
+
+<div>
+<strong>Motor de ajedrez completo</strong>
+<p>Implementación de movimientos legales, jaque mate, tablas, enroque y validación rigurosa.
+                            </p>
+</div>
+</div>
+<div class="roadmap-item completed">
+
+<div>
+<strong>Sistema de chat en tiempo real</strong>
+<p>Canales globales y específicos por sala de juego.</p>
+</div>
+</div>
+<div class="roadmap-item in-progress">
+
+<div>
+<strong>Historial de partidas PGN</strong>
+<p>Guardado persistente en MongoDB para revisión y análisis de jugadas.</p>
+</div>
+</div>
+<div class="roadmap-item in-progress">
+
+<div>
+<strong>Sistema de clasificación ELO</strong>
+<p>Matchmaking basado en habilidad y tabla de líderes global.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section>
+<h2> Créditos</h2>
+<p><strong>ForcexDev</strong> — Full Stack Architect &amp; DevOps. Dirección técnica, infraestructura, motor
+                    lógico y reescritura del núcleo.</p>
+<p><strong>BurnedGPU</strong> — Co-Founder (Legacy). Colaboración original en las fases tempranas del
+                    diseño.</p>
+</section>
+</article>
+<footer class="text-block">
+<p>© 2025 Burned GPU Inc. — All rights reserved</p>
+<div>
+<a class="cta-button" href="https://github.com/ForcexDev/GrandChessAuto_DesarrolloWeb" target="_blank">
+ <span>View Repository</span>
+</a>
+<a class="cta-button secondary-btn" href="../index.html#projects">
+<span>Back to Portfolio</span>
+</a>
+</div>
+</footer>
+</div>

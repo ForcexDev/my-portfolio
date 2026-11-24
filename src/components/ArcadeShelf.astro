@@ -1,0 +1,539 @@
+---
+import { games } from "../data/arcade";
+import { base, type Language } from "../i18n";
+interface Props {
+  lang: Language;
+}
+const es = Astro.props.lang === "es";
+const carouselCopies = [false, true] as const;
+---
+
+<section id="game-hub" class="game-room" aria-labelledby="arcade-heading">
+  <div class="shelf-head wrap">
+    <div class="shelf-copy">
+      <div class="shelf-title-row">
+        <h2 id="arcade-heading">Arcade</h2>
+        <button type="button" data-leave-arcade hidden>
+          {es ? "Salir del modo Arcade" : "Exit Arcade mode"}
+        </button>
+      </div>
+      <p>
+        {es
+          ? "Elige una carátula para cambiar el espacio y escuchar su música."
+          : "Select a cover to change the space around you and hear its soundtrack."}
+      </p>
+    </div>
+
+    <div
+      class="arcade-views"
+      role="tablist"
+      aria-label={es ? "Modo de vista Arcade" : "Arcade view mode"}
+    >
+      <button
+        type="button"
+        role="tab"
+        class="view-tab"
+        data-arcade-view="carousel"
+        aria-selected="true"
+      >
+        {es ? "Carrusel" : "Carousel"}
+      </button>
+      <button
+        type="button"
+        role="tab"
+        class="view-tab"
+        data-arcade-view="tunnel"
+        aria-selected="false"
+      >
+        {es ? "Túnel 3D" : "3D Tunnel"}
+      </button>
+    </div>
+  </div>
+
+  <!-- Full-bleed continuous rotating carousel -->
+  <div class="arcade-marquee" data-view-panel="carousel">
+    <div class="arcade-track">
+      {carouselCopies.map((isClone) => (
+        <div
+          class:list={["arcade-group", { "is-clone": isClone }]}
+          role={isClone ? undefined : "group"}
+          aria-hidden={isClone ? "true" : undefined}
+          aria-label={isClone ? undefined : es ? "Carátulas" : "Game covers"}
+        >
+          {games.map(({ key, name, art }) => (
+            <button
+              type="button"
+              class="game-case"
+              data-game={key}
+              aria-pressed="false"
+              tabindex={isClone ? -1 : undefined}
+            >
+              <span class="case-art">
+                <span class="disc-wrap" aria-hidden="true">
+                  <span class="disc">
+                    <img
+                      class="disc-art"
+                      src={base + art}
+                      alt=""
+                      width="240"
+                      height="240"
+                      loading="eager"
+                      decoding="async"
+                    />
+                    <span class="disc-hub"></span>
+                  </span>
+                </span>
+                <img
+                  class="case-cover"
+                  src={base + art}
+                  alt=""
+                  width="480"
+                  height="720"
+                  loading="eager"
+                  decoding="async"
+                />
+              </span>
+              <strong>{name}</strong>
+            </button>
+          ))}
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Full-width interactive GSAP 3D Endless Corridor -->
+  <div
+    class="endless-root"
+    data-view-panel="tunnel"
+    hidden
+    aria-label={es ? "Corredor 3D de carátulas" : "3D Arcade corridor"}
+  >
+    <div class="endless-scene">
+      <div class="endless-world">
+        {games.map(({ key, name, art }) => (
+          <button
+            type="button"
+            class="endless-plane"
+            data-game={key}
+            aria-label={name}
+            aria-pressed="false"
+          >
+            <img
+              src={base + art}
+              alt=""
+              width="480"
+              height="720"
+              loading="eager"
+              decoding="async"
+            />
+            <span class="plane-label">{name}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div class="endless-center" aria-hidden="true">
+      <span class="endless-eyebrow">ARCADE · 16 CLASSICS</span>
+      <p class="endless-title" data-tunnel-title>Arcade</p>
+      <p class="endless-caption" data-tunnel-caption>
+        {es ? "Haz clic en una carátula para activar su mundo" : "Click a cover to activate its world"}
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initArcadeViews } from "../scripts/arcade-tunnel";
+  initArcadeViews();
+</script>
+
+<style>
+  .game-room {
+    border-block: 1px solid var(--line);
+    padding-block: clamp(46px, 6vw, 88px);
+    overflow-x: clip;
+  }
+
+  .shelf-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 18px 28px;
+    margin-bottom: clamp(26px, 3.2vw, 40px);
+  }
+
+  .shelf-title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 12px 22px;
+  }
+
+  .shelf-head h2 {
+    font-size: clamp(40px, 5vw, 72px);
+    line-height: 1.02;
+  }
+
+  .shelf-copy p {
+    color: #c3cddc;
+    margin-top: 8px;
+  }
+
+  [data-leave-arcade] {
+    color: var(--ice);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    font-size: 14px;
+  }
+
+  .arcade-views {
+    display: inline-flex;
+    padding: 4px;
+    border-radius: 999px;
+    border: 1px solid rgba(118, 194, 255, 0.24);
+    background: rgba(6, 14, 30, 0.72);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .view-tab {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #9eb9d6;
+    transition: background-color 0.24s ease, color 0.24s ease;
+  }
+
+  .view-tab[aria-selected="true"] {
+    background: rgba(125, 211, 252, 0.18);
+    color: #f4f9ff;
+  }
+
+  /* ---- Full-bleed continuous rotating carousel ---- */
+  .arcade-marquee {
+    width: 100%;
+    overflow: hidden;
+    padding-block: 18px 24px;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  }
+
+  .arcade-track {
+    display: flex;
+    width: max-content;
+    animation: arcadeGlide 58s linear infinite;
+    will-change: transform;
+  }
+
+  .arcade-marquee:hover .arcade-track,
+  .arcade-marquee:focus-within .arcade-track {
+    animation-play-state: paused;
+  }
+
+  .arcade-group {
+    display: flex;
+    align-items: flex-start;
+    gap: clamp(14px, 1.8vw, 24px);
+    padding-right: clamp(14px, 1.8vw, 24px);
+  }
+
+  .game-case {
+    flex: none;
+    width: clamp(148px, 13.2vw, 198px);
+    padding-right: clamp(40px, 3.6vw, 56px);
+    text-align: left;
+    color: #cad7e6;
+    cursor: pointer;
+  }
+
+  .case-art {
+    position: relative;
+    display: block;
+    width: 100%;
+    perspective: 920px;
+  }
+
+  .case-cover {
+    position: relative;
+    z-index: 2;
+    display: block;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    height: auto;
+    object-fit: cover;
+    border-radius: 4px 7px 7px 4px;
+    border: 1px solid rgba(186, 212, 240, 0.38);
+    background: #09121e;
+    box-shadow: 7px 12px 24px rgba(0, 0, 0, 0.62);
+    transform-origin: 8% 50%;
+    transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Printed real CD-ROM disc sliding out and rotating smoothly */
+  .disc-wrap {
+    position: absolute;
+    z-index: 1;
+    width: 96%;
+    aspect-ratio: 1;
+    right: -4%;
+    top: 18%;
+    transform: translateX(0);
+    transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+  }
+
+  .disc {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid rgba(226, 242, 255, 0.48);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.68);
+    -webkit-mask-image: radial-gradient(circle, transparent 0 15.5%, #000 16.3%);
+    mask-image: radial-gradient(circle, transparent 0 15.5%, #000 16.3%);
+    animation: discSpin 4.4s linear infinite;
+    animation-play-state: paused;
+  }
+
+  .disc-art {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: contrast(1.06) saturate(1.1);
+  }
+
+  /* Optical iridescent lacquer sheen over printed disc */
+  .disc::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background:
+      conic-gradient(
+        from 20deg,
+        rgba(255, 255, 255, 0.24),
+        transparent 18%,
+        rgba(120, 210, 255, 0.2) 34%,
+        transparent 52%,
+        rgba(255, 255, 255, 0.22) 72%,
+        rgba(140, 255, 210, 0.16) 88%,
+        rgba(255, 255, 255, 0.24)
+      );
+    mix-blend-mode: screen;
+    pointer-events: none;
+  }
+
+  /* Polycarbonate clamping ring & inner reflective collar around center spindle */
+  .disc-hub {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background:
+      radial-gradient(
+        circle,
+        transparent 0 16%,
+        rgba(225, 238, 250, 0.85) 16.2% 17.6%,
+        rgba(180, 198, 216, 0.45) 17.8% 24.5%,
+        rgba(255, 255, 255, 0.65) 24.8% 25.8%,
+        transparent 26.2% 96%,
+        rgba(235, 245, 255, 0.55) 97% 100%
+      );
+    pointer-events: none;
+  }
+
+  .game-case:hover .disc-wrap,
+  .game-case:focus-visible .disc-wrap,
+  .game-case[aria-pressed="true"] .disc-wrap {
+    transform: translateX(48%);
+  }
+
+  .game-case:hover .disc,
+  .game-case:focus-visible .disc,
+  .game-case[aria-pressed="true"] .disc {
+    animation-play-state: running;
+  }
+
+  .game-case:hover .case-cover,
+  .game-case:focus-visible .case-cover,
+  .game-case[aria-pressed="true"] .case-cover {
+    transform: rotateY(-19deg) translateY(-4px) scale(1.03);
+  }
+
+  .game-case strong {
+    display: block;
+    margin-top: 13px;
+    font-size: clamp(13.5px, 1.1vw, 16px);
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .game-case[aria-pressed="true"] strong {
+    color: #ffffff;
+    text-decoration: underline;
+    text-decoration-color: var(--ice);
+    text-underline-offset: 6px;
+  }
+
+  @keyframes arcadeGlide {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @keyframes discSpin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* ---- Full-width interactive GSAP 3D Endless Corridor ---- */
+  .endless-root {
+    position: relative;
+    width: 100%;
+    height: clamp(540px, 76vh, 760px);
+    overflow: hidden;
+    user-select: none;
+    background: radial-gradient(ellipse 65% 55% at 50% 50%, rgba(28, 86, 178, 0.14), transparent 72%);
+    -webkit-mask-image: linear-gradient(180deg, transparent, #000 8%, #000 90%, transparent);
+    mask-image: linear-gradient(180deg, transparent, #000 8%, #000 90%, transparent);
+  }
+
+  .endless-scene {
+    position: absolute;
+    inset: 0;
+    perspective: 1100px;
+    perspective-origin: 50% 50%;
+    transform-style: preserve-3d;
+  }
+
+  .endless-world {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+  }
+
+  .endless-plane {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: #040914;
+    border-radius: 8px;
+    border: 1px solid rgba(154, 210, 255, 0.25);
+    overflow: hidden;
+    transform-style: preserve-3d;
+    transform-origin: 50% 50%;
+    backface-visibility: hidden;
+    will-change: transform;
+    cursor: pointer;
+    box-shadow: 0 22px 44px rgba(0, 0, 0, 0.65);
+    transition: border-color 0.24s ease;
+  }
+
+  .endless-plane:hover,
+  .endless-plane[aria-pressed="true"] {
+    border-color: var(--ice);
+  }
+
+  .endless-plane img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+
+  .plane-label {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 20px 12px 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #f4f9ff;
+    background: linear-gradient(180deg, transparent, rgba(3, 7, 19, 0.92));
+    opacity: 0;
+    transition: opacity 0.22s ease;
+  }
+
+  .endless-plane:hover .plane-label,
+  .endless-plane:focus-visible .plane-label,
+  .endless-plane[aria-pressed="true"] .plane-label {
+    opacity: 1;
+  }
+
+  .endless-center {
+    position: absolute;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 8px;
+    text-align: center;
+    padding: 24px;
+    background: radial-gradient(circle 280px at 50% 50%, rgba(3, 7, 19, 0.72), transparent 78%);
+    pointer-events: none;
+  }
+
+  .endless-eyebrow {
+    font: 500 11.5px/1 var(--mono);
+    letter-spacing: 0.14em;
+    color: var(--ice);
+  }
+
+  .endless-title {
+    font: 600 clamp(24px, 3vw, 40px)/1.05 var(--title);
+    letter-spacing: -0.025em;
+    color: #f5f9ff;
+    text-shadow: 0 6px 28px rgba(0, 0, 0, 0.85);
+  }
+
+  .endless-caption {
+    font-size: 13.5px;
+    color: #aac3de;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .arcade-track {
+      animation: none;
+      padding-inline: clamp(18px, 4vw, 48px);
+    }
+    .arcade-marquee {
+      overflow-x: auto;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+    .arcade-group.is-clone {
+      display: none;
+    }
+    .disc {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .game-case {
+      width: 146px;
+      padding-right: 36px;
+    }
+    .endless-root {
+      height: 440px;
+    }
+  }
+</style>

@@ -1,0 +1,287 @@
+---
+import { base, type Language } from "../i18n";
+interface Props {
+  lang: Language;
+}
+const es = Astro.props.lang === "es";
+interface Role {
+  title: string;
+  context: string;
+  start: string;
+  since: string;
+  end?: string;
+  until?: string;
+  description: string;
+}
+interface Employer {
+  name: string;
+  logo: string;
+  location: string;
+  roles: Role[];
+}
+const employers: Employer[] = [
+  {
+    name: "Universidad Diego Portales",
+    logo: "udp.webp",
+    location: "Santiago, Chile",
+    roles: [
+      {
+        title: es
+          ? "Ayudante de Criptografía y Seguridad en Redes"
+          : "Teaching assistant in Cryptography and Network Security",
+        context: es ? "Cátedra · Presencial" : "Lecture course · On-site",
+        start: "2026-08",
+        since: es ? "Ago. 2026" : "Aug 2026",
+        description: es
+          ? "Preparo laboratorios de cifrado, firmas digitales y TLS. Guío los ejercicios de análisis de tráfico y apoyo la evaluación de tareas y controles."
+          : "I prepare labs on encryption, digital signatures and TLS, guide traffic analysis exercises and help assess coursework.",
+      },
+      {
+        title: es
+          ? "Ayudante de Proyecto en TICs I"
+          : "Teaching assistant in ICT Project I",
+        context: es ? "Cátedra · Presencial" : "Lecture course · On-site",
+        start: "2026-03",
+        since: es ? "Mar. 2026" : "Mar 2026",
+        description: es
+          ? "Acompaño a los equipos desde que definen el alcance de su proyecto hasta la entrega. Reviso código, informes y presentaciones."
+          : "I work with student teams from scoping their projects through delivery, reviewing code, reports and presentations.",
+      },
+      {
+        title: es ? "Práctica de Investigación I" : "Research Practicum I",
+        context: es
+          ? "Investigación con Nicolás Boettcher"
+          : "Research with Nicolás Boettcher",
+        start: "2025-12",
+        since: es ? "Dic. 2025" : "Dec 2025",
+        description: es
+          ? "Investigo fugas de datos personales en aplicaciones y servicios digitales. Desarrollo un panel de prevención de fugas en OpenWrt a partir de capturas de tráfico."
+          : "I research personal data leaks in apps and digital services and use network captures to build a data loss prevention dashboard on OpenWrt.",
+      },
+    ],
+  },
+  {
+    name: "Sodimac",
+    logo: "sodimac.webp",
+    location: "Santiago, Chile",
+    roles: [
+      {
+        title: es ? "Analista de inventario" : "Inventory analyst",
+        context: es ? "Jornada completa · Presencial" : "Full-time · On-site",
+        start: "2022-05",
+        since: es ? "May. 2022" : "May 2022",
+        end: "2022-07",
+        until: es ? "Jul. 2022" : "Jul 2022",
+        description: es
+          ? "Analicé el inventario y audité las cargas. Coordiné con bodega y transporte el seguimiento de los productos."
+          : "I analyzed inventory, audited shipments and worked with warehouse and transport teams to track products.",
+      },
+    ],
+  },
+  {
+    name: "Titan Service PC",
+    logo: "titan-service-pc.png",
+    location: "Santiago, Chile",
+    roles: [
+      {
+        title: es
+          ? "Encargado del área de informática y logística"
+          : "IT and logistics lead",
+        context: es ? "Autónomo · Híbrido" : "Self-employed · Hybrid",
+        start: "2020-03",
+        since: es ? "Mar. 2020" : "Mar 2020",
+        end: "2021-04",
+        until: es ? "Abr. 2021" : "Apr 2021",
+        description: es
+          ? "Diagnostiqué y reparé equipos, di soporte a usuarios y llevé el control del inventario técnico y de los dispositivos en garantía."
+          : "I diagnosed and repaired computers, supported users and tracked technical inventory and devices under warranty.",
+      },
+    ],
+  },
+];
+---
+
+<section class="experience" id="experiencia" aria-labelledby="experience-title">
+  <h3 id="experience-title">{es ? "Experiencia" : "Experience"}</h3>
+  {employers.map(({ name, logo, location, roles }) => (
+    <article class="employer">
+      <header class="employer-heading">
+        <img
+          class:list={[
+            "company-mark",
+            { house: logo === "sodimac.webp", udp: logo === "udp.webp" },
+          ]}
+          src={base + "media/" + logo}
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
+        <div>
+          <h4>{name}</h4>
+          <p>{location}</p>
+        </div>
+      </header>
+      <ul class:list={["roles", { timeline: roles.length > 1 }]}>
+        {roles.map((role) => (
+          <li>
+            <div class="role-heading">
+              <h5>{role.title}</h5>
+              <p class="dates">
+                <time datetime={role.start}>{role.since}</time> –{" "}
+                {role.end ? (
+                  <time datetime={role.end}>{role.until}</time>
+                ) : (
+                  <span class="current">{es ? "Actualidad" : "Present"}</span>
+                )}
+              </p>
+            </div>
+            <p class="role-context">{role.context}</p>
+            <p class="role-description">{role.description}</p>
+          </li>
+        ))}
+      </ul>
+    </article>
+  ))}
+</section>
+<style>
+  .experience {
+    scroll-margin-top: 5rem;
+  }
+  .experience > h3 {
+    font-size: clamp(29px, 3.3vw, 44px);
+    line-height: 1.15;
+    font-weight: 550;
+    letter-spacing: -0.035em;
+    margin-bottom: 26px;
+  }
+  .employer {
+    display: grid;
+    grid-template-columns: minmax(185px, 0.8fr) minmax(0, 2fr);
+    gap: clamp(22px, 4vw, 64px);
+    align-items: start;
+    border-top: 1px solid var(--line);
+    padding: clamp(22px, 2.6vw, 35px) 0;
+  }
+  .employer:last-child {
+    padding-bottom: 0;
+  }
+  .employer-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .company-mark {
+    width: auto;
+    max-width: 114px;
+    height: auto;
+    max-height: 68px;
+    object-fit: contain;
+    object-position: left center;
+  }
+  .company-mark.house {
+    width: 46px;
+    height: 46px;
+  }
+  .company-mark.udp {
+    max-width: 148px;
+  }
+  .employer h4,
+  .employer h5 {
+    letter-spacing: -0.022em;
+    line-height: 1.24;
+    font-weight: 550;
+  }
+  .employer h4 {
+    font-size: 20px;
+  }
+  .employer-heading p,
+  .role-context,
+  .dates {
+    font-size: 14px;
+    color: var(--dim);
+  }
+  .roles {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .roles li {
+    position: relative;
+    padding: 0 0 24px 19px;
+  }
+  .roles li::before {
+    content: "";
+    position: absolute;
+    top: 7px;
+    left: 0;
+    width: 7px;
+    height: 7px;
+    border: 1px solid var(--ice);
+    background: var(--ink);
+    border-radius: 50%;
+  }
+  .timeline li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 3px;
+    top: 17px;
+    bottom: -4px;
+    width: 1px;
+    background: var(--line);
+  }
+  .roles li:last-child {
+    padding-bottom: 0;
+  }
+  .role-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 4px 14px;
+    flex-wrap: wrap;
+  }
+  .role-heading h5 {
+    font-size: clamp(18px, 1.55vw, 22px);
+  }
+  .dates {
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .current {
+    color: var(--ice);
+  }
+  .role-context {
+    margin-top: 3px;
+  }
+  .role-description {
+    color: var(--dim);
+    margin-top: 7px;
+    max-width: 67ch;
+    line-height: 1.55;
+  }
+  @media (max-width: 760px) {
+    .employer {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+    .employer-heading {
+      flex-direction: row;
+      align-items: center;
+      gap: 15px;
+    }
+    .company-mark {
+      width: 76px;
+      max-height: 51px;
+    }
+    .company-mark.house {
+      width: 42px;
+    }
+    .company-mark.udp {
+      width: auto;
+      max-width: 112px;
+    }
+    .role-heading {
+      display: grid;
+    }
+  }
+</style>

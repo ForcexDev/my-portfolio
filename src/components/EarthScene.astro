@@ -1,0 +1,22 @@
+---
+import { base } from "../i18n";
+interface Props {
+  variant?: "hero" | "footer";
+}
+const { variant = "hero" } = Astro.props;
+const posters = variant === "footer" ? "media/earth/footer" : "media/earth/hero";
+---
+
+<div
+  class:list={["earth-scene", { "earth-footer": variant === "footer" }]}
+  aria-hidden="true"
+  data-assets={base + "media/"}
+  data-mode={variant === "footer" ? "1" : "0"}
+  style={`--wide:url("${base}${posters}-wide.webp");--narrow:url("${base}${posters}-narrow.webp")`}
+>
+  <canvas></canvas>
+</div>
+<script>
+  import { observeEarth } from "../scripts/earth";
+  document.querySelectorAll<HTMLElement>(".earth-scene").forEach(observeEarth);
+</script>

@@ -1,0 +1,131 @@
+.article {
+  max-width: 900px;
+  padding-block: 70px;
+  overflow-wrap: anywhere;
+}
+.article h1 {
+  font: 600 clamp(42px, 5.5vw, 76px)/1.04 var(--title);
+  letter-spacing: -0.032em;
+}
+.article h2 {
+  font-size: clamp(27px, 3.4vw, 44px);
+  margin: 44px 0 18px;
+}
+.article h3 {
+  font-size: 22px;
+  color: var(--fg);
+  margin: 24px 0 8px;
+}
+.article p,
+.article li {
+  max-width: 74ch;
+  color: var(--dim);
+  margin-bottom: 12px;
+}
+.article ul {
+  list-style: disc;
+  padding-left: 24px;
+}
+.article a,
+.article button {
+  color: var(--ice);
+}
+.article a {
+  text-decoration: underline;
+}
+.article header p {
+  font-size: 20px;
+  margin-block: 20px;
+}
+.page-tags,
+.page-meta,
+.article footer > div {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.page-tags,
+.page-meta {
+  color: var(--dim);
+  font: 14px var(--mono);
+  margin: 14px 0;
+}
+.article img {
+  max-height: 460px;
+  object-fit: contain;
+}
+.article figure,
+.article .hero-banner,
+.code-block,
+.comparison-table-wrapper {
+  margin-block: 22px;
+  padding: 16px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.article pre,
+.comparison-table-wrapper {
+  overflow: auto;
+}
+.article table {
+  border-collapse: collapse;
+  min-width: 620px;
+}
+.article td,
+.article th {
+  padding: 12px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+.article pre {
+  font-size: 14px;
+  color: #bfdcf6;
+  padding: 14px 0;
+}
+.code-header {
+  display: flex;
+  justify-content: space-between;
+}
+.article .zoom {
+  display: block;
+  cursor: zoom-in;
+  margin-inline: auto;
+}
+.carousel-track {
+  display: flex;
+  overflow: auto;
+  scroll-snap-type: x mandatory;
+}
+.carousel-item {
+  min-width: 100%;
+  scroll-snap-align: start;
+}
+.carousel-btn {
+  font-size: 26px;
+  padding: 0 16px;
+}
+.lightbox {
+  margin: auto;
+  max-width: 90vw;
+  max-height: 90vh;
+  background: var(--panel);
+  color: white;
+  padding: 16px;
+  border: 1px solid var(--line);
+}
+.lightbox::backdrop {
+  background: #000d;
+}
+.lightbox img {
+  max-height: 76vh;
+  object-fit: contain;
+}
+.lightbox button {
+  display: block;
+  margin-left: auto;
+  font-size: 26px;
+}
+.article footer {
+  margin-top: 44px;
+}

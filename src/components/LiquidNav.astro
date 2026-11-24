@@ -1,0 +1,90 @@
+---
+import { translate, type Language } from "../i18n";
+
+interface Props {
+  lang: Language;
+  home: string;
+  isArticle?: boolean;
+}
+
+const { lang, home, isArticle = false } = Astro.props;
+const es = lang === "es";
+const t = translate(lang);
+
+const navItems = [
+  { id: "projects", label: t("navProjects"), fx: "pop" },
+  { id: "about", label: es ? "Perfil" : "Profile", fx: "wave" },
+  { id: "skills", label: t("navSkills"), fx: "drop" },
+  { id: "certifications", label: t("navCertifications"), fx: "spin" },
+  { id: "game-hub", label: "Arcade", fx: "pop" },
+  { id: "contact", label: t("navContact"), fx: "plane" },
+];
+---
+
+<nav
+  id="liquid-nav"
+  class="nimbus-nav mast-nav"
+  data-tone="dark"
+  data-gl="on"
+  data-embedded="true"
+  aria-label={es ? "Navegación principal" : "Main navigation"}
+>
+  <canvas class="nimbus-water" aria-hidden="true"></canvas>
+  <span class="nimbus-drop" aria-hidden="true"></span>
+
+  {
+    navItems.map((item, idx) => (
+      <a
+        href={home + "#" + item.id}
+        class="nimbus-item"
+        data-section={item.id}
+        data-fx={item.fx}
+        aria-label={item.label}
+        aria-current={isArticle && idx === 0 ? "page" : undefined}
+      >
+        <span class="nv-ico" aria-hidden="true">
+          {item.id === "projects" && (
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3.5" y="4" width="7" height="7" rx="1.5" />
+              <rect x="13.5" y="4" width="7" height="7" rx="1.5" />
+              <rect x="3.5" y="13.5" width="7" height="6.5" rx="1.5" />
+              <rect x="13.5" y="13.5" width="7" height="6.5" rx="1.5" />
+            </svg>
+          )}
+          {item.id === "about" && (
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8.5" r="3.6" />
+              <path d="M5 19.8c1.2-3.3 3.9-4.9 7-4.9s5.8 1.6 7 4.9" />
+            </svg>
+          )}
+          {item.id === "skills" && (
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3.5 5 6.5v5.3c0 4.5 3 8 7 9.2 4-1.2 7-4.7 7-9.2V6.5l-7-3Z" />
+              <path d="m9.2 12.2 2 2 3.8-4" />
+            </svg>
+          )}
+          {item.id === "certifications" && (
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="9.5" r="5" />
+              <path d="M8.8 13.6 7.5 20.5 12 18.2l4.5 2.3-1.3-6.9" />
+            </svg>
+          )}
+          {item.id === "game-hub" && (
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="7.5" width="18" height="10" rx="5" />
+              <path d="M7.5 12.5h3M9 11v3" />
+              <circle cx="15.2" cy="11.4" r=".7" fill="currentColor" />
+              <circle cx="17.2" cy="13.4" r=".7" fill="currentColor" />
+            </svg>
+          )}
+          {item.id === "contact" && (
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.2 3.6 5.4l2.7 6.8-2.7 6.4L21 12.2Zm-14.7 0H13" />
+            </svg>
+          )}
+        </span>
+        <span class="nimbus-label">{item.label}</span>
+      </a>
+    ))
+  }
+</nav>

@@ -1,0 +1,194 @@
+[
+  [
+    {
+      "name": "Bash",
+      "icon": "devicon:bash",
+      "descKey": "skillBash",
+      "accent": "148, 205, 255"
+    },
+    {
+      "name": "Docker",
+      "icon": "devicon:docker",
+      "descKey": "skillDocker",
+      "accent": "36, 150, 237"
+    },
+    {
+      "name": "Kubernetes",
+      "icon": "devicon:kubernetes",
+      "descKey": "skillKubernetes",
+      "accent": "50, 118, 238"
+    },
+    {
+      "name": "AWS",
+      "icon": "devicon:amazonwebservices",
+      "descKey": "skillAWS",
+      "accent": "255, 168, 56"
+    },
+    {
+      "name": "Cloudflare",
+      "icon": "devicon:cloudflare",
+      "descKey": "skillCloudflare",
+      "accent": "246, 130, 31"
+    },
+    {
+      "name": "Oracle Cloud",
+      "icon": "devicon:oracle",
+      "descKey": "skillOracle",
+      "accent": "240, 82, 74"
+    },
+    {
+      "name": "Nginx",
+      "icon": "devicon:nginx",
+      "descKey": "skillNginx",
+      "accent": "0, 186, 104"
+    },
+    {
+      "name": "Wireshark",
+      "icon": "wireshark",
+      "descKey": "skillWireshark",
+      "accent": "76, 196, 255"
+    },
+    {
+      "name": "Burp Suite",
+      "icon": "burpsuite",
+      "descKey": "skillBurp",
+      "accent": "255, 122, 69"
+    },
+    {
+      "name": "Metasploit",
+      "icon": "metasploit",
+      "descKey": "skillMetasploit",
+      "accent": "94, 170, 255"
+    }
+  ],
+  [
+    {
+      "name": "C",
+      "icon": "devicon:c",
+      "descKey": "skillC",
+      "accent": "92, 152, 224"
+    },
+    {
+      "name": "C++",
+      "icon": "devicon:cplusplus",
+      "descKey": "skillCpp",
+      "accent": "78, 154, 240"
+    },
+    {
+      "name": "Java",
+      "icon": "devicon:java",
+      "descKey": "skillJava",
+      "accent": "242, 134, 64"
+    },
+    {
+      "name": "Spring Boot",
+      "icon": "devicon:spring",
+      "descKey": "skillSpring",
+      "accent": "119, 188, 31"
+    },
+    {
+      "name": "Python",
+      "icon": "devicon:python",
+      "descKey": "skillPython",
+      "accent": "76, 168, 245"
+    },
+    {
+      "name": "Lua",
+      "icon": "devicon:lua",
+      "descKey": "skillLua",
+      "accent": "86, 158, 255"
+    },
+    {
+      "name": "Node.js",
+      "icon": "devicon:nodejs",
+      "descKey": "skillNode",
+      "accent": "104, 194, 92"
+    },
+    {
+      "name": "Express",
+      "icon": "devicon:express",
+      "descKey": "skillExpress",
+      "accent": "152, 206, 255"
+    },
+    {
+      "name": "Redis",
+      "icon": "devicon:redis",
+      "descKey": "skillRedis",
+      "accent": "240, 86, 78"
+    },
+    {
+      "name": "PostgreSQL",
+      "icon": "devicon:postgresql",
+      "descKey": "skillPostgres",
+      "accent": "86, 164, 242"
+    },
+    {
+      "name": "MongoDB",
+      "icon": "devicon:mongodb",
+      "descKey": "skillMongoDB",
+      "accent": "76, 196, 108"
+    },
+    {
+      "name": "Arduino",
+      "icon": "devicon:arduino",
+      "descKey": "skillArduino",
+      "accent": "0, 184, 194"
+    }
+  ],
+  [
+    {
+      "name": "Astro",
+      "icon": "devicon:astro",
+      "descKey": "skillAstro",
+      "accent": "255, 114, 62"
+    },
+    {
+      "name": "React",
+      "icon": "devicon:react",
+      "descKey": "skillReact",
+      "accent": "97, 218, 251"
+    },
+    {
+      "name": "TypeScript",
+      "icon": "devicon:typescript",
+      "descKey": "skillTS",
+      "accent": "49, 120, 198"
+    },
+    {
+      "name": "Tailwind",
+      "icon": "devicon:tailwindcss",
+      "descKey": "skillTailwind",
+      "accent": "56, 189, 248"
+    },
+    {
+      "name": "JavaScript",
+      "icon": "devicon:javascript",
+      "descKey": "skillJS",
+      "accent": "247, 214, 72"
+    },
+    {
+      "name": "HTML",
+      "icon": "devicon:html5",
+      "descKey": "skillHTML",
+      "accent": "242, 114, 62"
+    },
+    {
+      "name": "CSS",
+      "icon": "devicon:css3",
+      "descKey": "skillCSS",
+      "accent": "62, 164, 248"
+    },
+    {
+      "name": "Git",
+      "icon": "devicon:git",
+      "descKey": "skillGit",
+      "accent": "240, 100, 68"
+    },
+    {
+      "name": "LaTeX",
+      "icon": "devicon:latex",
+      "descKey": "skillLatex",
+      "accent": "148, 205, 255"
+    }
+  ]
+]

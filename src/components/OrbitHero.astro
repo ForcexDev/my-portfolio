@@ -1,0 +1,42 @@
+---
+import { Icon } from "astro-icon/components";
+import { base, translate, type Language } from "../i18n";
+import EarthScene from "./EarthScene.astro";
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const es = lang === "es";
+---
+
+<section class="observatory" id="home">
+  <EarthScene />
+  <div class="hero-title wrap">
+    <h1>
+      <span class="hero-mask">
+        <span class="hero-rise hero-rise-1">Ezequiel <em>Morales</em></span>
+      </span>
+    </h1>
+    <p>
+      <span class="hero-mask">
+        <span class="hero-rise hero-rise-2">{translate(lang)("heroTagline")}</span>
+      </span>
+    </p>
+    <div class="hero-actions">
+      <a class="primary glass-action hero-pill" href="#projects">
+        <span>
+          {es ? "Ver proyectos" : "View projects"}
+          <Icon name="lucide:arrow-down-right" />
+        </span>
+      </a>
+      <a
+        class="text-link hover-ul"
+        href={base + "documents/Ezequiel-Morales-CV.pdf"}
+        data-open-resume
+        rel="noopener noreferrer"
+      >
+        {es ? "Ver CV" : "View CV"} <Icon name="lucide:arrow-up-right" />
+      </a>
+    </div>
+  </div>
+</section>

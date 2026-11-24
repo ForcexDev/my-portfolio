@@ -1,0 +1,27 @@
+---
+import ResumeViewer from "./ResumeViewer.astro";
+import ArcadeShelf from "./ArcadeShelf.astro";
+import Competition from "./Competition.astro";
+import Site from "../layouts/Site.astro";
+import OrbitHero from "./OrbitHero.astro";
+import Radio from "./Radio.astro";
+import Projects from "./Projects.astro";
+import Profile from "./Profile.astro";
+import Contact from "./Contact.astro";
+import type { Language } from "../i18n";
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+---
+
+<Site lang={lang}>
+  <OrbitHero lang={lang} />
+  <Radio lang={lang} />
+  <Projects lang={lang} />
+  <Profile lang={lang} />
+  <Competition lang={lang} />
+  <ArcadeShelf lang={lang} />
+  <Contact lang={lang} />
+  <ResumeViewer lang={lang} />
+</Site>

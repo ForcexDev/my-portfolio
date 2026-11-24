@@ -1,0 +1,64 @@
+---
+import { base } from "../i18n";
+---
+
+<div
+  class="black-hole-scene"
+  data-black-hole
+  aria-hidden="true"
+  style={`--bh-fallback:url("${base}media/black-hole-fallback.webp")`}
+>
+  <canvas class="black-hole-canvas"></canvas>
+</div>
+
+<script>
+  const hosts = document.querySelectorAll<HTMLElement>("[data-black-hole]");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  hosts.forEach((host) => {
+    const canvas = host.querySelector<HTMLCanvasElement>("canvas");
+    if (!canvas || reducedMotion.matches) return;
+    if (typeof navigator === "undefined" || !("gpu" in navigator)) return;
+
+    let mounted = false;
+    let dispose: (() => void) | undefined;
+
+    const boot = async () => {
+      if (mounted) return;
+      mounted = true;
+      try {
+        const { createRenderer } = await import(
+          "../scripts/black-hole/renderer"
+        );
+        const renderer = createRenderer({ canvas });
+        dispose = renderer.dispose;
+        await renderer.ready;
+        canvas.classList.add("ready");
+      } catch {
+        // Keep static fallback cleanly when WebGPU adapter is unavailable
+      }
+    };
+
+    if (typeof IntersectionObserver !== "undefined") {
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((e) => e.isIntersecting)) return;
+          io.disconnect();
+          void boot();
+        },
+        { rootMargin: "320px 0px" },
+      );
+      io.observe(host);
+    } else {
+      void boot();
+    }
+
+    window.addEventListener(
+      "pagehide",
+      () => {
+        dispose?.();
+      },
+      { once: true },
+    );
+  });
+</script>

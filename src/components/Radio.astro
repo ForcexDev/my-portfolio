@@ -1,0 +1,142 @@
+---
+import { Icon } from "astro-icon/components";
+import RadioTransport from "./RadioTransport.astro";
+import { stations } from "../data/stations";
+import { base, type Language } from "../i18n";
+interface Props {
+  lang: Language;
+}
+const es = Astro.props.lang === "es";
+const initial = stations[0];
+---
+
+<div class="radio-slot" id="radio-slot" data-base={base}>
+  <!-- Stage 1 & 2: Full-width Orbital Radio bar under Hero -> smoothly hands off before Projects -->
+  <section class="radio radio-bar" id="radio" aria-label="Radio">
+    <div class="wrap radio-strip">
+      <div class="radio-label">
+        <Icon name="lucide:radio" />
+        <span>Radio</span>
+      </div>
+
+      <div class="radio-art-wrap">
+        <img
+          data-radio-art
+          class="radio-art"
+          src={base + initial.art}
+          alt={initial.title}
+          width="46"
+          height="46"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="radio-track" aria-live="polite">
+        <strong data-radio-title>{initial.title}</strong>
+        <span data-radio-genre>{initial.genre}</span>
+      </div>
+
+      <div class="wave" aria-hidden="true">
+        {Array.from({ length: 41 }, (_, i) => (
+          <i
+            style={`--height:${4 + Math.abs(Math.sin(i * 0.69) * Math.cos(i * 0.17)) * 24}px;--delay:-${i * 0.09}s`}
+          />
+        ))}
+      </div>
+
+      <div class="radio-controls">
+        <RadioTransport lang={Astro.props.lang} />
+        <div class="volume" data-vol-wrap style="--vol:30%">
+          <button
+            data-radio-mute
+            class="vol-btn"
+            type="button"
+            aria-label={es ? "Silenciar" : "Mute"}
+          >
+            <Icon name="lucide:volume-2" class="vol-on" />
+            <Icon name="lucide:volume-x" class="vol-off" />
+          </button>
+          <div class="vol-hairline">
+            <span class="vol-rail" aria-hidden="true">
+              <span class="vol-fill"></span>
+            </span>
+            <input
+              type="range"
+              data-radio-vol
+              min="0"
+              max="100"
+              value="30"
+              aria-label={es ? "Volumen" : "Volume"}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="radio-player"></div>
+    <div class="radio-feedback wrap" data-radio-feedback role="status"></div>
+  </section>
+</div>
+
+<!-- Compact player shown after the inline radio scrolls out. -->
+<aside
+  class="radio-dock"
+  id="radio-dock"
+  aria-label={es ? "Reproductor flotante" : "Floating radio player"}
+  aria-hidden="true"
+>
+  <div class="dock-art-wrap">
+    <img
+      data-radio-art
+      class="radio-art"
+      src={base + initial.art}
+      alt=""
+      width="84"
+      height="84"
+    />
+    <span class="dock-channel" aria-hidden="true">
+      <Icon name="lucide:audio-lines" />
+      <span data-channel>01 / {String(stations.length).padStart(2, "0")}</span>
+    </span>
+  </div>
+  <div class="dock-titles" aria-live="polite">
+    <strong data-radio-title>{initial.title}</strong>
+  </div>
+  <div class="dock-controls">
+    <RadioTransport lang={Astro.props.lang} />
+  </div>
+  <div class="dock-vol" data-vol-wrap style="--vol:30%">
+    <button
+      type="button"
+      class="vol-btn"
+      data-radio-mute
+      aria-label={es ? "Silenciar" : "Mute"}
+    >
+      <Icon name="lucide:volume-2" class="vol-on" />
+      <Icon name="lucide:volume-x" class="vol-off" />
+    </button>
+    <div class="vol-hairline">
+      <span class="vol-rail" aria-hidden="true">
+        <span class="vol-fill"></span>
+      </span>
+      <input
+        type="range"
+        data-radio-vol
+        min="0"
+        max="100"
+        value="30"
+        aria-label={es ? "Volumen" : "Volume"}
+      />
+    </div>
+  </div>
+  <button
+    type="button"
+    id="radio-collapse"
+    class="dock-collapse"
+    aria-label={es ? "Minimizar reproductor" : "Minimize player"}
+  >
+    <Icon name="lucide:x" class="min-icon" />
+    <Icon name="lucide:maximize-2" class="max-icon" />
+  </button>
+</aside>
+<script src="../scripts/radio.ts"></script>

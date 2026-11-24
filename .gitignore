@@ -1,0 +1,25 @@
+# dependencias
+node_modules/
+
+# build
+dist/
+.astro/
+.vercel/
+
+# entorno
+.env
+.env.production
+
+# CV: la fuente LaTeX se queda local, aqui solo se publica el PDF
+# (public/cv/ForcexDev-CV.pdf)
+cv/
+
+# sistema
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+
+# editor
+.vscode/
+.idea/
